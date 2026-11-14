@@ -227,7 +227,7 @@
         r.hidden = !show;
         if (show) n++;
       });
-      count.textContent = 'Showing ' + n + ' of ' + cards.length + ' bots';
+      count.textContent = n === cards.length ? cards.length + ' crawlers' : 'Showing ' + n + ' of ' + cards.length + ' crawlers';
     }
     segs.forEach(function (b) { b.addEventListener('click', function () { setPurpose(b.getAttribute('data-p')); }); });
     stats.forEach(function (b) { b.addEventListener('click', function () { setPurpose(b.getAttribute('data-filter')); }); });
@@ -268,7 +268,7 @@
       stats.forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-filter') === g); });
       var n = 0;
       cards.forEach(function (c) { var show = !g || c.getAttribute('data-group') === g; c.hidden = !show; if (show) n++; });
-      count.textContent = 'Showing ' + n + ' of ' + cards.length + ' AI ad products';
+      count.textContent = n === cards.length ? cards.length + ' products' : 'Showing ' + n + ' of ' + cards.length + ' products';
     }
     segs.forEach(function (b) { b.addEventListener('click', function () { set(b.getAttribute('data-p')); }); });
     stats.forEach(function (b) { b.addEventListener('click', function () { set(b.getAttribute('data-filter')); }); });
@@ -281,10 +281,10 @@
       b.addEventListener('click', function () {
         if (!navigator.clipboard) return;
         navigator.clipboard.writeText(b.getAttribute('data-copy')).then(function () {
-          var label = b.querySelector('span'), old = label ? label.textContent : '';
+          var label = b.querySelector('span') || b, old = label.textContent;
           b.classList.add('is-done');
-          if (label) label.textContent = 'Copied';
-          setTimeout(function () { b.classList.remove('is-done'); if (label) label.textContent = old; }, 1600);
+          label.textContent = 'Copied';
+          setTimeout(function () { b.classList.remove('is-done'); label.textContent = old; }, 1600);
         });
       });
     });
