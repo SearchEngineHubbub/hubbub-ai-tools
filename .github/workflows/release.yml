@@ -17,7 +17,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Read version
         id: v
-        run: echo "version=$(grep -m1 -oP '^\s*\*\s*Version:\s*\K[0-9.]+' hubbub-ai-hub/hubbub-ai-hub.php)" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "version=$(grep -m1 -oP '^\s*\*\s*Version:\s*\K[0-9.]+' hubbub-ai-hub/hubbub-ai-hub.php)" >> "$GITHUB_OUTPUT"
       - name: Check for an existing release
         id: exists
         env:
@@ -26,10 +27,13 @@ jobs:
           if gh release view "v${{ steps.v.outputs.version }}" >/dev/null 2>&1; then echo "yes=true" >> "$GITHUB_OUTPUT"; else echo "yes=false" >> "$GITHUB_OUTPUT"; fi
       - name: Run tests
         if: steps.exists.outputs.yes == 'false'
-        run: php tests/test.php | tee /tmp/test.log && grep -q "failures: 0" /tmp/test.log
+        run: |
+          php tests/test.php | tee /tmp/test.log
+          grep -q "failures: 0" /tmp/test.log
       - name: Build zip
         if: steps.exists.outputs.yes == 'false'
-        run: zip -qr hubbub-ai-hub.zip hubbub-ai-hub -x '*.DS_Store'
+        run: |
+          zip -qr hubbub-ai-hub.zip hubbub-ai-hub -x '*.DS_Store'
       - name: Publish release
         if: steps.exists.outputs.yes == 'false'
         env:
