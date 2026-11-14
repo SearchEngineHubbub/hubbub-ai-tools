@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Visibility Checker, AI Crawler Directory and AI Ads Tracker for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.10.0
+ * Version: 0.11.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.10.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.11.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -510,25 +510,69 @@ final class Hubbub_AI_Hub {
 
 	public static function tools_shortcode() {
 		self::enqueue();
-		$crawl = self::data();
-		$ads   = self::ads_data();
-		$form  = '<form class="hb-search" role="search" method="get" action="' . esc_url( self::page_url( 'checker' ) ) . '">'
-			. '<label class="screen-reader-text" for="hubbub-home-url">Check a page</label>'
-			. '<input id="hubbub-home-url" name="url" type="text" inputmode="url" placeholder="Check any page, e.g. yoursite.com" required>'
-			. '<button type="submit" class="hb-btn">Check page</button></form>';
-		$meta  = array(
-			'checker'  => 'Free · 12 checks across ' . count( $crawl['crawlers'] ) . ' AI crawlers',
-			'crawlers' => count( $crawl['crawlers'] ) . ' crawlers · checked ' . self::fmt_date( $crawl['updated'] ),
-			'ads'      => count( $ads['products'] ) . ' products · checked ' . self::fmt_date( $ads['updated'] ),
+		$crawl  = self::data();
+		$ads    = self::ads_data();
+		$counts = self::ad_counts();
+		$nbots  = count( $crawl['crawlers'] );
+		$nads   = count( $ads['products'] );
+		$t      = self::tools();
+		$meta   = array(
+			'checker'  => 'Free · 12 checks across ' . $nbots . ' AI crawlers',
+			'crawlers' => $nbots . ' crawlers · checked ' . self::fmt_date( $crawl['updated'] ),
+			'ads'      => $nads . ' products · checked ' . self::fmt_date( $ads['updated'] ),
 		);
-		$list = '';
-		foreach ( self::tools() as $k => $t ) {
-			$list .= '<li><h3><a href="' . esc_url( self::page_url( $k ) ) . '">' . esc_html( $t['name'] ) . '</a></h3><p>' . esc_html( $t['desc'] ) . '</p><p class="hb-toollist__meta">' . esc_html( $meta[ $k ] ) . '</p></li>';
+
+		$form = '<form class="hb-search hb-search--hero" role="search" method="get" action="' . esc_url( self::page_url( 'checker' ) ) . '">'
+			. '<label class="screen-reader-text" for="hubbub-home-url">Page to check</label>' . self::icon( 'search' )
+			. '<input id="hubbub-home-url" name="url" type="text" inputmode="url" placeholder="Check any page, e.g. yoursite.com" required>'
+			. '<button type="submit" class="hb-btn">Check page' . self::icon( 'arrow' ) . '</button></form>';
+		$stats = '<dl class="hb-figures">'
+			. '<div><dt>AI crawlers tracked</dt><dd class="hb-stat__num" data-count="' . (int) $nbots . '">' . (int) $nbots . '</dd></div>'
+			. '<div><dt>AI ad products</dt><dd class="hb-stat__num" data-count="' . (int) $nads . '">' . (int) $nads . '</dd></div>'
+			. '<div><dt>Live right now</dt><dd class="hb-stat__num" data-count="' . (int) $counts['live'] . '">' . (int) $counts['live'] . '</dd></div>'
+			. '<div><dt>MCP tools for agents</dt><dd class="hb-stat__num" data-count="4">4</dd></div></dl>';
+		$hero = '<header class="hb-stage">'
+			. '<p class="hb-kicker"><span class="hb-live" aria-hidden="true"></span>Free tools · Live data · MCP</p>'
+			. '<h2 class="hb-stage__title">The toolkit for <mark>AI search</mark> marketers</h2>'
+			. '<p class="hb-stage__sub">See how ChatGPT, Claude, Perplexity and Gemini find, read, cite and sell. Use it here, or plug it straight into your own AI.</p>'
+			. $form . $stats . '</header>';
+
+		// Tool cards, each with a small live preview drawn from the data.
+		$card = function ( $key, $label, $preview, $cta, $extra_class = '' ) use ( $t, $meta ) {
+			return '<a class="hb-tile hb-tile--' . esc_attr( $key ) . ' ' . esc_attr( $extra_class ) . '" href="' . esc_url( self::page_url( $key ) ) . '">'
+				. '<span class="hb-label">' . esc_html( $label ) . '</span><h3>' . esc_html( $t[ $key ]['name'] ) . '</h3><p>' . esc_html( $t[ $key ]['desc'] ) . '</p>'
+				. $preview . '<span class="hb-tile__foot"><span>' . esc_html( $meta[ $key ] ) . '</span><span class="hb-cta">' . esc_html( $cta ) . self::icon( 'arrow' ) . '</span></span></a>';
+		};
+		$gauge = '<div class="hb-preview hb-preview--gauge" aria-hidden="true"><div class="hb-ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="52" class="fg"/></svg><strong>92</strong></div>'
+			. '<ul><li><span>Reach</span><i style="--w:100%"></i></li><li><span>Readability</span><i style="--w:100%"></i></li><li class="mid"><span>Guidance</span><i style="--w:55%"></i></li><li><span>Structure</span><i style="--w:90%"></i></li><li class="mid"><span>Trust</span><i style="--w:60%"></i></li></ul></div>';
+		$bots = '';
+		foreach ( array_slice( $crawl['crawlers'], 0, 12 ) as $c ) {
+			$bots .= '<span class="hb-tag hb-tag--' . esc_attr( $c['purpose'] ) . '">' . esc_html( $c['token'] ) . '</span>';
 		}
-		$list .= '<li class="is-soon"><h3>AI Citation Index <span>Coming soon</span></h3><p>Each month we will ask the leading AI assistants the same marketing questions and publish which sources they cite.</p></li>';
-		$inner = '<div class="hb-home">' . self::hero( '', 'Free tools for marketers working in AI search', 'How ChatGPT, Claude, Perplexity and Gemini find, read, cite and sell. Use the tools here, or connect them to your own AI assistant.', $form )
-			. self::graph( $meta ) . '</div>'
-			. '<section class="hb-section"><ul class="hb-toollist">' . $list . '</ul></section>';
+		$bots = '<div class="hb-preview hb-preview--tags" aria-hidden="true">' . $bots . '<span class="hb-tag hb-tag--more">+' . max( 0, $nbots - 12 ) . ' more</span></div>';
+		$live = '';
+		$i    = 0;
+		foreach ( $ads['products'] as $p ) {
+			if ( 'live' !== $p['status'] || $i++ >= 4 ) {
+				continue;
+			}
+			$live .= '<li><span class="hb-dot"></span><b>' . esc_html( $p['product'] ) . '</b><small>' . esc_html( $p['company'] ) . '</small></li>';
+		}
+		$live = '<ul class="hb-preview hb-preview--live" aria-hidden="true">' . $live . '</ul>';
+
+		$tiles = '<section class="hb-tiles" aria-label="Tools">'
+			. '<h2 class="hb-rule"><span>The tools</span></h2>'
+			. '<div class="hb-tiles__grid">'
+			. $card( 'checker', 'Most used', $gauge, 'Check a page', 'is-lead' )
+			. $card( 'crawlers', 'Updated weekly', $bots, 'Browse the directory' )
+			. $card( 'ads', $counts['live'] . ' live now', $live, 'See what is live' )
+			. '<a class="hb-tile hb-tile--mcp" href="#hb-agents"><span class="hb-label">For AI agents</span><h3>MCP server</h3><p>Give Claude, ChatGPT or Cursor every tool here. One URL, no sign-in.</p>'
+			. '<code class="hb-tile__code">' . esc_html( rest_url( self::NS . '/mcp' ) ) . '</code><span class="hb-tile__foot"><span>4 tools · JSON API too</span><span class="hb-cta">Connect your AI' . self::icon( 'arrow' ) . '</span></span></a>'
+			. '<div class="hb-tile hb-tile--soon"><span class="hb-label">Coming soon</span><h3>AI Citation Index</h3><p>Each month we will ask the leading AI assistants the same marketing questions and publish which sources they cite.</p>'
+			. '<div class="hb-preview hb-preview--bars" aria-hidden="true"><i style="--h:84%"></i><i style="--h:66%"></i><i style="--h:52%"></i><i style="--h:40%"></i><i style="--h:28%"></i><i style="--h:18%"></i></div></div>'
+			. '</div></section>';
+
+		$inner = $hero . self::graph( $meta ) . $tiles;
 		return self::shell( 'tools', $inner );
 	}
 
@@ -545,15 +589,18 @@ final class Hubbub_AI_Hub {
 			'citations' => array( 'Share of voice', 'Prompts', 'Sources' ),
 		);
 		$nodes = array();
+		$mini  = array( 'checker' => 'Checker', 'crawlers' => 'Crawlers', 'ads' => 'Ads' );
 		foreach ( self::tools() as $k => $t ) {
-			$nodes[] = array( 'id' => $k, 'label' => $t['short'], 'meta' => $meta[ $k ], 'desc' => $t['desc'], 'url' => self::page_url( $k ), 'topics' => $topics[ $k ] );
+			$nodes[] = array( 'id' => $k, 'label' => $t['short'], 'mini' => $mini[ $k ], 'meta' => $meta[ $k ], 'desc' => $t['desc'], 'url' => self::page_url( $k ), 'topics' => $topics[ $k ] );
 		}
-		$nodes[] = array( 'id' => 'citations', 'label' => 'Citation Index', 'meta' => 'Coming soon', 'desc' => 'Which sources the leading AI assistants cite for the same marketing questions, tracked monthly.', 'url' => '', 'soon' => true, 'topics' => $topics['citations'] );
+		$nodes[] = array( 'id' => 'citations', 'label' => 'Citation Index', 'mini' => 'Citations', 'meta' => 'Coming soon', 'desc' => 'Which sources the leading AI assistants cite for the same marketing questions, tracked monthly.', 'url' => '', 'soon' => true, 'topics' => $topics['citations'] );
 		$links = array(
 			array( 'robots.txt', 'GPTBot' ), array( 'Google-Extended', 'AI Mode' ), array( 'ChatGPT Ads', 'Share of voice' ), array( 'Sources', 'Schema' ),
 		);
 		$data = array( 'hub' => 'Knowledge Hub', 'tools' => $nodes, 'links' => $links );
-		return '<figure class="hb-graph" aria-hidden="true" data-graph="' . esc_attr( wp_json_encode( $data ) ) . '"><div class="hb-graph__stage"></div>'
+		return '<figure class="hb-graph" aria-hidden="true" data-graph="' . esc_attr( wp_json_encode( $data ) ) . '">'
+			. '<div class="hb-graph__head"><span class="hb-label">The Knowledge Hub</span><span class="hb-graph__legend"><i class="is-tool"></i>Tool <i class="is-topic"></i>What it covers <i class="is-link"></i>Related</span></div>'
+			. '<div class="hb-graph__stage"></div>'
 			. '<figcaption class="hb-graph__cap"><span class="hb-graph__hint">Hover a tool to explore what it covers</span></figcaption></figure>';
 	}
 
