@@ -34,7 +34,9 @@ class Hubbub_AI_Hub_Updater {
 
 	/** @return array|null { version, package, notes, url, published } */
 	public static function latest() {
-		$cached = get_site_transient( self::CACHE_KEY );
+		// Dashboard > Updates > "Check again" adds force-check=1: skip the cache so a new release shows at once.
+		$forced = is_admin() && ! empty( $_GET['force-check'] ); // phpcs:ignore WordPress.Security.NonceVerification
+		$cached = $forced ? false : get_site_transient( self::CACHE_KEY );
 		if ( is_array( $cached ) ) {
 			return $cached['version'] ? $cached : null;
 		}
@@ -58,8 +60,8 @@ class Hubbub_AI_Hub_Updater {
 				}
 			}
 		}
-		// Cache failures for an hour, successes for six.
-		set_site_transient( self::CACHE_KEY, $out, $out['version'] ? 6 * HOUR_IN_SECONDS : HOUR_IN_SECONDS );
+		// Cache for an hour so GitHub is not asked on every admin page load.
+		set_site_transient( self::CACHE_KEY, $out, HOUR_IN_SECONDS );
 		return $out['version'] ? $out : null;
 	}
 
