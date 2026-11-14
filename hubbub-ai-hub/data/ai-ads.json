@@ -1,0 +1,238 @@
+{
+ "updated": "2026-11-14",
+ "statuses": {
+  "live": "Live",
+  "beta": "Beta",
+  "testing": "Testing",
+  "announced": "Announced",
+  "unknown": "Unclear",
+  "ended": "Ended",
+  "none": "No ads"
+ },
+ "products": [
+  {
+   "product": "ChatGPT Ads",
+   "company": "OpenAI",
+   "surface": "ChatGPT",
+   "status": "live",
+   "markets": "89 countries (from 21 Oct 2026), starting with a US pilot in Feb 2026",
+   "formats": "Labelled sponsored unit below the answer, kept separate from it. Shown on Free and Go plans to logged-in adults only.",
+   "buying": "Self-serve Ads Manager (ads.openai.com), ad-tech partners such as Criteo, and a Shopify app.",
+   "pricing": "CPM at launch; CPC bidding added May 2026.",
+   "announced": "2026-01-16",
+   "updated": "2026-10-21",
+   "sources": [
+    "https://openai.com/index/our-approach-to-advertising-and-expanding-access/",
+    "https://ppc.land/advertisers-in-26-more-countries-gain-chatgpt-ads-bringing-the-total-to-89/"
+   ],
+   "official_source": true,
+   "notes": "Country count and rollout dates come from trade press. Not shown to under-18s or next to health, mental health or political topics."
+  },
+  {
+   "product": "Ads in AI Overviews",
+   "company": "Google",
+   "surface": "Google Search",
+   "status": "live",
+   "markets": "Inside the overview: US, Australia, Canada, India, Indonesia, Kenya, Malaysia, New Zealand, Nigeria, Pakistan, Philippines, Singapore (English). Above or below: every AI Overviews market.",
+   "formats": "Text and Shopping ads inside the overview; text, Shopping, local and app ads above or below it.",
+   "buying": "Automatic through existing Search, Shopping and Performance Max campaigns. No opt-out and no separate reporting.",
+   "pricing": "Normal campaign bidding.",
+   "announced": "2024-10-03",
+   "updated": "2025-12-19",
+   "sources": [
+    "https://support.google.com/google-ads/answer/16297775",
+    "https://blog.google/products/ads-commerce/google-lens-ai-overviews-ads-marketers/"
+   ],
+   "official_source": true,
+   "notes": "Not shown inside the overview for sensitive categories such as finance, health and politics."
+  },
+  {
+   "product": "Ads in AI Mode",
+   "company": "Google",
+   "surface": "Google Search",
+   "status": "live",
+   "markets": "US, plus Australia, Canada, India, Kenya, Malaysia, New Zealand, Nigeria, Pakistan, Philippines and Singapore from 28 Oct 2026. Brazil, Mexico and the UK planned for Q4 2026.",
+   "formats": "Sponsored text ads and Shopping ads inside answers; ads on follow-up questions (US).",
+   "buying": "Automatic through Search, Shopping and Performance Max. AI Max and broad match can match on conversation context. No opt-out.",
+   "pricing": "Normal campaign bidding.",
+   "announced": "2025-05-21",
+   "updated": "2026-10-28",
+   "sources": [
+    "https://blog.google/products/ads-commerce/ads-in-ai-mode-global/"
+   ],
+   "official_source": true,
+   "notes": ""
+  },
+  {
+   "product": "AI Mode Direct Offers and new formats",
+   "company": "Google",
+   "surface": "Google Search",
+   "status": "testing",
+   "markets": "US tests",
+   "formats": "Direct Offers (exclusive discounts), Conversational Discovery ads written by Gemini, Highlighted Answers in recommendation lists.",
+   "buying": "Direct Offers set in Performance Max and Shopping with Merchant Center feeds; Google recommends AI Max and Performance Max for the rest.",
+   "pricing": "Not stated.",
+   "announced": "2026-01-12",
+   "updated": "2026-05-20",
+   "sources": [
+    "https://blog.google/products/ads-commerce/a-new-generation-of-ads-for-the-ai-era-of-search/"
+   ],
+   "official_source": true,
+   "notes": ""
+  },
+  {
+   "product": "Ads in Microsoft Copilot",
+   "company": "Microsoft",
+   "surface": "Copilot",
+   "status": "live",
+   "markets": "Not stated by Microsoft",
+   "formats": "Search ads with logos, product ads, multimedia ads, hotel and travel ads, and ad summaries under the answer.",
+   "buying": "Automatic for eligible Microsoft Advertising campaigns (search, Shopping, Performance Max). No opt-out.",
+   "pricing": "Normal auction bidding.",
+   "announced": "2023",
+   "updated": "2026-09-02",
+   "sources": [
+    "https://learn.microsoft.com/en-us/advertising/msa-help/hlp_ba_conc_adsforcopilot"
+   ],
+   "official_source": true,
+   "notes": "Ads first appeared in Bing Chat in 2023."
+  },
+  {
+   "product": "Sponsored prompts in Alexa for Shopping (formerly Rufus)",
+   "company": "Amazon",
+   "surface": "Amazon shopping assistant",
+   "status": "live",
+   "markets": "US",
+   "formats": "AI-written branded questions in results and on product pages that open an assistant answer with the product; sponsored ads inside assistant conversations.",
+   "buying": "Automatic through Sponsored Products and Sponsored Brands campaigns; prompts can be paused in the console.",
+   "pricing": "CPC (billable since 25 Mar 2026).",
+   "announced": "2025-11-11",
+   "updated": "2026-06-11",
+   "sources": [
+    "https://advertising.amazon.com/resources/whats-new/unboxed-2025-sponsored-products-and-sponsored-brands-prompts"
+   ],
+   "official_source": true,
+   "notes": "Rufus was merged into Alexa for Shopping in May 2026."
+  },
+  {
+   "product": "Sparky ads",
+   "company": "Walmart",
+   "surface": "Walmart shopping assistant",
+   "status": "live",
+   "markets": "Not stated",
+   "formats": "Sponsored product prompts in Sparky recommendation answers.",
+   "buying": "Walmart Connect.",
+   "pricing": "Not stated.",
+   "announced": "2025",
+   "updated": "2026-01-08",
+   "sources": [
+    "https://www.bandt.com.au/walmart-rolls-out-ai-ads-inside-sparky-shopping-assistant/"
+   ],
+   "official_source": false,
+   "notes": "Walmart calls it an early experiment."
+  },
+  {
+   "product": "Yahoo Scout ads",
+   "company": "Yahoo",
+   "surface": "Yahoo Scout",
+   "status": "beta",
+   "markets": "US (reported)",
+   "formats": "Ad units and affiliate shopping links inside AI search answers.",
+   "buying": "Not stated.",
+   "pricing": "Not stated.",
+   "announced": "2026-01-28",
+   "updated": "2026-01-28",
+   "sources": [
+    "https://www.emarketer.com/content/yahoo-s-scout-turns-ai-search-ad-supported-answer-engine"
+   ],
+   "official_source": false,
+   "notes": ""
+  },
+  {
+   "product": "Sponsored Links in My AI",
+   "company": "Snap",
+   "surface": "Snapchat My AI",
+   "status": "unknown",
+   "markets": "US and select markets (2023)",
+   "formats": "Sponsored links relevant to the conversation.",
+   "buying": "Microsoft Advertising.",
+   "pricing": "Not stated.",
+   "announced": "2023-09-21",
+   "updated": "2023-09-21",
+   "sources": [
+    "https://newsroom.snap.com/evolving-my-ai-with-sponsored-links-powered-by-microsoft-advertising"
+   ],
+   "official_source": true,
+   "notes": "No 2026 update found."
+  },
+  {
+   "product": "Ads in Grok answers",
+   "company": "xAI",
+   "surface": "Grok on X",
+   "status": "announced",
+   "markets": "Not stated",
+   "formats": "Paid placements in Grok answers and suggestions, as described by Elon Musk.",
+   "buying": "Not stated.",
+   "pricing": "Not stated.",
+   "announced": "Aug 2025",
+   "updated": "2025-08",
+   "sources": [
+    "https://searchengineland.com/x-ads-grok-ai-answers-460520"
+   ],
+   "official_source": false,
+   "notes": "No confirmation that ads are live."
+  },
+  {
+   "product": "Perplexity sponsored follow-up questions",
+   "company": "Perplexity",
+   "surface": "Perplexity",
+   "status": "ended",
+   "markets": "US",
+   "formats": "Sponsored follow-up questions and paid placements beside answers.",
+   "buying": "Managed, with selected brands.",
+   "pricing": "CPM (reported).",
+   "announced": "2024-11-12",
+   "updated": "2026-02-18",
+   "sources": [
+    "https://www.perplexity.ai/hub/blog/why-we-re-experimenting-with-advertising",
+    "https://the-decoder.com/perplexity-pulls-advertising-from-its-search-engine-calling-itself-an-accuracy-business/"
+   ],
+   "official_source": true,
+   "notes": "Wound down from late 2025; the end was reported by the FT, not announced by Perplexity."
+  },
+  {
+   "product": "Gemini app",
+   "company": "Google",
+   "surface": "Gemini",
+   "status": "none",
+   "markets": "-",
+   "formats": "No ads in the Gemini app.",
+   "buying": "-",
+   "pricing": "-",
+   "announced": "",
+   "updated": "2026-04",
+   "sources": [
+    "https://searchengineland.com/google-corrects-report-claiming-ads-are-coming-to-gemini-in-2026-465856"
+   ],
+   "official_source": false,
+   "notes": "Google said in Dec 2025 it had no plans; in Apr 2026 it said it was open-minded."
+  },
+  {
+   "product": "Meta AI",
+   "company": "Meta",
+   "surface": "Meta AI",
+   "status": "none",
+   "markets": "-",
+   "formats": "No ads inside Meta AI confirmed.",
+   "buying": "-",
+   "pricing": "-",
+   "announced": "",
+   "updated": "2026-10",
+   "sources": [
+    "https://s21.q4cdn.com/399680738/files/content_files/META-Q3-2026-Earnings-Call-Transcript.pdf"
+   ],
+   "official_source": true,
+   "notes": "Meta lists ads as one possible way to make money from AI."
+  }
+ ]
+}

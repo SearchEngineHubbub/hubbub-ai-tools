@@ -1,0 +1,40 @@
+name: Release plugin
+
+# When the Version in the plugin header changes on main, test, build hubbub-ai-hub.zip
+# and publish it as a GitHub release. Sites running the plugin pick it up and auto-update.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read version
+        id: v
+        run: echo "version=$(grep -m1 -oP '^\s*\*\s*Version:\s*\K[0-9.]+' hubbub-ai-hub/hubbub-ai-hub.php)" >> "$GITHUB_OUTPUT"
+      - name: Check for an existing release
+        id: exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "v${{ steps.v.outputs.version }}" >/dev/null 2>&1; then echo "yes=true" >> "$GITHUB_OUTPUT"; else echo "yes=false" >> "$GITHUB_OUTPUT"; fi
+      - name: Run tests
+        if: steps.exists.outputs.yes == 'false'
+        run: php tests/test.php | tee /tmp/test.log && grep -q "failures: 0" /tmp/test.log
+      - name: Build zip
+        if: steps.exists.outputs.yes == 'false'
+        run: zip -qr hubbub-ai-hub.zip hubbub-ai-hub -x '*.DS_Store'
+      - name: Publish release
+        if: steps.exists.outputs.yes == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v${{ steps.v.outputs.version }}" hubbub-ai-hub.zip \
+            --title "v${{ steps.v.outputs.version }}" \
+            --notes "$(git log -1 --pretty=%B)"

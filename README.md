@@ -1,0 +1,31 @@
+# Hubbub AI Hub
+
+WordPress plugin behind the AI tools on [searchenginehubbub.com/tools](https://searchenginehubbub.com/tools/):
+
+- **AI Visibility Checker** `[hubbub_ai_checker]`
+- **AI Crawler Directory** and robots.txt builder `[hubbub_ai_crawlers]`
+- **AI Ads Tracker** `[hubbub_ai_ads]`
+- **Tools landing page** `[hubbub_ai_tools]`
+- JSON API under `/wp-json/hubbub/v1/` (`check`, `crawlers`, `robots`, `ads`, `about`, `llms`) and an MCP server at `/wp-json/hubbub/v1/mcp`.
+
+The styling inherits the active theme's colours and fonts (`--wp--preset--*`).
+
+## Data
+
+`hubbub-ai-hub/data/*.json` ship with the plugin. A private page with the slug `hubbub-data-ai-ads` or `hubbub-data-crawlers` holding newer JSON overrides them, so data can be refreshed without a release.
+
+## Releases and updates
+
+Bump `Version:` in `hubbub-ai-hub/hubbub-ai-hub.php` and push to `main`. The workflow runs the tests, builds `hubbub-ai-hub.zip` and publishes a release. Installed sites check the latest release every few hours and auto-update.
+
+If this repository is private, the site needs a read-only token in `wp-config.php`:
+
+```php
+define( 'HUBBUB_AI_HUB_GITHUB_TOKEN', 'github_pat_…' );
+```
+
+## Tests
+
+```
+php tests/test.php
+```
