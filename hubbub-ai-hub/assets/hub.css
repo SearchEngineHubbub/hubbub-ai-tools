@@ -598,3 +598,34 @@ a.hb-card:hover { transform: none; box-shadow: none; border-color: var(--text); 
 @media (max-width: 760px) {
 	.hb-bento__item, .hb-bento--soon { grid-column: span 6 !important; }
 }
+
+/* Use the theme's wide width (like post pages), centred, instead of the narrow page column. */
+.hubbub-hub {
+	--hb-wide: var(--wp--style--global--wide-size, 1140px);
+	width: min(var(--hb-wide), calc(100vw - 32px));
+	max-width: none !important;
+	margin-left: calc(50% - min(var(--hb-wide), calc(100vw - 32px)) / 2) !important;
+	margin-right: 0 !important;
+}
+@media (max-width: 760px) {
+	.hubbub-hub { width: calc(100vw - 32px); margin-left: calc(50% - 50vw + 16px) !important; }
+}
+
+/* Cards adapt to their own width, so nothing gets squashed in narrower layouts. */
+.hb-bento__item, .hb-builder, .hb-agents, .hb-report { container-type: inline-size; }
+@container (max-width: 460px) {
+	.hb-mini { grid-template-columns: 1fr; justify-items: center; }
+	.hb-mini ul { width: 100%; }
+	.hb-mini > strong { left: 50%; transform: translateX(-50%); }
+}
+@container (max-width: 640px) {
+	.hb-report__top { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+	.hb-report__meta { align-items: center; }
+}
+@media (min-width: 1000px) {
+	.hb-builder { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+	.hb-agents { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+	.hb-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.hb-adlist { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.hb-checks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
