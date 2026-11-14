@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Visibility Checker, AI Crawler Directory and AI Ads Tracker for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.9.0
+ * Version: 0.10.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.9.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.10.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -526,9 +526,35 @@ final class Hubbub_AI_Hub {
 			$list .= '<li><h3><a href="' . esc_url( self::page_url( $k ) ) . '">' . esc_html( $t['name'] ) . '</a></h3><p>' . esc_html( $t['desc'] ) . '</p><p class="hb-toollist__meta">' . esc_html( $meta[ $k ] ) . '</p></li>';
 		}
 		$list .= '<li class="is-soon"><h3>AI Citation Index <span>Coming soon</span></h3><p>Each month we will ask the leading AI assistants the same marketing questions and publish which sources they cite.</p></li>';
-		$inner = self::hero( '', 'Free tools for marketers working in AI search', 'How ChatGPT, Claude, Perplexity and Gemini find, read, cite and sell. Use the tools here, or connect them to your own AI assistant.', $form )
+		$inner = '<div class="hb-home">' . self::hero( '', 'Free tools for marketers working in AI search', 'How ChatGPT, Claude, Perplexity and Gemini find, read, cite and sell. Use the tools here, or connect them to your own AI assistant.', $form )
+			. self::graph( $meta ) . '</div>'
 			. '<section class="hb-section"><ul class="hb-toollist">' . $list . '</ul></section>';
 		return self::shell( 'tools', $inner );
+	}
+
+	/**
+	 * The knowledge graph on the Tools page: the hub, each tool and the topics it covers.
+	 * Drawn by hub.js. It is decorative for screen readers and agents, who get the same
+	 * links in the tool list below it.
+	 */
+	private static function graph( $meta ) {
+		$topics = array(
+			'checker'   => array( 'Schema', 'Canonical', 'Authorship', 'llms.txt', 'robots.txt' ),
+			'crawlers'  => array( 'GPTBot', 'ClaudeBot', 'PerplexityBot', 'Applebot', 'Google-Extended' ),
+			'ads'       => array( 'AI Mode', 'AI Overviews', 'Copilot', 'ChatGPT Ads' ),
+			'citations' => array( 'Share of voice', 'Prompts', 'Sources' ),
+		);
+		$nodes = array();
+		foreach ( self::tools() as $k => $t ) {
+			$nodes[] = array( 'id' => $k, 'label' => $t['short'], 'meta' => $meta[ $k ], 'desc' => $t['desc'], 'url' => self::page_url( $k ), 'topics' => $topics[ $k ] );
+		}
+		$nodes[] = array( 'id' => 'citations', 'label' => 'Citation Index', 'meta' => 'Coming soon', 'desc' => 'Which sources the leading AI assistants cite for the same marketing questions, tracked monthly.', 'url' => '', 'soon' => true, 'topics' => $topics['citations'] );
+		$links = array(
+			array( 'robots.txt', 'GPTBot' ), array( 'Google-Extended', 'AI Mode' ), array( 'ChatGPT Ads', 'Share of voice' ), array( 'Sources', 'Schema' ),
+		);
+		$data = array( 'hub' => 'Knowledge Hub', 'tools' => $nodes, 'links' => $links );
+		return '<figure class="hb-graph" aria-hidden="true" data-graph="' . esc_attr( wp_json_encode( $data ) ) . '"><div class="hb-graph__stage"></div>'
+			. '<figcaption class="hb-graph__cap"><span class="hb-graph__hint">Hover a tool to explore what it covers</span></figcaption></figure>';
 	}
 
 	/** Which tool (if any) the current singular page shows. */

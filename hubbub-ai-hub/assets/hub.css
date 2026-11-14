@@ -224,6 +224,52 @@
 .hb-error { margin-top: 1.5rem !important; padding: .9rem 1rem; border-left: 3px solid var(--bad); background: var(--soft); }
 
 /* Small screens */
+/* Tools page: intro beside the knowledge graph */
+.hb-home { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 1.5rem; align-items: center; margin-bottom: 2.5rem; }
+.hb-home .hb-intro { max-width: 34rem; }
+.hb-graph { margin: 0; position: relative; }
+.hb-graph__svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.hb-g-edge { stroke: var(--line); stroke-width: 1; transition: stroke .3s, opacity .3s; }
+.hb-g-edge.is-spoke { stroke: var(--mute); stroke-opacity: .45; stroke-width: 1.25; }
+.hb-g-edge.is-soon { stroke-dasharray: 3 4; }
+.hb-g-edge.is-cross { stroke-dasharray: 2 5; stroke-opacity: .7; }
+.hb-g-hub circle { fill: var(--text); }
+.hb-g-hub text { fill: var(--paper); font-size: 13px; font-weight: 600; letter-spacing: .02em; }
+.hb-g-tool { cursor: pointer; }
+.hb-g-hit { fill: transparent; }
+.hb-g-dot { fill: var(--paper); stroke: var(--text); stroke-width: 2; transition: fill .3s, r .3s; }
+.hb-g-label { fill: var(--text); font-size: 16px; font-weight: 700; paint-order: stroke; stroke: var(--paper); stroke-width: 5px; stroke-linejoin: round; }
+.hb-g-tool.is-soon .hb-g-dot { stroke: var(--mute); stroke-dasharray: 3 3; }
+.hb-g-tool.is-soon .hb-g-label { fill: var(--mute); }
+.hb-g-topic { cursor: pointer; }
+.hb-g-topic circle { fill: var(--mute); transition: fill .3s; }
+.hb-g-topic text { fill: var(--mute); font-size: 14px; paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; transition: fill .3s; }
+.hb-g-pulse { fill: var(--accent); }
+.hb-g-tool, .hb-g-topic, .hb-g-hub { transition: opacity .3s; }
+.has-active .hb-g-edge { opacity: .35; }
+.has-active .hb-g-edge.is-on, .has-active .hb-g-edge.is-near { opacity: 1; }
+.has-active .hb-g-edge.is-on { stroke: var(--text); stroke-opacity: 1; }
+.has-active .hb-g-tool:not(.is-on) .hb-g-label, .has-active .hb-g-topic:not(.is-on) text { fill-opacity: .45; }
+.hb-g-tool.is-on .hb-g-dot { fill: var(--accent); }
+.hb-g-topic.is-on circle { fill: var(--text); }
+.hb-g-topic.is-on text { fill: var(--text); }
+.hb-graph__cap { min-height: 6.5rem; max-width: 30rem; margin: .5rem auto 0; padding-top: .75rem; border-top: 1px solid var(--line); font-size: .95rem; }
+.hb-graph__hint { color: var(--mute); font-size: .875rem; }
+.hb-graph__title { display: flex; flex-wrap: wrap; gap: .25rem .75rem; align-items: baseline; }
+.hb-graph__title span { color: var(--mute); font-size: .85rem; }
+.hb-graph__desc { color: var(--mute); margin-top: .25rem !important; }
+.hb-graph__go { display: inline-block; margin-top: .35rem; font-weight: 600; }
+@media (max-width: 900px) {
+	.hb-home { grid-template-columns: 1fr; }
+	.hb-home .hb-intro { max-width: none; }
+}
+.hb-graph__svg.is-compact .hb-g-edge { stroke-width: 2; }
+.hb-graph__svg.is-compact .hb-g-label { font-size: 34px; stroke-width: 10px; }
+.hb-graph__svg.is-compact .hb-g-dot { stroke-width: 3.5; }
+.hb-graph__svg.is-compact .hb-g-hub text { font-size: 23px; }
+.hb-graph__svg.is-compact .hb-g-topic text { font-size: 28px; stroke-width: 8px; opacity: 0; transition: opacity .3s; }
+.hb-graph__svg.is-compact .hb-g-topic.is-on text { opacity: 1; }
+
 @media (max-width: 800px) {
 	.hb-toollist li { grid-template-columns: 1fr; gap: .35rem; }
 	.hb-toollist__meta { white-space: normal; }
@@ -235,6 +281,7 @@
 	.hb-nav ul { gap: 1.25rem; }
 	.hb-nav__end { margin-left: 0; }
 	.hb-search { flex-direction: column; }
+	.hb-search input { flex: none; width: 100%; }
 	.hb-btn { width: 100%; }
 	.hb-table thead { display: none; }
 	.hb-table, .hb-table tbody, .hb-table tr, .hb-table th, .hb-table td { display: block; width: auto !important; }
@@ -251,3 +298,7 @@
 	.hubbub-hub * { animation: none !important; transition: none !important; }
 	.hb-steps li { opacity: 1; }
 }
+
+/* Without JavaScript the graph is not drawn, so the intro takes the full width. */
+.hb-graph:not(.is-ready) { display: none; }
+.hb-home:not(:has(.hb-graph.is-ready)) { display: block; }
