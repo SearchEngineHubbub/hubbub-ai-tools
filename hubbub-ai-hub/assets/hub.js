@@ -399,10 +399,11 @@
     var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     // Phones get a taller layout with bigger type, and topic names only for the active tool.
     var compact = stage.clientWidth < 700;
+    // A knowledge-graph layout: small round nodes, labels beside them, hairline edges.
     var G = compact
-      ? { W: 700, H: 760, tx: 175, ty: 190, px: 300, py: 330, ang: [-140, -40, 40, 140], fan: 19, hub: 78, fs: 30, ts: 24, ph: 56, th: 44 }
-      : { W: 1140, H: 575, tx: 285, ty: 140, px: 455, py: 245, ang: [-148, -32, 32, 148], fan: 16, hub: 62, fs: 16, ts: 13, ph: 34, th: 26 };
-    var W = G.W, H = G.H, CX = W / 2, CY = H / 2;
+      ? { W: 700, H: 820, tx: 215, ty: 235, px: 318, py: 360, fan: 15, hub: 58, tr: 14, dr: 7, fs: 30, ts: 24 }
+      : { W: 1140, H: 600, tx: 300, ty: 165, px: 470, py: 262, fan: 14, hub: 46, tr: 9, dr: 4.5, fs: 17, ts: 13 };
+    var W = G.W, H = G.H, CX = W / 2, CY = H / 2 + (compact ? 10 : 6);
     function s(tag, attrs, parent) {
       var n = document.createElementNS(NS, tag);
       for (var k in attrs) n.setAttribute(k, attrs[k]);
@@ -410,35 +411,30 @@
       return n;
     }
     var svg = s('svg', { viewBox: '0 0 ' + W + ' ' + H, class: 'hb-graph__svg' + (compact ? ' is-compact' : ''), focusable: 'false' }, stage);
-    var defs = s('defs', {}, svg);
-    var glow = s('radialGradient', { id: 'hbGlow' }, defs);
-    s('stop', { offset: '0', 'stop-color': 'var(--accent)', 'stop-opacity': '.38' }, glow);
-    s('stop', { offset: '1', 'stop-color': 'var(--accent)', 'stop-opacity': '0' }, glow);
-    s('ellipse', { cx: CX, cy: CY, rx: W * 0.36, ry: H * 0.42, fill: 'url(#hbGlow)', class: 'hb-g-glow' }, svg);
     var gRings = s('g', { class: 'hb-g-rings' }, svg);
-    [0, 1, 2].forEach(function (i) { s('circle', { cx: CX, cy: CY, r: G.hub, style: 'animation-delay:' + (i * 1.6) + 's' }, gRings); });
+    [0, 1].forEach(function (i) { s('circle', { cx: CX, cy: CY, r: G.hub, style: 'animation-delay:' + (i * 2.4) + 's' }, gRings); });
     var gEdges = s('g', {}, svg), gPulse = s('g', {}, svg), gNodes = s('g', {}, svg);
     var nodes = [], edges = [], byLabel = {};
 
     function node(o) {
-      o.px = 0; o.py = 0; o.ph = Math.random() * 6.28; o.sp = 0.3 + Math.random() * 0.3;
+      o.px = 0; o.py = 0; o.ph = Math.random() * 6.28; o.sp = 0.25 + Math.random() * 0.25;
       o.x = o.hx; o.y = o.hy;
       nodes.push(o);
       return o;
     }
-    function pill(g, text, h, cls) {
-      var r = s('rect', { class: cls + '__bg', height: h, y: -h / 2, rx: h / 2 }, g);
-      var t = s('text', { 'text-anchor': 'middle', y: 0, dy: '.35em', class: cls + '__tx' }, g);
+    // A label beside a node, pushed outward from the centre.
+    function label(g, text, c, si, gap, cls, lim) {
+      lim = lim === undefined ? 0.35 : lim;
+      var anchor = c > lim ? 'start' : c < -lim ? 'end' : 'middle';
+      var x = anchor === 'start' ? gap : anchor === 'end' ? -gap : 0;
+      var y = anchor === 'middle' ? (si < 0 ? -gap * 1.1 : gap * 1.1) : 0;
+      var t = s('text', { x: x, y: y, dy: anchor === 'middle' ? (si < 0 ? '0' : '.7em') : '.35em', 'text-anchor': anchor, class: cls }, g);
       t.textContent = text;
-      return function () {
-        var w = t.getComputedTextLength() + h * 0.95;
-        r.setAttribute('width', w.toFixed(1)); r.setAttribute('x', (-w / 2).toFixed(1));
-        return w;
-      };
+      return { el: t, anchor: anchor };
     }
     var sizers = [];
     function edge(a, b, cls, bend) {
-      var e = { a: a, b: b, bend: bend || 0.12, el: s('path', { class: 'hb-g-edge ' + (cls || '') }, gEdges) };
+      var e = { a: a, b: b, bend: bend || 0.06, el: s('path', { class: 'hb-g-edge ' + (cls || '') }, gEdges) };
       edges.push(e);
       return e;
     }
@@ -446,33 +442,47 @@
     var hub = node({ kind: 'hub', hx: CX, hy: CY, amp: 0 });
     hub.el = s('g', { class: 'hb-g-hub' }, gNodes);
     s('circle', { r: G.hub }, hub.el);
-    s('text', { y: -G.fs * 0.75, 'text-anchor': 'middle', class: 'hb-g-hub__k' }, hub.el).textContent = 'Hubbub';
-    s('text', { y: G.fs * 0.45, 'text-anchor': 'middle', class: 'hb-g-hub__t' }, hub.el).textContent = 'Knowledge';
-    s('text', { y: G.fs * 1.5, 'text-anchor': 'middle', class: 'hb-g-hub__t' }, hub.el).textContent = 'Hub';
+    s('text', { y: -G.fs * 0.55, 'text-anchor': 'middle', class: 'hb-g-hub__k' }, hub.el).textContent = 'Hubbub';
+    s('text', { y: G.fs * 0.55, 'text-anchor': 'middle', class: 'hb-g-hub__t' }, hub.el).textContent = 'Knowledge';
+    s('text', { y: G.fs * 1.55, 'text-anchor': 'middle', class: 'hb-g-hub__t' }, hub.el).textContent = 'Hub';
 
+    var count = data.tools.length;
     data.tools.forEach(function (t, i) {
-      var a = G.ang[i % 4] * Math.PI / 180, c = Math.cos(a), si = Math.sin(a);
-      var tool = node({ kind: 'tool', data: t, hx: CX + c * G.tx, hy: CY + si * G.ty, amp: 3, topics: [] });
-      tool.el = s('g', { class: 'hb-g-tool' + (t.soon ? ' is-soon' : '') }, gNodes);
-      sizers.push(pill(tool.el, compact && t.mini ? t.mini : t.label, G.ph, 'hb-g-tool'));
-      tool.edge = edge(hub, tool, 'is-spoke' + (t.soon ? ' is-soon' : ''), 0.08);
+      // The first tool (AI Search Insights) sits at the top; the rest spread evenly around.
+      var a = (-90 + i * 360 / count) * Math.PI / 180, c = Math.cos(a), si = Math.sin(a);
+      var tool = node({ kind: 'tool', data: t, hx: CX + c * G.tx, hy: CY + si * G.ty, amp: 2, topics: [] });
+      tool.el = s('g', { class: 'hb-g-tool' + (i === 0 ? ' is-lead' : '') + (t.soon ? ' is-soon' : '') }, gNodes);
+      s('circle', { r: G.tr * 2.6, class: 'hb-g-hit' }, tool.el);
+      s('circle', { r: G.tr * 1.9, class: 'hb-g-tool__halo' }, tool.el);
+      s('circle', { r: G.tr, class: 'hb-g-tool__dot' }, tool.el);
+      // Tool names sit on the outside of their node, except at the top and bottom where they sit beside it.
+      // On phones, names of the side tools sit under their node so they stay inside the frame.
+      if (compact && i > 0) label(tool.el, t.mini || t.label, 0, 1, G.tr + 12, 'hb-g-tool__tx');
+      else label(tool.el, compact && t.mini ? t.mini : t.label, Math.abs(c) < 0.35 ? 1 : c, si, G.tr + (compact ? 12 : 8), 'hb-g-tool__tx');
+      tool.edge = edge(hub, tool, 'is-spoke' + (t.soon ? ' is-soon' : ''), 0.04);
       var n = t.topics.length;
-      t.topics.forEach(function (label, j) {
-        var b = a + ((j - (n - 1) / 2) * G.fan) * Math.PI / 180;
-        var tp = node({ kind: 'topic', hx: CX + Math.cos(b) * G.px, hy: CY + Math.sin(b) * G.py, amp: 5, tool: tool });
+      t.topics.forEach(function (lab, j) {
+        var b = a + ((j - (n - 1) / 2) * G.fan) * Math.PI / 180, bc = Math.cos(b), bs = Math.sin(b);
+        var tp = node({ kind: 'topic', hx: CX + bc * G.px, hy: CY + bs * G.py, amp: 3, tool: tool });
         tp.bx = tp.hx;
         tp.el = s('g', { class: 'hb-g-topic' }, gNodes);
-        var sz = pill(tp.el, label, G.th, 'hb-g-topic');
-        if (compact) s('circle', { r: 7, class: 'hb-g-topic__dot' }, tp.el);
-        // Keep each topic inside the frame once its width is known.
-        sizers.push(function () { var w = sz(); tp.hx = Math.max(w / 2 + 8, Math.min(W - w / 2 - 8, tp.bx)); });
-        tp.edge = edge(tool, tp, 'is-leaf', 0.1);
+        s('circle', { r: G.dr * 3, class: 'hb-g-hit' }, tp.el);
+        s('circle', { r: G.dr, class: 'hb-g-topic__dot' }, tp.el);
+        var L = label(tp.el, lab, bc, bs, G.dr + (compact ? 10 : 7), 'hb-g-topic__tx', 0.1);
+        // Keep each label inside the frame once its width is known.
+        sizers.push(function () {
+          var w = L.el.getComputedTextLength() + G.dr + 10;
+          if (L.anchor === 'start') tp.hx = Math.min(tp.bx, W - w - 6);
+          else if (L.anchor === 'end') tp.hx = Math.max(tp.bx, w + 6);
+          else tp.hx = Math.max(w / 2 + 6, Math.min(W - w / 2 - 6, tp.bx));
+        });
+        tp.edge = edge(tool, tp, 'is-leaf', 0.05);
         tool.topics.push(tp);
-        byLabel[label] = tp;
+        byLabel[lab] = tp;
       });
     });
     (data.links || []).forEach(function (l) {
-      if (byLabel[l[0]] && byLabel[l[1]]) edge(byLabel[l[0]], byLabel[l[1]], 'is-cross', 0.25);
+      if (byLabel[l[0]] && byLabel[l[1]]) edge(byLabel[l[0]], byLabel[l[1]], 'is-cross', 0.1);
     });
     var tools = nodes.filter(function (n) { return n.kind === 'tool'; });
     function size() { sizers.forEach(function (f) { f(); }); }
@@ -561,7 +571,7 @@
         var px = 0, py = 0;
         if (ptr && !still && n.kind !== 'hub') {
           var vx = n.hx - ptr.x, vy = n.hy - ptr.y, dist = Math.sqrt(vx * vx + vy * vy) || 1;
-          if (dist < 140) { var f = (1 - dist / 140) * 16; px = vx / dist * f; py = vy / dist * f; }
+          if (dist < 120) { var f = (1 - dist / 120) * 10; px = vx / dist * f; py = vy / dist * f; }
         }
         n.px += (px - n.px) * 0.1; n.py += (py - n.py) * 0.1;
         n.x = CX + (n.hx - CX) * k + tx + n.px;
@@ -580,7 +590,7 @@
         var tool = active && Math.random() < 0.7 ? active : tools[Math.floor(Math.random() * tools.length)];
         if (!tool.data.soon) {
           var leaf = tool.topics[Math.floor(Math.random() * tool.topics.length)];
-          pulses.push({ path: [tool.edge, leaf.edge], t: time, el: s('circle', { r: compact ? 7 : 4, class: 'hb-g-pulse' }, gPulse) });
+          pulses.push({ path: [tool.edge, leaf.edge], t: time, el: s('circle', { r: compact ? 5 : 2.75, class: 'hb-g-pulse' }, gPulse) });
         }
       }
       pulses = pulses.filter(function (p) {

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.14.0
+ * Version: 0.14.1
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.14.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.14.1' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -677,11 +677,12 @@ final class Hubbub_AI_Hub {
 			. '<div><dt>AI ad products</dt><dd class="hb-stat__num" data-count="' . (int) $nads . '">' . (int) $nads . '</dd></div>'
 			. '<div><dt>Live right now</dt><dd class="hb-stat__num" data-count="' . (int) $counts['live'] . '">' . (int) $counts['live'] . '</dd></div>'
 			. '<div><dt>MCP tools for agents</dt><dd class="hb-stat__num" data-count="6">6</dd></div></dl>';
-		$hero = '<header class="hb-stage">'
+		$hero = '<header class="hb-stage hb-stage--hub">'
 			. '<p class="hb-kicker"><span class="hb-live" aria-hidden="true"></span>Free tools · Live data · MCP</p>'
 			. '<h2 class="hb-stage__title">The toolkit for <mark>AI search</mark> marketers</h2>'
 			. '<p class="hb-stage__sub">See how ChatGPT, Claude, Perplexity and Gemini find, read, cite and sell. Use it here, or plug it straight into your own AI.</p>'
-			. $form . $stats . '</header>';
+			. '</header>';
+		$quick = '<section class="hb-quick" aria-label="Check a page">' . $form . $stats . '</section>';
 
 		// Tool cards, each with a small live preview drawn from the data.
 		$card = function ( $key, $label, $preview, $cta, $extra_class = '' ) use ( $t, $meta ) {
@@ -722,7 +723,7 @@ final class Hubbub_AI_Hub {
 			. $card( 'citations', 'New · early version', $cites, 'See the index' )
 			. '</div></section>';
 
-		$inner = $hero . self::brief() . self::graph( $meta ) . $tiles;
+		$inner = $hero . self::graph( $meta ) . self::brief() . $quick . $tiles;
 		return self::shell( 'tools', $inner );
 	}
 
@@ -1020,13 +1021,25 @@ final class Hubbub_AI_Hub {
 			'ads'       => array( 'AI Mode', 'AI Overviews', 'Copilot', 'ChatGPT Ads' ),
 			'citations' => array( 'YouTube', 'Reddit', 'Wikipedia' ),
 		);
-		$nodes = array();
+		$ins   = self::insights();
+		$nodes = array(
+			array(
+				'id'     => 'insights',
+				'label'  => 'AI Search Insights',
+				'mini'   => 'Insights',
+				'meta'   => count( $ins['insights'] ) . ' insights · checked ' . self::fmt_date( $ins['updated'] ),
+				'desc'   => 'The headline numbers on AI search: how much traffic AI sends, what it cites, how it searches and how its crawlers behave. Updated weekly.',
+				'url'    => self::insights_url(),
+				'topics' => array( 'AI referrals', 'Citation share', 'Crawler stats', 'Trend lines' ),
+			),
+		);
 		$mini  = array( 'checker' => 'Checker', 'crawlers' => 'Crawlers', 'ads' => 'Ads', 'citations' => 'Citations' );
 		foreach ( self::tools() as $k => $t ) {
 			$nodes[] = array( 'id' => $k, 'label' => $t['short'], 'mini' => $mini[ $k ], 'meta' => $meta[ $k ], 'desc' => $t['desc'], 'url' => self::page_url( $k ), 'topics' => $topics[ $k ] );
 		}
 		$links = array(
 			array( 'robots.txt', 'GPTBot' ), array( 'Google-Extended', 'AI Mode' ), array( 'Schema', 'Wikipedia' ), array( 'ChatGPT Ads', 'YouTube' ),
+			array( 'Crawler stats', 'ClaudeBot' ), array( 'Citation share', 'Reddit' ), array( 'AI referrals', 'llms.txt' ),
 		);
 		$data = array( 'hub' => 'Knowledge Hub', 'tools' => $nodes, 'links' => $links );
 		return '<figure class="hb-graph" aria-hidden="true" data-graph="' . esc_attr( wp_json_encode( $data ) ) . '">'
