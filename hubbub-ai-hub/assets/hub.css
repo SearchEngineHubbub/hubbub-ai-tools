@@ -549,5 +549,55 @@ a.hb-tile--mcp:hover { border-color: var(--accent); box-shadow: 0 24px 44px -24p
 	.hb-site__brands::after { content: " brands"; }
 }
 
+/* Trend line charts on AI Search Insights. */
+.hb-line { display: block !important; margin: 0 0 1.5rem; padding: 1.4rem 1.5rem 1.1rem; border-radius: 12px; background: var(--soft); }
+.hb-line figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1rem; margin-bottom: .9rem; }
+.hb-line figcaption span { max-width: 46rem; color: var(--mute); font-size: .82rem; }
+.hb-line__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .75rem; margin: 0 0 1rem !important; }
+.hb-line__head b { font-size: 2rem; line-height: 1; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.hb-line__head span { color: var(--mute); font-size: .85rem; }
+.hb-line__head em { font-style: normal; font-size: .82rem; font-weight: 700; padding: .15rem .55rem; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); }
+.hb-line__chart { padding: .75rem 0 1.9rem 3.4rem; }
+.hb-line__plot { position: relative; height: 220px; touch-action: pan-y; cursor: crosshair; }
+.hb-line__chart.is-few .hb-line__plot { height: 180px; }
+.hb-line__plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; clip-path: inset(0 100% 0 0); transition: clip-path 1.4s cubic-bezier(.2, .8, .2, 1); }
+.hb-line.is-seen .hb-line__plot svg { clip-path: inset(-10px -10px -10px -10px); }
+.hb-line__path { fill: none; stroke: var(--text); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.hb-line__area { fill: var(--accent); opacity: .22; stroke: none; }
+.hb-line__grid { position: absolute; left: 0; right: 0; height: 0; border-top: 1px dashed var(--line); }
+.hb-line__grid i { position: absolute; right: 100%; top: -.55rem; padding-right: .6rem; color: var(--mute); font-size: .72rem; font-style: normal; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.hb-line__x { position: absolute; left: 0; right: 0; top: 100%; height: 1.6rem; }
+.hb-line__x span { position: absolute; top: .55rem; transform: translateX(-50%); color: var(--mute); font-size: .72rem; white-space: nowrap; }
+.hb-line__x span:first-child { transform: none; }
+.hb-line__x span:last-child { transform: translateX(-100%); }
+.hb-line__dot { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--paper); border: 2.5px solid var(--text); opacity: 0; transition: opacity .4s ease 1.1s; }
+.hb-line__dot.is-last { background: var(--accent); }
+.hb-line.is-seen .hb-line__dot { opacity: 1; }
+.hb-line__dot b { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); font-size: .78rem; font-weight: 700; white-space: nowrap; background: var(--soft); padding: 0 .2rem; }
+.hb-line__guide { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px solid var(--text); opacity: .35; pointer-events: none; }
+.hb-line__tip { position: absolute; z-index: 2; transform: translate(-50%, calc(-100% - 12px)); padding: .35rem .6rem; border-radius: 8px; background: var(--text); color: var(--paper); font-size: .78rem; line-height: 1.3; white-space: nowrap; pointer-events: none; box-shadow: 0 6px 18px rgba(0, 0, 0, .15); }
+.hb-line__tip.is-left { transform: translate(-12px, calc(-100% - 12px)); }
+.hb-line__tip.is-right { transform: translate(calc(-100% + 12px), calc(-100% - 12px)); }
+.hb-line__tip b { display: block; font-size: .95rem; }
+.hb-line__tip span { opacity: .8; }
+.hb-line__guide[hidden], .hb-line__tip[hidden] { display: none; }
+.hb-line__data { margin-top: .25rem; font-size: .82rem; color: var(--mute); }
+.hb-line__data summary { cursor: pointer; width: max-content; }
+.hb-line__data table { margin-top: .5rem; font-size: .82rem; max-width: 22rem; }
+.hb-line__data td, .hb-line__data th { padding: .2rem 1rem .2rem 0 !important; border: 0 !important; text-align: left; }
+@media (max-width: 700px) {
+	.hb-line { padding: 1.1rem 1rem .9rem; }
+	.hb-line__head b { font-size: 1.6rem; }
+	.hb-line__chart { padding-left: 2.8rem; }
+	.hb-line__plot { height: 170px; }
+	.hb-line__chart.is-few .hb-line__plot { height: 150px; }
+	.hb-line__x span:nth-child(2), .hb-line__x span:nth-child(3) { display: none; }
+	.hb-line__chart.is-few .hb-line__x span { display: block; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.hb-line__plot svg { clip-path: none; }
+	.hb-line__dot { opacity: 1; }
+}
+
 /* Without JavaScript the graph is not drawn, so the intro takes the full width. */
 .hb-graph:not(.is-ready) { display: none; }

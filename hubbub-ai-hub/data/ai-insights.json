@@ -295,5 +295,191 @@
   "schema": "80% of pages AI cites carry schema markup (web average about 39%).",
   "llms_txt": "About 4% of domains publish llms.txt (33,743 of 834K), and it made no measurable difference to citations.",
   "length": "Pages AI cites average 2,290 words."
- }
+ },
+ "trends": [
+  {
+   "id": "ai-pageviews",
+   "theme": "traffic",
+   "title": "Pageviews from AI, day by day",
+   "unit": "count",
+   "basis": "7-day average of daily pageviews from AI assistants across 6,635 sites using Google Analytics 4. Data through 3 Nov 2026.",
+   "change": "+8.1% on the previous 30 days",
+   "url": "https://trakkr.ai/data",
+   "points": [
+    [
+     "5 Oct 2026",
+     238914
+    ],
+    [
+     "6 Oct 2026",
+     235841
+    ],
+    [
+     "7 Oct 2026",
+     233143
+    ],
+    [
+     "8 Oct 2026",
+     229501
+    ],
+    [
+     "9 Oct 2026",
+     224675
+    ],
+    [
+     "10 Oct 2026",
+     219354
+    ],
+    [
+     "11 Oct 2026",
+     212297
+    ],
+    [
+     "12 Oct 2026",
+     203392
+    ],
+    [
+     "13 Oct 2026",
+     193728
+    ],
+    [
+     "14 Oct 2026",
+     184472
+    ],
+    [
+     "15 Oct 2026",
+     177844
+    ],
+    [
+     "16 Oct 2026",
+     176042
+    ],
+    [
+     "17 Oct 2026",
+     177638
+    ],
+    [
+     "18 Oct 2026",
+     183060
+    ],
+    [
+     "19 Oct 2026",
+     192044
+    ],
+    [
+     "20 Oct 2026",
+     204331
+    ],
+    [
+     "21 Oct 2026",
+     218012
+    ],
+    [
+     "22 Oct 2026",
+     232597
+    ],
+    [
+     "23 Oct 2026",
+     245050
+    ],
+    [
+     "24 Oct 2026",
+     255357
+    ],
+    [
+     "25 Oct 2026",
+     263831
+    ],
+    [
+     "26 Oct 2026",
+     270609
+    ],
+    [
+     "27 Oct 2026",
+     275761
+    ],
+    [
+     "28 Oct 2026",
+     279599
+    ],
+    [
+     "29 Oct 2026",
+     281156
+    ],
+    [
+     "30 Oct 2026",
+     280614
+    ],
+    [
+     "31 Oct 2026",
+     278349
+    ],
+    [
+     "1 Nov 2026",
+     275407
+    ],
+    [
+     "2 Nov 2026",
+     272494
+    ],
+    [
+     "3 Nov 2026",
+     267459
+    ]
+   ]
+  },
+  {
+   "id": "grokbot-fakes",
+   "theme": "crawlers",
+   "title": "Fake GrokBot requests are falling",
+   "unit": "pct",
+   "basis": "Share of requests using the GrokBot name that came from outside xAI's published addresses. Server logs from 127 sites, 1 Aug to 14 Oct 2026 (October is a part month).",
+   "change": "Down from 20.7% in August to 2.6% in October",
+   "url": "https://trakkr.ai/data/security",
+   "points": [
+    [
+     "Aug 2026",
+     20.7
+    ],
+    [
+     "Sep 2026",
+     5.5
+    ],
+    [
+     "Oct 2026",
+     2.6
+    ]
+   ]
+  },
+  {
+   "id": "chatgpt-share",
+   "theme": "traffic",
+   "title": "ChatGPT's share of AI referral visits, week by week",
+   "unit": "pct",
+   "basis": "Recorded by Search Engine Hubbub each Monday from Trakkr's AI traffic data (last 30 days, about 4,200 GA4 sites). Shown once there are three weeks of readings.",
+   "change": "",
+   "url": "https://trakkr.ai/data/ai-traffic",
+   "points": [
+    [
+     "16 Nov 2026",
+     90.8
+    ]
+   ]
+  },
+  {
+   "id": "citations-counted",
+   "theme": "citations",
+   "title": "Citations counted in the index, week by week",
+   "unit": "millions",
+   "basis": "Total AI citations in Trakkr's citation index, recorded by Search Engine Hubbub each Monday. Shown once there are three weeks of readings.",
+   "change": "",
+   "url": "https://trakkr.ai/data/citations",
+   "points": [
+    [
+     "16 Nov 2026",
+     95.7
+    ]
+   ]
+  }
+ ]
 }

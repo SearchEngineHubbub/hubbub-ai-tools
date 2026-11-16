@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Visibility Checker, AI Crawler Directory and AI Ads Tracker for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.12.0
+ * Version: 0.13.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.12.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.13.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -217,6 +217,14 @@ final class Hubbub_AI_Hub {
 			'themes'        => $d['themes'],
 			'traffic_share' => $d['traffic_share'],
 			'insights'      => $list,
+			'trends'        => array_values(
+				array_filter(
+					isset( $d['trends'] ) ? $d['trends'] : array(),
+					function ( $x ) use ( $theme ) {
+						return ( ! $theme || $x['theme'] === $theme ) && count( $x['points'] ) >= 3;
+					}
+				)
+			),
 		);
 	}
 
@@ -837,12 +845,118 @@ final class Hubbub_AI_Hub {
 				}
 				$extra = '<figure class="hb-share"><figcaption><strong>The 10 sites AI cites most</strong><span>Share of ' . esc_html( $c['total_citations'] ) . ' citations. <a href="' . esc_url( self::page_url( 'citations' ) ) . '">See all 45 in the AI Citation Index</a></span></figcaption><ol>' . $rows . '</ol></figure>';
 			}
+			$lines = '';
+			foreach ( isset( $d['trends'] ) ? $d['trends'] : array() as $tr ) {
+				if ( $tr['theme'] === $id && count( $tr['points'] ) >= 3 ) {
+					$lines .= self::line_chart( $tr );
+				}
+			}
+			$extra = $lines . $extra;
 			$links = array( 'crawlers' => array( 'crawlers', 'Check every AI crawler in the directory' ), 'readiness' => array( 'checker', 'Check how ready your page is' ), 'citations' => array( 'citations', 'Open the AI Citation Index' ) );
 			$more  = isset( $links[ $id ] ) ? '<p class="hb-more"><a href="' . esc_url( self::page_url( $links[ $id ][0] ) ) . '">' . esc_html( $links[ $id ][1] ) . '</a> →</p>' : '';
 			$body .= '<section class="hb-theme" id="hb-' . esc_attr( $id ) . '"><h2 class="hb-rule"><span>' . esc_html( $t['title'] ) . '</span></h2><p class="hb-theme__intro">' . esc_html( $t['intro'] ) . '</p>'
 				. $extra . '<div class="hb-insights">' . $items . '</div>' . $more . '</section>';
 		}
 		return self::shell( 'insights', $hero . $body . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
+	}
+
+	/** Formats a trend value for its unit. */
+	private static function trend_value( $v, $unit, $short = false ) {
+		if ( 'pct' === $unit ) {
+			return rtrim( rtrim( number_format( $v, 1 ), '0' ), '.' ) . '%';
+		}
+		if ( 'millions' === $unit ) {
+			return rtrim( rtrim( number_format( $v, 1 ), '0' ), '.' ) . 'M';
+		}
+		if ( $short && $v >= 1000 ) {
+			return rtrim( rtrim( number_format( $v / 1000, 1 ), '0' ), '.' ) . 'K';
+		}
+		return number_format( $v );
+	}
+
+	/**
+	 * A line chart for one trend. The line is an SVG stretched to the plot; labels,
+	 * points and the hover readout are HTML so text stays crisp at any width.
+	 * The table under it carries every value for screen readers and agents.
+	 */
+	private static function line_chart( $t ) {
+		$pts  = $t['points'];
+		$n    = count( $pts );
+		$vals = array_map( 'floatval', array_column( $pts, 1 ) );
+		$lo   = min( $vals );
+		$hi   = max( $vals );
+		$raw  = max( ( $hi - $lo ) / 3, $hi * 0.05, 0.1 );
+		$mag  = pow( 10, floor( log10( $raw ) ) );
+		$step = $mag * 10;
+		foreach ( array( 1, 2, 2.5, 5, 10 ) as $m ) {
+			if ( $m * $mag >= $raw ) {
+				$step = $m * $mag;
+				break;
+			}
+		}
+		$y0 = floor( $lo / $step ) * $step;
+		$y1 = ceil( $hi / $step ) * $step;
+		if ( $y1 <= $y0 ) {
+			$y1 = $y0 + $step;
+		}
+		if ( 'count' !== $t['unit'] && $y0 > 0 && $y0 <= $step ) {
+			$y0 = 0;
+		}
+		$xs   = function ( $i ) use ( $n ) {
+			return $n > 1 ? $i / ( $n - 1 ) * 100 : 50;
+		};
+		$ys   = function ( $v ) use ( $y0, $y1 ) {
+			return 100 - ( $v - $y0 ) / ( $y1 - $y0 ) * 100;
+		};
+		$line = '';
+		foreach ( $vals as $i => $v ) {
+			$line .= ( $i ? ' L' : 'M' ) . round( $xs( $i ), 2 ) . ' ' . round( $ys( $v ), 2 );
+		}
+		$area = $line . ' L100 100 L0 100 Z';
+		$grid = '';
+		for ( $g = $y0; $g <= $y1 + $step / 2; $g += $step ) {
+			$grid .= '<span class="hb-line__grid" style="top:' . round( $ys( $g ), 2 ) . '%"><i>' . esc_html( self::trend_value( $g, $t['unit'], true ) ) . '</i></span>';
+		}
+		$few   = $n <= 8;
+		$peak  = array_search( $hi, $vals, true );
+		$marks = '';
+		$xlab  = '';
+		$picks = $few ? range( 0, $n - 1 ) : array_unique( array( 0, (int) round( ( $n - 1 ) / 3 ), (int) round( ( $n - 1 ) * 2 / 3 ), $n - 1 ) );
+		foreach ( $vals as $i => $v ) {
+			$label = $pts[ $i ][0];
+			$short = preg_replace( '/ \d{4}$/', '', $label );
+			if ( in_array( $i, $picks, true ) ) {
+				$xlab .= '<span style="left:' . round( $xs( $i ), 2 ) . '%">' . esc_html( $short ) . '</span>';
+			}
+			$tag = '';
+			if ( $few ) {
+				$tag = self::trend_value( $v, $t['unit'] );
+			} elseif ( $i === $peak ) {
+				$tag = 'Peak ' . self::trend_value( $v, $t['unit'] );
+			}
+			if ( $few || $i === $peak || $i === $n - 1 ) {
+				$marks .= '<span class="hb-line__dot' . ( $i === $n - 1 ? ' is-last' : '' ) . '" style="left:' . round( $xs( $i ), 2 ) . '%;top:' . round( $ys( $v ), 2 ) . '%">'
+					. ( $tag ? '<b>' . esc_html( $tag ) . '</b>' : '' ) . '</span>';
+			}
+		}
+		$data = array();
+		$rows = '';
+		foreach ( $vals as $i => $v ) {
+			$data[] = array( $pts[ $i ][0], self::trend_value( $v, $t['unit'] ), round( $xs( $i ), 2 ), round( $ys( $v ), 2 ) );
+			$rows  .= '<tr><td>' . esc_html( $pts[ $i ][0] ) . '</td><td>' . esc_html( self::trend_value( $v, $t['unit'] ) ) . '</td></tr>';
+		}
+		$last = end( $pts );
+		$head = '<p class="hb-line__head"><b>' . esc_html( self::trend_value( $vals[ $n - 1 ], $t['unit'] ) ) . '</b><span>' . esc_html( $last[0] ) . '</span>'
+			. ( $t['change'] ? '<em>' . esc_html( $t['change'] ) . '</em>' : '' ) . '</p>';
+		return '<figure class="hb-line" data-line="' . esc_attr( wp_json_encode( $data ) ) . '">'
+			. '<figcaption><strong>' . esc_html( $t['title'] ) . '</strong><span>' . esc_html( $t['basis'] ) . ' <a href="' . esc_url( $t['url'] ) . '" rel="noopener" target="_blank">Source</a></span></figcaption>'
+			. $head
+			. '<div class="hb-line__chart' . ( $few ? ' is-few' : '' ) . '"><div class="hb-line__plot">' . $grid
+			. '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="hb-line__area" d="' . esc_attr( $area ) . '"/><path class="hb-line__path" d="' . esc_attr( $line ) . '"/></svg>'
+			. $marks . '<span class="hb-line__guide" hidden></span><span class="hb-line__tip" hidden></span>'
+			. '<div class="hb-line__x">' . $xlab . '</div></div></div>'
+			. '<details class="hb-line__data"><summary>Show the numbers</summary><table><thead><tr><th scope="col">Date</th><th scope="col">Value</th></tr></thead><tbody>' . $rows . '</tbody></table></details>'
+			. '</figure>';
 	}
 
 	/**

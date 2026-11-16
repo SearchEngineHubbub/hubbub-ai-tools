@@ -290,8 +290,32 @@
   }
 
   // Grow meters and bars when they scroll into view.
+  // Line charts: a readout follows the pointer to the nearest point.
+  function initLines(root) {
+    Array.prototype.forEach.call(root.querySelectorAll('.hb-line[data-line]'), function (fig) {
+      var pts; try { pts = JSON.parse(fig.getAttribute('data-line')); } catch (e) { return; }
+      var plot = fig.querySelector('.hb-line__plot'), tip = fig.querySelector('.hb-line__tip'), guide = fig.querySelector('.hb-line__guide');
+      if (!plot || !tip || !pts.length) return;
+      function show(clientX) {
+        var r = plot.getBoundingClientRect(), f = (clientX - r.left) / r.width * 100, best = 0;
+        pts.forEach(function (p, i) { if (Math.abs(p[2] - f) < Math.abs(pts[best][2] - f)) best = i; });
+        var p = pts[best];
+        tip.innerHTML = '<b></b><span></span>';
+        tip.firstChild.textContent = p[1]; tip.lastChild.textContent = p[0];
+        tip.style.left = p[2] + '%'; tip.style.top = p[3] + '%';
+        tip.classList.toggle('is-right', p[2] > 70); tip.classList.toggle('is-left', p[2] < 30);
+        guide.style.left = p[2] + '%';
+        tip.hidden = false; guide.hidden = false;
+      }
+      function hide() { tip.hidden = true; guide.hidden = true; }
+      plot.addEventListener('pointermove', function (e) { show(e.clientX); });
+      plot.addEventListener('pointerdown', function (e) { show(e.clientX); });
+      plot.addEventListener('pointerleave', hide);
+    });
+  }
+
   function initReveal(root) {
-    var els = root.querySelectorAll('.hb-share, .hb-mix, .hb-table--sites, .hb-tiles, .hb-bigfigs');
+    var els = root.querySelectorAll('.hb-share, .hb-mix, .hb-table--sites, .hb-tiles, .hb-bigfigs, .hb-line');
     Array.prototype.forEach.call(els, function (el) {
       if (!('IntersectionObserver' in window)) { el.classList.add('is-seen'); return; }
       var io = new IntersectionObserver(function (en) {
@@ -595,6 +619,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-crawlers'), initCrawlers);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-ads'), initAds);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-citations'), initCitations);
+    Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initLines);
     Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initReveal);
     Array.prototype.forEach.call(document.querySelectorAll('.hb-graph[data-graph]'), initGraph);
   });
