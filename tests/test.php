@@ -43,4 +43,8 @@ ok($ids['noindex']==='fail' && $ids['ai-search-bots']==='fail' && $ids['server-h
 ok(isset($c->run('not a url')['error']), 'invalid url rejected');
 ok(isset((new Hubbub_AI_Hub_Checker([], function($u){return ['code'=>0,'body'=>'','headers'=>[],'url'=>$u,'error'=>'timeout'];}))->run('ex.com')['error']), 'unreachable');
 echo json_encode($b['checks'][1], JSON_PRETTY_PRINT)."\n";
+// The shipped stylesheet is built from tools/hub.src.css; it must be current.
+require __DIR__.'/../tools/build-css.php';
+ok(hubbub_build_css() === file_get_contents($P.'assets/hub.css'), 'hub.css is built from tools/hub.src.css (run php tools/build-css.php)');
+ok(strpos(hubbub_scope_css('.a, .b:not(.c, .d) li { x: 1; } @media (max-width: 9px) { .hubbub-hub .e { y: 2; } } @keyframes k { to { z: 3; } }'), 'html body .hubbub-hub.hubbub-hub.hb-app .b:not(.c, .d) li') !== false, 'scoping keeps :not() lists intact');
 echo "failures: $fail\n";
