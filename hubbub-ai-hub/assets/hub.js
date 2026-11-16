@@ -258,6 +258,33 @@
     build();
   }
 
+  function initVerify(root) {
+    var form = root.querySelector('.hb-verify__form');
+    if (!form) return;
+    var out = root.querySelector('.hb-verify__out'), ip = form.querySelector('[name=ip]'), ua = form.querySelector('[name=user_agent]');
+    var TITLE = { verified: 'Genuine', fake: 'Not verified', none: 'Not an AI crawler we know', unknown: 'Can\'t tell' };
+    function show(kind, title, text) {
+      out.innerHTML = '';
+      var box = el('div', 'hb-verdict hb-verdict--' + kind);
+      box.appendChild(el('strong', null, title));
+      box.appendChild(el('p', null, text));
+      out.appendChild(box);
+    }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = ip.value.trim();
+      if (!v) { ip.focus(); return; }
+      show('busy', 'Checking…', 'Looking up ' + v + ' in the published IP lists.');
+      fetch(api('/verify', 'ip=' + encodeURIComponent(v) + (ua.value ? '&user_agent=' + encodeURIComponent(ua.value) : '')))
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (!j || !j.verdict) { show('unknown', 'Something went wrong', (j && j.message) || 'Try again in a moment.'); return; }
+          show(j.verdict, TITLE[j.verdict] || j.verdict, j.message);
+        })
+        .catch(function () { show('unknown', 'Something went wrong', 'We could not reach the checker. Try again in a moment.'); });
+    });
+  }
+
   function initAds(root) {
     var segs = Array.prototype.slice.call(root.querySelectorAll('.hb-seg button'));
     var stats = Array.prototype.slice.call(root.querySelectorAll('.hb-stat'));
@@ -671,6 +698,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initCommon);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-checker'), initChecker);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-crawlers'), initCrawlers);
+    Array.prototype.forEach.call(document.querySelectorAll('.hubbub-crawlers'), initVerify);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-ads'), initAds);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-citations'), initCitations);
     Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initLines);

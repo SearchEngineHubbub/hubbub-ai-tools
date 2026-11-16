@@ -3,14 +3,16 @@
 WordPress plugin behind the AI tools on [searchenginehubbub.com/tools](https://searchenginehubbub.com/tools/):
 
 - **AI Readiness Checker** `[hubbub_ai_checker]`
-- **AI Crawler Directory** and robots.txt builder `[hubbub_ai_crawlers]`
+- **AI Crawler Directory**, bot verifier and robots.txt builder `[hubbub_ai_crawlers]`
 - **AI Ads Opportunities** `[hubbub_ai_ads]`
 - **Tools landing page** `[hubbub_ai_tools]`
-- JSON API under `/wp-json/hubbub/v1/` (`check`, `crawlers`, `robots`, `ads`, `about`, `llms`) and an MCP server at `/wp-json/hubbub/v1/mcp`.
+- JSON API under `/wp-json/hubbub/v1/` (`check`, `crawlers`, `verify`, `robots`, `ads`, `citations`, `insights`, `about`, `llms`) and an MCP server at `/wp-json/hubbub/v1/mcp`.
 
 The styling inherits the active theme's colours and fonts (`--wp--preset--*`).
 
 ## Data
+
+Outside sources: Trakkr open data (CC BY 4.0, figures quoted in the JSON files), each company's published crawler IP lists (fetched live by `/verify`, cached 12 hours) and live Cloudflare Radar chart embeds (CC BY 4.0; Radar's API data is CC BY-NC, so it is not used).
 
 `hubbub-ai-hub/data/*.json` ship with the plugin. A private page with the slug `hubbub-data-ai-ads` or `hubbub-data-crawlers` holding newer JSON overrides them, so data can be refreshed without a release.
 

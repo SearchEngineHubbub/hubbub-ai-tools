@@ -108,6 +108,20 @@ class Hubbub_AI_Hub_MCP {
 				'annotations' => array( 'readOnlyHint' => true ),
 			),
 			array(
+				'name'        => 'verify_ai_bot',
+				'title'       => 'Verify an AI crawler by IP address',
+				'description' => 'Checks whether an IP address really belongs to an AI crawler (GPTBot, ClaudeBot, PerplexityBot, Googlebot, bingbot and others) using the IP lists each company publishes, plus reverse DNS for Google, Microsoft, Apple and Amazon. Pass the user agent the visitor claimed to spot fakes.',
+				'inputSchema' => array(
+					'type'       => 'object',
+					'properties' => array(
+						'ip'         => array( 'type' => 'string', 'description' => 'IPv4 or IPv6 address from your logs' ),
+						'user_agent' => array( 'type' => 'string', 'description' => 'Optional: the user agent the visitor sent, e.g. GPTBot/1.2' ),
+					),
+					'required'   => array( 'ip' ),
+				),
+				'annotations' => array( 'readOnlyHint' => true ),
+			),
+			array(
 				'name'        => 'build_robots_txt',
 				'title'       => 'Build robots.txt rules for AI crawlers',
 				'description' => 'Generates robots.txt rules for AI crawlers. Choose which purposes to block. Googlebot, Bingbot and Applebot are never blocked.',
@@ -192,6 +206,12 @@ class Hubbub_AI_Hub_MCP {
 					)
 				);
 				$data = array( 'updated' => $all['updated'], 'source' => home_url( '/tools/ai-crawlers/' ), 'crawlers' => $list );
+				break;
+			case 'verify_ai_bot':
+				$data = Hubbub_AI_Hub_Verify::verify( isset( $args['ip'] ) ? (string) $args['ip'] : '', isset( $args['user_agent'] ) ? (string) $args['user_agent'] : '' );
+				if ( is_wp_error( $data ) ) {
+					return array( 'isError' => true, 'content' => array( array( 'type' => 'text', 'text' => $data->get_error_message() ) ) );
+				}
 				break;
 			case 'build_robots_txt':
 				$block = isset( $args['block'] ) && is_array( $args['block'] ) ? array_map( 'strval', $args['block'] ) : array();

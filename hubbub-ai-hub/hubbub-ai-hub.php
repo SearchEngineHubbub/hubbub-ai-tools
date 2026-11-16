@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.15.1
+ * Version: 0.16.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,12 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.15.1' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.16.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-robots.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-checker.php';
+require_once HUBBUB_AI_HUB_DIR . 'includes/class-verify.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-mcp.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-updater.php';
 
@@ -159,6 +160,19 @@ final class Hubbub_AI_Hub {
 				'callback'            => array( __CLASS__, 'rest_insights' ),
 				'args'                => array(
 					'theme' => array( 'type' => 'string', 'enum' => array( 'traffic', 'citations', 'searches', 'crawlers', 'readiness', 'models' ) ),
+				),
+			)
+		);
+		register_rest_route(
+			self::NS,
+			'/verify',
+			array(
+				'methods'             => 'GET',
+				'permission_callback' => '__return_true',
+				'callback'            => array( 'Hubbub_AI_Hub_Verify', 'rest' ),
+				'args'                => array(
+					'ip'         => array( 'type' => 'string', 'required' => true ),
+					'user_agent' => array( 'type' => 'string' ),
 				),
 			)
 		);
@@ -475,7 +489,7 @@ final class Hubbub_AI_Hub {
 			$pans .= '<div role="tabpanel" id="hb-pan-' . $k . '" aria-labelledby="hb-tab-' . $k . '"' . ( $on ? '' : ' hidden' ) . '>' . $tab[1] . '</div>';
 		}
 		return '<section class="hb-agents" id="hb-agents"><h2 class="hb-h2">Use these tools in your AI assistant</h2>'
-			. '<p>Every tool is available through an MCP server and an open JSON API, so Claude, ChatGPT, Cursor or your own agents can run checks and pull the data directly. The server offers six tools: <code>check_ai_readiness</code>, <code>list_ai_crawlers</code>, <code>build_robots_txt</code>, <code>list_ai_ad_products</code>, <code>list_top_cited_sites</code> and <code>get_ai_search_insights</code>.</p>'
+			. '<p>Every tool is available through an MCP server and an open JSON API, so Claude, ChatGPT, Cursor or your own agents can run checks and pull the data directly. The server offers seven tools: <code>check_ai_readiness</code>, <code>list_ai_crawlers</code>, <code>verify_ai_bot</code>, <code>build_robots_txt</code>, <code>list_ai_ad_products</code>, <code>list_top_cited_sites</code> and <code>get_ai_search_insights</code>.</p>'
 			. '<div class="hb-tabs" role="tablist" aria-label="Set up with">' . $btns . '</div><div class="hb-tabpans">' . $pans . '</div></section>';
 	}
 
@@ -554,12 +568,58 @@ final class Hubbub_AI_Hub {
 			. '<select class="hubbub-crawlers__company hb-input" aria-label="Operator">' . $opts . '</select></div>'
 			. '<p class="hb-count" aria-live="polite"></p>'
 			. '<div class="hb-tablewrap"><table class="hb-table hb-table--bots"><thead><tr><th scope="col">User agent</th><th scope="col">Operator</th><th scope="col">Purpose</th><th scope="col">Obeys robots.txt</th><th scope="col">Sources</th></tr></thead><tbody>' . $rows . '</tbody></table></div><p class="hb-tablenote">Visit shares and fake-request rates come from <a href="https://trakkr.ai/data/crawlers" rel="noopener" target="_blank">Trakkr</a>\'s server-log data (CC BY 4.0). ' . esc_html( self::insights()['crawler_stats_basis'] ) . '</p></section>'
+			. self::radar_section( 'crawlers' )
+			. self::verifier()
 			. '<section class="hb-section hb-builder"><h2 class="hb-h2">Build your robots.txt rules</h2><p>Choose what to block and copy the rules into your robots.txt. Search and user-request bots decide whether AI assistants can cite you. Googlebot, Bingbot and Applebot are left out, so your normal search rankings are not affected.</p>'
 			. '<div class="hb-builder__opts">' . $toggle( 'training', 'Block training bots.', 'Keeps your content out of AI model training.' )
 			. $toggle( 'search', 'Block AI search bots.', 'You will not be cited in ChatGPT search, Perplexity or Claude.' )
 			. $toggle( 'user', 'Block user-request fetchers.', 'Several of these ignore robots.txt anyway.' ) . '</div>'
 			. '<div class="hb-code hb-code--out"><pre class="hubbub-builder__out"></pre><button type="button" class="hb-copy hubbub-builder__copy">Copy</button></div></section>';
 		return self::shell( 'crawlers', $inner );
+	}
+
+	/** A live Cloudflare Radar chart (embeds are CC BY 4.0). */
+	private static function radar( $widget, $title, $note, $height = 420 ) {
+		$src = 'https://radar.cloudflare.com/embed/' . rawurlencode( $widget ) . '?theme=light&ref=%2Fai-insights';
+		return '<figure class="hb-radar"><figcaption><strong>' . esc_html( $title ) . '</strong><span>' . esc_html( $note ) . '</span></figcaption>'
+			. '<div class="hb-radar__frame" style="--h:' . (int) $height . 'px"><iframe src="' . esc_url( $src ) . '" title="' . esc_attr( $title . ' (Cloudflare Radar)' ) . '" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups"></iframe></div>'
+			. '<p class="hb-radar__credit">Live chart from <a href="https://radar.cloudflare.com/ai-insights" rel="noopener" target="_blank">Cloudflare Radar</a> (CC BY 4.0).</p></figure>';
+	}
+
+	/** Live AI crawler and AI service charts from Cloudflare Radar. */
+	private static function radar_section( $which ) {
+		if ( 'crawlers' === $which ) {
+			return '<section class="hb-section hb-radars" aria-labelledby="hb-radar-h"><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Live data</p><h2 class="hb-h2" id="hb-radar-h">AI crawler traffic across the web, live</h2>'
+				. '<p>How much each AI crawler is crawling right now, and why, across the share of the web that runs through Cloudflare.</p><div class="hb-radars__grid">'
+				. self::radar( 'AiBotTrafficXY', 'Traffic by AI bot', 'Share of AI bot HTTP requests over time' )
+				. self::radar( 'AiBotCrawlPurposeXY', 'Why AI bots crawl', 'Training, search, user actions and more' ) . '</div></section>';
+		}
+		return '<section class="hb-section hb-radars" aria-labelledby="hb-radar-h"><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Live data</p><h2 class="hb-h2" id="hb-radar-h">Live from Cloudflare Radar</h2>'
+			. '<p>Two live views from Cloudflare\'s network: which generative AI services people use most, and which AI crawlers are busiest.</p><div class="hb-radars__grid">'
+			. self::radar( 'AiServicesRankingXY', 'Most popular generative AI services', 'Ranking by DNS query popularity' )
+			. self::radar( 'AiBotTrafficXY', 'Traffic by AI bot', 'Share of AI bot HTTP requests over time' ) . '</div></section>';
+	}
+
+	/** The "Verify a bot" form on the Crawler Directory. */
+	private static function verifier() {
+		$opts = '<option value="">Any AI crawler</option>';
+		$seen = array();
+		foreach ( self::data()['crawlers'] as $c ) {
+			if ( empty( $c['ip_list'] ) || isset( $seen[ $c['token'] ] ) ) {
+				continue;
+			}
+			$seen[ $c['token'] ] = true;
+			$opts .= '<option value="' . esc_attr( $c['token'] ) . '">' . esc_html( $c['token'] ) . ' (' . esc_html( $c['company'] ) . ')</option>';
+		}
+		$opts .= '<option value="bingbot">bingbot (Microsoft)</option>';
+		return '<section class="hb-section hb-verify" id="verify-a-bot" aria-labelledby="hb-verify-h"><p class="hb-label">New · Free</p><h2 class="hb-h2" id="hb-verify-h">Verify a bot</h2>'
+			. '<p>Anyone can call their scraper GPTBot. Paste an IP address from your server logs and we check it against the IP lists OpenAI, Anthropic, Google, Perplexity, Microsoft and others publish, and reverse DNS where they use it.</p>'
+			. '<form class="hb-verify__form" novalidate><label class="screen-reader-text" for="hb-verify-ip">IP address</label>'
+			. '<input id="hb-verify-ip" class="hb-input" name="ip" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="IP address, e.g. 20.171.207.10" required>'
+			. '<label class="screen-reader-text" for="hb-verify-ua">Claims to be</label><select id="hb-verify-ua" class="hb-input" name="user_agent">' . $opts . '</select>'
+			. '<button type="submit" class="hb-btn">Verify' . self::icon( 'arrow' ) . '</button></form>'
+			. '<div class="hb-verify__out" aria-live="polite"></div>'
+			. '<p class="hb-tablenote">Checked live against each company\'s published list, cached for up to 12 hours. Also available to AI agents as the <code>verify_ai_bot</code> MCP tool.</p></section>';
 	}
 
 	public static function ads_data() {
@@ -723,7 +783,7 @@ final class Hubbub_AI_Hub {
 			. $card( 'crawlers', 'Updated weekly', $bots, 'Browse the directory' )
 			. $card( 'ads', $counts['live'] . ' live now', $live, 'See what is live' )
 			. '<a class="hb-tile hb-tile--mcp" href="#hb-agents"><span class="hb-label">For AI agents</span><h3>MCP server</h3><p>Give Claude, ChatGPT or Cursor every tool here. One URL, no sign-in.</p>'
-			. '<code class="hb-tile__code">' . esc_html( rest_url( self::NS . '/mcp' ) ) . '</code><span class="hb-tile__foot"><span>6 tools · JSON API too</span><span class="hb-cta">Connect your AI' . self::icon( 'arrow' ) . '</span></span></a>'
+			. '<code class="hb-tile__code">' . esc_html( rest_url( self::NS . '/mcp' ) ) . '</code><span class="hb-tile__foot"><span>7 tools · JSON API too</span><span class="hb-cta">Connect your AI' . self::icon( 'arrow' ) . '</span></span></a>'
 			. $card( 'citations', 'New · early version', $cites, 'See the index' )
 			. '</div></section>';
 
@@ -914,7 +974,7 @@ final class Hubbub_AI_Hub {
 			$body .= '<section class="hb-theme" id="hb-' . esc_attr( $id ) . '"><h2 class="hb-rule"><span>' . esc_html( $t['title'] ) . '</span></h2><p class="hb-theme__intro">' . esc_html( $t['intro'] ) . '</p>'
 				. $extra . '<div class="hb-insights">' . $items . '</div>' . $more . '</section>';
 		}
-		return self::shell( 'insights', $hero . $body . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
+		return self::shell( 'insights', $hero . $body . self::radar_section( 'insights' ) . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
 	}
 
 	/** Formats a trend value for its unit. */

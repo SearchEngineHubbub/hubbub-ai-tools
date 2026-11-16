@@ -736,3 +736,31 @@ html body .hubbub-hub.hubbub-hub.hb-app .hb-quick__text p:not(.hb-label) { margi
 html body .hubbub-hub.hubbub-hub.hb-app .hb-quick .hb-search--hero { max-width: none; margin: 0; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-graph + .hb-rule { margin-top: 3.5rem !important; }
 @media (max-width: 760px) { html body .hubbub-hub.hubbub-hub.hb-app .hb-quick__card { grid-template-columns: 1fr; padding: 1.25rem; } }
+
+/* Verify a bot */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verify { padding: 1.75rem; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(135deg, var(--paper), var(--soft)); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verify .hb-h2 { margin-top: .35rem !important; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verify > p:not(.hb-label):not(.hb-tablenote) { max-width: 46rem; color: var(--mute); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verify__form { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.1rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verify__form input { flex: 1 1 16rem; height: 2.75rem; font-family: var(--mono); font-size: .95rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verify__form select { flex: 0 1 16rem; height: 2.75rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verify__form .hb-btn { height: 2.75rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verdict { margin-top: 1rem; padding: 1rem 1.15rem; border: 1px solid var(--line); border-left: 4px solid var(--c, var(--mute)); border-radius: 10px; background: var(--paper); animation: hb-rise .35s ease both; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verdict strong { display: block; font-family: var(--head); font-size: 1.15rem; font-weight: 600; color: var(--c, var(--text)); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verdict p { margin: .25rem 0 0 !important; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verdict--verified { --c: var(--good); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verdict--fake { --c: var(--bad); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verdict--none, html body .hubbub-hub.hubbub-hub.hb-app .hb-verdict--unknown { --c: var(--warn); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-verdict--busy { --c: var(--mute); }
+@media (max-width: 640px) { html body .hubbub-hub.hubbub-hub.hb-app .hb-verify { padding: 1.1rem; } html body .hubbub-hub.hubbub-hub.hb-app .hb-verify__form select, html body .hubbub-hub.hubbub-hub.hb-app .hb-verify__form .hb-btn { flex: 1 1 100%; } }
+
+/* Live Cloudflare Radar charts */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-radars > p:not(.hb-label) { max-width: 46rem; color: var(--mute); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-radars .hb-h2 { margin-top: .35rem !important; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-radars__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); gap: 1rem; margin-top: 1.25rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-radar { display: flex; flex-direction: column; padding: 1.1rem 1.1rem .9rem; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-radar figcaption strong { display: block; font-family: var(--head); font-size: 1.1rem; font-weight: 600; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-radar figcaption span { color: var(--mute); font-size: .875rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-radar__frame { position: relative; height: var(--h, 420px); margin-top: .75rem; border-radius: 8px; overflow: hidden; background: var(--soft); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-radar__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-radar__credit { margin: .6rem 0 0 !important; color: var(--mute); font-size: .8rem; }

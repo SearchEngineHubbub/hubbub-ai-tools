@@ -43,6 +43,18 @@ ok($ids['noindex']==='fail' && $ids['ai-search-bots']==='fail' && $ids['server-h
 ok(isset($c->run('not a url')['error']), 'invalid url rejected');
 ok(isset((new Hubbub_AI_Hub_Checker([], function($u){return ['code'=>0,'body'=>'','headers'=>[],'url'=>$u,'error'=>'timeout'];}))->run('ex.com')['error']), 'unreachable');
 echo json_encode($b['checks'][1], JSON_PRETTY_PRINT)."\n";
+// Verify a bot: CIDR matching and list parsing.
+if (!defined('ABSPATH')) define('ABSPATH', __DIR__);
+require_once $P.'includes/class-verify.php';
+ok(Hubbub_AI_Hub_Verify::in_cidr('20.171.207.10', '20.171.206.0/23'), 'ipv4 in /23');
+ok(!Hubbub_AI_Hub_Verify::in_cidr('20.171.208.1', '20.171.206.0/23'), 'ipv4 outside /23');
+ok(Hubbub_AI_Hub_Verify::in_cidr('66.249.66.1', '66.249.66.1/32'), 'ipv4 /32');
+ok(Hubbub_AI_Hub_Verify::in_cidr('2001:4860:4801:10::1', '2001:4860:4801:10::/64'), 'ipv6 in /64');
+ok(!Hubbub_AI_Hub_Verify::in_cidr('2001:4860:4801:11::1', '2001:4860:4801:10::/64'), 'ipv6 outside /64');
+ok(!Hubbub_AI_Hub_Verify::in_cidr('20.171.207.10', '2001:4860::/32'), 'v4 vs v6 never match');
+$pl = Hubbub_AI_Hub_Verify::parse('{"creationTime":"2026-11-01T00:00:00Z","prefixes":[{"ipv4Prefix":"1.2.3.0/24"},{"ipv6Prefix":"2600::/48"},{"x":1}]}');
+ok($pl['updated'] === '2026-11-01' && count($pl['prefixes']) === 2, 'parses published list format');
+ok(Hubbub_AI_Hub_Verify::parse('<html>')['prefixes'] === [], 'bad list parses empty');
 // The shipped stylesheet is built from tools/hub.src.css; it must be current.
 require __DIR__.'/../tools/build-css.php';
 ok(hubbub_build_css() === file_get_contents($P.'assets/hub.css'), 'hub.css is built from tools/hub.src.css (run php tools/build-css.php)');
