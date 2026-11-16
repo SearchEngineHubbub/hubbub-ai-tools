@@ -718,6 +718,49 @@
     start();
   }
 
+  // Insights section bar: highlight the section in view and keep its chip visible.
+  function initSections(root) {
+    var bar = root.querySelector('.hb-sections');
+    if (!bar || !('IntersectionObserver' in window)) return;
+    var links = Array.prototype.slice.call(bar.querySelectorAll('a[href^="#"]'));
+    var map = {};
+    links.forEach(function (a) { var t = document.getElementById(a.getAttribute('href').slice(1)); if (t) map[t.id] = a; });
+    var current = null;
+    function set(a) {
+      if (a === current) return;
+      if (current) current.removeAttribute('aria-current');
+      current = a;
+      if (!a) return;
+      a.setAttribute('aria-current', 'true');
+      var box = bar.querySelector('.hb-sections__in');
+      box.scrollTo({ left: a.offsetLeft - box.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth' });
+    }
+    var seen = {};
+    var io = new IntersectionObserver(function (en) {
+      en.forEach(function (e) { seen[e.target.id] = e.isIntersecting ? e.boundingClientRect.top : null; });
+      var best = null, bestTop = Infinity;
+      Object.keys(seen).forEach(function (id) { var t = seen[id]; if (t !== null && t < bestTop) { bestTop = t; best = id; } });
+      set(best ? map[best] : null);
+    }, { rootMargin: '-20% 0px -60% 0px' });
+    Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
+  }
+
+  // Tools overview news reel: duplicate the items for a seamless loop, speed set by length.
+  function initReel(root) {
+    var reel = root.querySelector('.hb-reel');
+    if (!reel) return;
+    var list = reel.querySelector('.hb-reel__list');
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    Array.prototype.slice.call(list.children).forEach(function (li) {
+      var c = li.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      Array.prototype.forEach.call(c.querySelectorAll('a'), function (a) { a.setAttribute('tabindex', '-1'); });
+      list.appendChild(c);
+    });
+    reel.style.setProperty('--reel-dur', Math.max(30, Math.round(list.scrollWidth / 2 / 45)) + 's');
+    reel.classList.add('is-moving');
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initCommon);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-checker'), initChecker);
@@ -730,5 +773,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initReveal);
     Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initStagger);
     Array.prototype.forEach.call(document.querySelectorAll('.hb-graph[data-graph]'), initGraph);
+    Array.prototype.forEach.call(document.querySelectorAll('.hubbub-insights'), initSections);
+    Array.prototype.forEach.call(document.querySelectorAll('.hubbub-tools'), initReel);
   });
 })();

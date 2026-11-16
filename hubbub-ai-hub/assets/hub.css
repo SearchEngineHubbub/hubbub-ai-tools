@@ -825,3 +825,32 @@ html body .hubbub-hub.hubbub-hub.hb-app .hb-news__list a:hover { text-decoration
 
 /* OpenRouter board spacing */
 html body .hubbub-hub.hubbub-hub.hb-app .hb-openrouter { margin-top: 1.5rem !important; }
+
+/* Insights section bar: sticky, scrollable, highlights the section in view */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sections { position: sticky; top: var(--wp-admin--admin-bar--height, 0px); z-index: 20; margin: 2rem 0 1rem; padding: .5rem 0; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sections__in { display: flex; align-items: center; gap: .35rem; overflow-x: auto; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, #000 92%, transparent); mask-image: linear-gradient(90deg, #000 92%, transparent); padding-right: 2rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sections__in::-webkit-scrollbar { display: none; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sections__group { flex: none; display: inline-flex; align-items: center; gap: .4rem; margin: 0 .35rem 0 .25rem; color: var(--mute); font-size: .75rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sections__group--live { margin-left: 1rem; padding-left: 1rem; border-left: 1px solid var(--line); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sections a { flex: none; padding: .4rem .8rem; border: 1px solid transparent; border-radius: 999px; color: var(--text); font-size: .875rem; white-space: nowrap; text-decoration: none !important; transition: background .2s, border-color .2s, color .2s; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sections a:hover { border-color: var(--line); background: var(--soft); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sections a[aria-current="true"] { background: var(--text); border-color: var(--text); color: var(--paper); }
+html body .hubbub-hub.hubbub-hub.hb-app .hubbub-insights .hb-theme, html body .hubbub-hub.hubbub-hub.hb-app .hubbub-insights #hb-news, html body .hubbub-hub.hubbub-hub.hb-app .hubbub-insights #hb-interest, html body .hubbub-hub.hubbub-hub.hb-app .hubbub-insights #hb-live-charts { scroll-margin-top: calc(var(--wp-admin--admin-bar--height, 0px) + 6.5rem); }
+
+/* Tools overview news reel */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; margin: 1.5rem 0 .5rem; padding: .55rem 1rem; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__label { display: inline-flex; align-items: center; gap: .45rem; margin: 0 !important; font-size: .75rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__track { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__list { display: flex; gap: 2.5rem; width: max-content; margin: 0 !important; padding: 0 !important; list-style: none; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel.is-moving .hb-reel__list { animation: hb-reel var(--reel-dur, 60s) linear infinite; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel:hover .hb-reel__list, html body .hubbub-hub.hubbub-hub.hb-app .hb-reel:focus-within .hb-reel__list { animation-play-state: paused; }
+@keyframes hb-reel { to { transform: translateX(-50%); } }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__list li { margin: 0 !important; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__list a { display: inline-flex; align-items: baseline; gap: .55rem; white-space: nowrap; color: var(--text); font-size: .9rem; text-decoration: none !important; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__list a b { font-weight: 600; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__list a time { color: var(--mute); font-size: .8rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__list a:hover span { text-decoration: underline; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__list li + li::before { content: none; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__all { font-size: .85rem; font-weight: 600; white-space: nowrap; text-decoration: none !important; color: var(--text); }
+@media (max-width: 640px) { html body .hubbub-hub.hubbub-hub.hb-app .hb-reel { grid-template-columns: 1fr auto; border-radius: 16px; } html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__track { grid-column: 1 / -1; grid-row: 2; } }
+@media (prefers-reduced-motion: reduce) { html body .hubbub-hub.hubbub-hub.hb-app .hb-reel__track { overflow-x: auto; } html body .hubbub-hub.hubbub-hub.hb-app .hb-reel.is-moving .hb-reel__list { animation: none; } }

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.20.0
+ * Version: 0.21.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.20.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.21.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -621,7 +621,7 @@ final class Hubbub_AI_Hub {
 				. self::radar( 'AiBotTrafficXY', 'Traffic by AI bot', 'Share of AI bot HTTP requests over time' )
 				. self::radar( 'AiBotCrawlPurposeXY', 'Why AI bots crawl', 'Training, search, user actions and more' ) . '</div></section>';
 		}
-		return '<section class="hb-section hb-radars" aria-labelledby="hb-radar-h"><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Live data</p><h2 class="hb-h2" id="hb-radar-h">Live from Cloudflare Radar</h2>'
+		return '<section class="hb-section hb-radars" id="hb-live-charts" aria-labelledby="hb-radar-h"><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Live data</p><h2 class="hb-h2" id="hb-radar-h">Live from Cloudflare Radar</h2>'
 			. '<p>Two live views from Cloudflare\'s network: which generative AI services people use most, and which AI crawlers are busiest.</p><div class="hb-radars__grid">'
 			. self::radar( 'AiServicesRankingXY', 'Most popular generative AI services', 'Ranking by DNS query popularity' )
 			. self::radar( 'AiBotTrafficXY', 'Traffic by AI bot', 'Share of AI bot HTTP requests over time' ) . '</div></section>';
@@ -840,7 +840,7 @@ final class Hubbub_AI_Hub {
 			. $card( 'citations', 'New · early version', $cites, 'See the index' )
 			. '</div></section>';
 
-		$inner = $hero . self::graph( $meta ) . '<h2 class="hb-rule"><span>AI Search Insights</span></h2>' . self::brief() . $quick . $tiles;
+		$inner = $hero . self::newsreel() . self::graph( $meta ) . '<h2 class="hb-rule"><span>AI Search Insights</span></h2>' . self::brief() . $quick . $tiles;
 		return self::shell( 'tools', $inner );
 	}
 
@@ -966,10 +966,6 @@ final class Hubbub_AI_Hub {
 		foreach ( $d['themes'] as $t ) {
 			$themes[ $t['id'] ] = $t;
 		}
-		$jump = '';
-		foreach ( $themes as $id => $t ) {
-			$jump .= '<a href="#hb-' . esc_attr( $id ) . '">' . esc_html( $t['title'] ) . '</a>';
-		}
 		$lead = array();
 		foreach ( array( 'citations-3', 'searches-10', 'crawlers-15', 'readiness-18' ) as $id ) {
 			foreach ( $d['insights'] as $x ) {
@@ -985,7 +981,7 @@ final class Hubbub_AI_Hub {
 		$hero = '<header class="hb-stage hb-stage--insights"><p class="hb-kicker"><span class="hb-live" aria-hidden="true"></span>Free data · Updated weekly</p>'
 			. '<h2 class="hb-stage__title">AI search, <mark>by the numbers</mark></h2>'
 			. '<p class="hb-stage__sub">How AI assistants send traffic, choose what to cite, search the web and crawl your site. Free to read, share and reuse with a credit.</p>'
-			. '<nav class="hb-jump" aria-label="Sections">' . $jump . '</nav></header>'
+			. '</header>'
 			. '<dl class="hb-bigfigs">' . $cards . '</dl>';
 
 		$body = '';
@@ -1029,7 +1025,33 @@ final class Hubbub_AI_Hub {
 			$body .= '<section class="hb-theme" id="hb-' . esc_attr( $id ) . '"><h2 class="hb-rule"><span>' . esc_html( $t['title'] ) . '</span></h2><p class="hb-theme__intro">' . esc_html( $t['intro'] ) . '</p>'
 				. $extra . '<div class="hb-insights">' . $items . '</div>' . $more . '</section>';
 		}
-		return self::shell( 'insights', $hero . $body . self::interest() . self::news() . self::radar_section( 'insights' ) . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
+		$interest = self::interest();
+		$news     = self::news();
+		$short    = array( 'traffic' => 'AI traffic', 'citations' => 'Citations', 'searches' => 'How AI searches', 'crawlers' => 'Crawlers', 'readiness' => 'Site readiness', 'models' => 'Do AIs agree?', 'arena' => 'Search Arena' );
+		$data_l   = '';
+		foreach ( $themes as $id => $t ) {
+			$data_l .= '<a href="#hb-' . esc_attr( $id ) . '">' . esc_html( $short[ $id ] ?? $t['title'] ) . '</a>';
+		}
+		$live_l = ( $news ? '<a href="#hb-news">News</a>' : '' ) . ( $interest ? '<a href="#hb-interest">Interest</a>' : '' ) . '<a href="#hb-live-charts">Live charts</a>';
+		$nav    = '<nav class="hb-sections" aria-label="Sections on this page"><div class="hb-sections__in">'
+			. '<span class="hb-sections__group">The numbers</span>' . $data_l
+			. '<span class="hb-sections__group hb-sections__group--live"><span class="hb-live" aria-hidden="true"></span>Live</span>' . $live_l . '</div></nav>';
+		return self::shell( 'insights', $hero . $nav . $body . $news . $interest . self::radar_section( 'insights' ) . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
+	}
+
+	/** A horizontal reel of the latest AI search headlines for the Tools overview. */
+	private static function newsreel() {
+		$items = Hubbub_AI_Hub_News::items( 10 );
+		if ( ! $items ) {
+			return '';
+		}
+		$li = '';
+		foreach ( $items as $it ) {
+			$li .= '<li><a href="' . esc_url( $it[1] ) . '" rel="noopener" target="_blank"><b>' . esc_html( $it[3] ) . '</b><time datetime="' . esc_attr( gmdate( 'c', $it[2] ) ) . '">' . esc_html( wp_date( 'j M', $it[2] ) ) . '</time><span>' . esc_html( $it[0] ) . '</span></a></li>';
+		}
+		return '<section class="hb-reel" aria-label="Latest AI search news"><p class="hb-reel__label"><span class="hb-live" aria-hidden="true"></span>Latest news</p>'
+			. '<div class="hb-reel__track"><ul class="hb-reel__list">' . $li . '</ul></div>'
+			. '<a class="hb-reel__all" href="' . esc_url( self::insights_url() ) . '#hb-news">All news <span aria-hidden="true">→</span></a></section>';
 	}
 
 	/** Latest AI search headlines from official blogs and changelogs (headlines and links only). */
@@ -1044,7 +1066,7 @@ final class Hubbub_AI_Hub {
 				. '<a href="' . esc_url( $it[1] ) . '" rel="noopener" target="_blank">' . esc_html( $it[0] ) . '</a></li>';
 		}
 		$names = array_keys( apply_filters( 'hubbub_ai_hub_news_feeds', Hubbub_AI_Hub_News::FEEDS ) );
-		return '<section class="hb-section hb-news" aria-labelledby="hb-news-h"><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Updated every few hours</p><h2 class="hb-h2" id="hb-news-h">Latest from the AI search platforms</h2>'
+		return '<section class="hb-section hb-news" id="hb-news" aria-labelledby="hb-news-h"><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Updated every few hours</p><h2 class="hb-h2" id="hb-news-h">Latest from the AI search platforms</h2>'
 			. '<p>New announcements straight from the official blogs, so you can see what changed this week. OpenAI and Google AI posts are filtered to the ones about search, ads, shopping and agents.</p>'
 			. '<ul class="hb-news__list">' . $li . '</ul>'
 			. '<p class="hb-tablenote">Headlines link to the original posts on ' . esc_html( implode( ', ', $names ) ) . '.</p></section>';
@@ -1084,7 +1106,7 @@ final class Hubbub_AI_Hub {
 		}
 		$from = $mon( $series[0][2][0][0] );
 		$to   = $mon( end( $series[0][2] )[0] );
-		return '<section class="hb-section hb-interest" aria-labelledby="hb-interest-h"><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Updated daily</p><h2 class="hb-h2" id="hb-interest-h">Which AI assistants people are reading about</h2>'
+		return '<section class="hb-section hb-interest" id="hb-interest" aria-labelledby="hb-interest-h"><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Updated daily</p><h2 class="hb-h2" id="hb-interest-h">Which AI assistants people are reading about</h2>'
 			. '<p>Monthly views of each assistant\'s English Wikipedia article. It is a rough proxy for public interest, not usage, and it shows which names are growing. Each line shows that article\'s own trend over the last 12 months.</p>'
 			. '<ul class="hb-interest__list">' . $rows . '</ul>'
 			. '<p class="hb-tablenote">Change compares ' . esc_html( $to ) . ' with ' . esc_html( $from ) . '. Source: <a href="https://wikimedia.org/api/rest_v1/" rel="noopener" target="_blank">Wikimedia pageviews API</a> (CC0), people only, all devices.</p></section>';

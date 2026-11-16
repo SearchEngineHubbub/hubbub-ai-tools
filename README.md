@@ -12,7 +12,7 @@ The styling inherits the active theme's colours and fonts (`--wp--preset--*`).
 
 ## Data
 
-Outside sources: Trakkr open data (CC BY 4.0, figures quoted in the JSON files), the community ai.robots.txt list (MIT, rebuilt by `python3 tools/import-ai-robots.py`), each company's published crawler IP lists (fetched live by `/verify`, cached 12 hours), monthly English Wikipedia pageviews for the main AI assistants (Wikimedia API, CC0, fetched by the site and cached a day), OpenRouter's weekly model rankings (CC BY 4.0, top ten quoted in the JSON), headlines from the official Google Search Central, Bing Webmaster, OpenAI and Google AI feeds (headlines and links only, cached six hours) and live Cloudflare Radar chart embeds (CC BY 4.0; Radar's API data is CC BY-NC, so it is not used).
+Outside sources: Trakkr open data (CC BY 4.0, figures quoted in the JSON files), the community ai.robots.txt list (MIT, rebuilt by `python3 tools/import-ai-robots.py`), each company's published crawler IP lists (fetched live by `/verify`, cached 12 hours), monthly English Wikipedia pageviews for the main AI assistants (Wikimedia API, CC0, fetched by the site and cached a day), OpenRouter's weekly model rankings (CC BY 4.0, top ten quoted in the JSON), headlines from the official Google Search Central, Bing Webmaster, Microsoft Advertising, OpenAI and Google AI feeds (headlines and links only, cached six hours) and live Cloudflare Radar chart embeds (CC BY 4.0; Radar's API data is CC BY-NC, so it is not used).
 
 `hubbub-ai-hub/data/*.json` ship with the plugin. A private page with the slug `hubbub-data-ai-ads` or `hubbub-data-crawlers` holding newer JSON overrides them, so data can be refreshed without a release.
 

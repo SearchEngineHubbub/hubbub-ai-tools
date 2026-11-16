@@ -17,6 +17,7 @@ class Hubbub_AI_Hub_News {
 	const FEEDS = array(
 		'Google Search Central' => array( 'https://feeds.feedburner.com/blogspot/amDG', false ),
 		'Bing Webmaster'        => array( 'https://blogs.bing.com/webmaster/feed', false ),
+		'Microsoft Advertising' => array( 'https://about.ads.microsoft.com/en/blog/rss', false ),
 		'OpenAI'                => array( 'https://openai.com/news/rss.xml', true ),
 		'Google AI'             => array( 'https://blog.google/technology/ai/rss/', true ),
 	);
@@ -35,7 +36,7 @@ class Hubbub_AI_Hub_News {
 
 	/** Latest items across all feeds: [title, url, timestamp, source], newest first. */
 	public static function items( $limit = 8 ) {
-		$cached = get_transient( 'hubbub_news_v1' );
+		$cached = get_transient( 'hubbub_news_v2' );
 		if ( is_array( $cached ) ) {
 			return array_slice( $cached, 0, $limit );
 		}
@@ -68,7 +69,7 @@ class Hubbub_AI_Hub_News {
 			}
 		);
 		$out = array_slice( $out, 0, 20 );
-		set_transient( 'hubbub_news_v1', $out, $out ? 6 * HOUR_IN_SECONDS : HOUR_IN_SECONDS );
+		set_transient( 'hubbub_news_v2', $out, $out ? 6 * HOUR_IN_SECONDS : HOUR_IN_SECONDS );
 		return array_slice( $out, 0, $limit );
 	}
 }
