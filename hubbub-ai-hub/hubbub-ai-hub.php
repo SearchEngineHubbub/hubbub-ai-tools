@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.18.0
+ * Version: 0.19.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,13 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.18.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.19.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-robots.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-checker.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-verify.php';
+require_once HUBBUB_AI_HUB_DIR . 'includes/class-interest.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-mcp.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-updater.php';
 
@@ -1026,7 +1027,47 @@ final class Hubbub_AI_Hub {
 			$body .= '<section class="hb-theme" id="hb-' . esc_attr( $id ) . '"><h2 class="hb-rule"><span>' . esc_html( $t['title'] ) . '</span></h2><p class="hb-theme__intro">' . esc_html( $t['intro'] ) . '</p>'
 				. $extra . '<div class="hb-insights">' . $items . '</div>' . $more . '</section>';
 		}
-		return self::shell( 'insights', $hero . $body . self::radar_section( 'insights' ) . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
+		return self::shell( 'insights', $hero . $body . self::interest() . self::radar_section( 'insights' ) . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
+	}
+
+	/** Interest in AI assistants: monthly English Wikipedia pageviews (CC0), fetched live and cached for a day. */
+	private static function interest() {
+		$series = Hubbub_AI_Hub_Interest::series();
+		if ( ! $series ) {
+			return '';
+		}
+		$fmt  = function ( $v ) {
+			return $v >= 1000000 ? rtrim( rtrim( number_format( $v / 1000000, 1 ), '0' ), '.' ) . 'M' : ( $v >= 1000 ? round( $v / 1000 ) . 'K' : (string) $v );
+		};
+		$mon  = function ( $ym ) {
+			return gmdate( 'M Y', gmmktime( 0, 0, 0, (int) substr( $ym, 4, 2 ), 1, (int) substr( $ym, 0, 4 ) ) );
+		};
+		$rows = '';
+		foreach ( $series as $s ) {
+			$pts   = $s[2];
+			$n     = count( $pts );
+			$first = $pts[0][1];
+			$last  = $pts[ $n - 1 ][1];
+			$vals  = wp_list_pluck( $pts, 1 );
+			$lo    = min( $vals ) * 0.9;
+			$span  = max( 1, max( $vals ) - $lo );
+			$xy    = array();
+			foreach ( $pts as $i => $p ) {
+				$xy[] = round( $i / ( $n - 1 ) * 200, 1 ) . ',' . round( 44 - ( $p[1] - $lo ) / $span * 40, 1 );
+			}
+			$end   = explode( ',', end( $xy ) );
+			$chg   = $first > 0 ? round( ( $last - $first ) / $first * 100 ) : 0;
+			$cls   = $chg >= 0 ? 'up' : 'down';
+			$rows .= '<li><span class="hb-interest__name"><b>' . esc_html( $s[0] ) . '</b><small>' . esc_html( $fmt( $last ) ) . ' views in ' . esc_html( $mon( $pts[ $n - 1 ][0] ) ) . '</small></span>'
+				. '<span class="hb-interest__chart"><svg class="hb-interest__spark" viewBox="0 0 200 48" preserveAspectRatio="none" role="img" aria-label="' . esc_attr( $s[0] . ': ' . $fmt( $first ) . ' to ' . $fmt( $last ) . ' monthly views' ) . '"><polygon points="0,48 ' . esc_attr( implode( ' ', $xy ) ) . ' 200,48"/><polyline points="' . esc_attr( implode( ' ', $xy ) ) . '"/></svg><i class="hb-interest__dot" style="--y:' . esc_attr( round( $end[1] / 48 * 100, 1 ) ) . '%"></i></span>'
+				. '<b class="hb-interest__chg hb-interest__chg--' . $cls . '">' . ( $chg > 0 ? '+' : '' ) . (int) $chg . '%</b></li>';
+		}
+		$from = $mon( $series[0][2][0][0] );
+		$to   = $mon( end( $series[0][2] )[0] );
+		return '<section class="hb-section hb-interest" aria-labelledby="hb-interest-h"><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Updated daily</p><h2 class="hb-h2" id="hb-interest-h">Which AI assistants people are reading about</h2>'
+			. '<p>Monthly views of each assistant\'s English Wikipedia article. It is a rough proxy for public interest, not usage, and it shows which names are growing. Each line shows that article\'s own trend over the last 12 months.</p>'
+			. '<ul class="hb-interest__list">' . $rows . '</ul>'
+			. '<p class="hb-tablenote">Change compares ' . esc_html( $to ) . ' with ' . esc_html( $from ) . '. Source: <a href="https://wikimedia.org/api/rest_v1/" rel="noopener" target="_blank">Wikimedia pageviews API</a> (CC0), people only, all devices.</p></section>';
 	}
 
 	/** Search Arena leaderboard snapshot: the top five, quoted with a link, and the top ten by company. */

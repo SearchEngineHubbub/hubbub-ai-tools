@@ -56,6 +56,10 @@ $pl = Hubbub_AI_Hub_Verify::parse('{"creationTime":"2026-11-01T00:00:00Z","prefi
 ok($pl['updated'] === '2026-11-01' && count($pl['prefixes']) === 2, 'parses published list format');
 ok(Hubbub_AI_Hub_Verify::parse('<html>')['prefixes'] === [], 'bad list parses empty');
 // The shipped stylesheet is built from tools/hub.src.css; it must be current.
+require_once $P.'includes/class-interest.php';
+$iv = Hubbub_AI_Hub_Interest::parse('{"items":[{"timestamp":"2026090100","views":12},{"timestamp":"2026100100","views":15}]}');
+ok($iv === [['202609',12],['202610',15]], 'pageviews parse to [month, views]');
+ok(Hubbub_AI_Hub_Interest::parse('{"type":"not_found"}') === [], 'missing article parses empty');
 require __DIR__.'/../tools/build-css.php';
 ok(hubbub_build_css() === file_get_contents($P.'assets/hub.css'), 'hub.css is built from tools/hub.src.css (run php tools/build-css.php)');
 ok(strpos(hubbub_scope_css('.a, .b:not(.c, .d) li { x: 1; } @media (max-width: 9px) { .hubbub-hub .e { y: 2; } } @keyframes k { to { z: 3; } }'), 'html body .hubbub-hub.hubbub-hub.hb-app .b:not(.c, .d) li') !== false, 'scoping keeps :not() lists intact');

@@ -796,3 +796,19 @@ html body .hubbub-hub.hubbub-hub.hb-app .hb-tail__more { margin-top: 1rem; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-tail__more[hidden] { display: none; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-btn--ghost { background: var(--paper) !important; color: var(--text) !important; border: 1px solid var(--line) !important; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-btn--ghost:hover { border-color: var(--text) !important; }
+
+/* Interest in AI assistants (Wikipedia pageviews) */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__list { display: grid; gap: .25rem; margin-top: 1.25rem !important; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__list li { display: grid; grid-template-columns: minmax(9rem, 14rem) 1fr 4.5rem; align-items: center; gap: 1.25rem; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); transition: border-color .2s; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__list li:hover { border-color: var(--accent); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__name b { display: block; font-family: var(--head); font-size: 1.05rem; font-weight: 600; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__name small { color: var(--mute); font-size: .85rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__chart { position: relative; display: block; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__spark { display: block; width: 100%; height: 48px; overflow: visible; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__spark polygon { fill: var(--accent); opacity: .14; stroke: none; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__dot { position: absolute; right: -4px; top: var(--y); width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__spark polyline { fill: none; stroke: var(--accent); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__chg { text-align: right; font-variant-numeric: tabular-nums; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__chg--up { color: var(--good); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__chg--down { color: var(--bad); }
+@media (max-width: 640px) { html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__list li { grid-template-columns: 1fr 4rem; gap: .5rem 1rem; } html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__chart { grid-column: 1 / -1; grid-row: 2; } html body .hubbub-hub.hubbub-hub.hb-app .hb-interest__spark { height: 40px; } }
