@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.16.0
+ * Version: 0.17.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.16.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.17.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -233,7 +233,8 @@ final class Hubbub_AI_Hub {
 		return array(
 			'updated'       => $d['updated'],
 			'page'          => self::insights_url(),
-			'attribution'   => 'Data: Trakkr (https://trakkr.ai/data), CC BY 4.0, via Search Engine Hubbub.',
+			'attribution'   => 'Data: Trakkr (https://trakkr.ai/data), CC BY 4.0, and the Search Arena study and leaderboard (arena.ai), via Search Engine Hubbub. Each insight names its own source.',
+			'search_arena'  => isset( $d['search_arena'] ) ? $d['search_arena'] : null,
 			'themes'        => $d['themes'],
 			'summary'       => isset( $d['summary'] ) ? $d['summary'] : null,
 			'traffic_share' => $d['traffic_share'],
@@ -902,7 +903,7 @@ final class Hubbub_AI_Hub {
 			. '<section class="hb-section hb-split"><div><h2 class="hb-h2">How it is measured</h2><p>' . esc_html( $d['method'] ) . ' The index was last rebuilt on ' . esc_html( $d['index_built'] ) . '.</p></div>'
 			. '<div><h2 class="hb-h2">What comes next</h2><p>Our own monthly index will ask ChatGPT, Gemini, Perplexity and Claude the same marketing questions and show which sources each one cites, so you can see differences between assistants. Until then, this early version uses Trakkr\'s open index.</p></div></section>'
 			. self::credit( 'The citation index is', $d['source_page'], $d['updated'] );
-		return self::shell( 'citations', $intro . $body );
+		return self::shell( 'citations', $intro . $body . self::who_cites_what() );
 	}
 
 	public static function insights_shortcode() {
@@ -942,7 +943,7 @@ final class Hubbub_AI_Hub {
 				if ( $x['theme'] !== $id || in_array( $x, $lead, true ) ) {
 					continue;
 				}
-				$cite   = $x['headline'] . ' (' . $x['period'] . '. Source: Trakkr, via Search Engine Hubbub ' . self::insights_url() . ')';
+				$cite   = $x['headline'] . ' (' . $x['period'] . '. Source: ' . ( isset( $x['source_name'] ) ? $x['source_name'] : 'Trakkr' ) . ', via Search Engine Hubbub ' . self::insights_url() . ')';
 				$items .= '<article class="hb-insight"><p class="hb-insight__fig">' . esc_html( $x['figure'] ) . '</p><p class="hb-insight__text">' . esc_html( $x['headline'] ) . '</p>'
 					. '<p class="hb-insight__meta">' . esc_html( $x['detail'] ) . ' · ' . esc_html( $x['period'] ) . '</p>'
 					. '<p class="hb-insight__foot"><a href="' . esc_url( $x['url'] ) . '" rel="noopener" target="_blank">Source</a><button type="button" class="hb-copy hb-copy--text" data-copy="' . esc_attr( $cite ) . '">Copy stat</button></p></article>';
@@ -955,6 +956,8 @@ final class Hubbub_AI_Hub {
 					$bars .= '<li><span>' . esc_html( $r[0] ) . '</span><span class="hb-meter"><i style="--w:' . max( 0.6, round( $r[1] / $top * 100, 1 ) ) . '%"></i></span><b>' . esc_html( $r[1] ) . '%</b></li>';
 				}
 				$extra = '<figure class="hb-share"><figcaption><strong>Who sends the visits</strong><span>' . esc_html( $d['traffic_share']['basis'] ) . ' <a href="' . esc_url( $d['traffic_share']['url'] ) . '" rel="noopener" target="_blank">Source</a></span></figcaption><ol>' . $bars . '</ol></figure>';
+			} elseif ( 'arena' === $id && ! empty( $d['search_arena'] ) ) {
+				$extra = self::arena_board( $d['search_arena'] );
 			} elseif ( 'citations' === $id ) {
 				$rows = '';
 				foreach ( array_slice( $c['sites'], 0, 10 ) as $x ) {
@@ -969,12 +972,44 @@ final class Hubbub_AI_Hub {
 				}
 			}
 			$extra = $lines . $extra;
-			$links = array( 'crawlers' => array( 'crawlers', 'Check every AI crawler in the directory' ), 'readiness' => array( 'checker', 'Check how ready your page is' ), 'citations' => array( 'citations', 'Open the AI Citation Index' ) );
+			$links = array( 'arena' => array( 'citations', 'See which AI cites what in the Citation Index' ), 'crawlers' => array( 'crawlers', 'Check every AI crawler in the directory' ), 'readiness' => array( 'checker', 'Check how ready your page is' ), 'citations' => array( 'citations', 'Open the AI Citation Index' ) );
 			$more  = isset( $links[ $id ] ) ? '<p class="hb-more"><a href="' . esc_url( self::page_url( $links[ $id ][0] ) ) . '">' . esc_html( $links[ $id ][1] ) . '</a> →</p>' : '';
 			$body .= '<section class="hb-theme" id="hb-' . esc_attr( $id ) . '"><h2 class="hb-rule"><span>' . esc_html( $t['title'] ) . '</span></h2><p class="hb-theme__intro">' . esc_html( $t['intro'] ) . '</p>'
 				. $extra . '<div class="hb-insights">' . $items . '</div>' . $more . '</section>';
 		}
 		return self::shell( 'insights', $hero . $body . self::radar_section( 'insights' ) . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
+	}
+
+	/** Search Arena leaderboard snapshot: the top five, quoted with a link, and the top ten by company. */
+	private static function arena_board( $a ) {
+		$max  = $a['top'][0][3];
+		$rows = '';
+		foreach ( $a['top'] as $r ) {
+			$rows .= '<li><span class="hb-arena__rank">' . (int) $r[0] . '</span><span class="hb-arena__name"><b>' . esc_html( $r[1] ) . '</b><small>' . esc_html( $r[2] ) . ' · ' . esc_html( $r[4] ) . ' votes</small></span>'
+				. '<span class="hb-meter"><i style="--w:' . round( 40 + ( $r[3] - 1100 ) / max( 1, $max - 1100 ) * 60, 1 ) . '%"></i></span><b class="hb-arena__score">' . (int) $r[3] . '</b></li>';
+		}
+		$orgs = array();
+		foreach ( $a['top10_by_org'] as $o ) {
+			$orgs[] = '<b>' . (int) $o[1] . '</b> ' . esc_html( $o[0] );
+		}
+		return '<figure class="hb-share hb-arena"><figcaption><strong>Top five on the Search Arena leaderboard</strong><span>Score from ' . esc_html( $a['votes'] ) . ' blind votes across ' . (int) $a['models'] . ' AI search systems. Leaderboard updated ' . esc_html( self::fmt_date( $a['updated'] ) ) . ', checked ' . esc_html( self::fmt_date( $a['checked'] ) ) . '. <a href="' . esc_url( $a['url'] ) . '" rel="noopener" target="_blank">Full leaderboard on Arena</a></span></figcaption>'
+			. '<ol>' . $rows . '</ol><p class="hb-arena__orgs">Top ten by company: ' . implode( ', ', $orgs ) . '. ' . esc_html( $a['note'] ) . '</p></figure>';
+	}
+
+	/** "Which AI cites what", from the Search Arena study, for the Citation Index. */
+	private static function who_cites_what() {
+		$a = self::insights();
+		$a = isset( $a['search_arena'] ) ? $a['search_arena'] : null;
+		if ( ! $a ) {
+			return '';
+		}
+		$li = '';
+		foreach ( $a['who_cites_what'] as $w ) {
+			$li .= '<li><b>' . esc_html( $w[0] ) . '</b><span>' . esc_html( $w[1] ) . '</span></li>';
+		}
+		return '<section class="hb-section hb-whocites" aria-labelledby="hb-whocites-h"><p class="hb-label">From the Search Arena study</p><h2 class="hb-h2" id="hb-whocites-h">Which AI cites what</h2>'
+			. '<p>Different AI search engines lean on different kinds of sites. This comes from 24,069 real AI search conversations collected by Search Arena in 2025.</p><ul class="hb-whocites__list">' . $li . '</ul>'
+			. '<p class="hb-tablenote">Source: <a href="' . esc_url( $a['paper'] ) . '" rel="noopener" target="_blank">Search Arena: Analyzing Search-Augmented LLMs</a> (Miroyan et al., 2025). Conversations from Mar to May 2025, so newer models may differ. <a href="' . esc_url( self::insights_url() ) . '#hb-arena">More from Search Arena in AI Search Insights</a>.</p></section>';
 	}
 
 	/** Formats a trend value for its unit. */
