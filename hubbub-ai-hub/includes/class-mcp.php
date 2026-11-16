@@ -84,8 +84,8 @@ class Hubbub_AI_Hub_MCP {
 	private static function tools() {
 		return array(
 			array(
-				'name'        => 'check_ai_visibility',
-				'title'       => 'Check AI visibility of a URL',
+				'name'        => 'check_ai_readiness',
+				'title'       => 'Check how ready a URL is for AI search',
 				'description' => 'Checks whether AI assistants and AI search engines (ChatGPT, Claude, Perplexity, Gemini and others) can reach, read and cite a web page. Returns a 0-100 score, each check with pass/warn/fail and a fix, and whether each AI crawler is allowed by robots.txt.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -173,7 +173,8 @@ class Hubbub_AI_Hub_MCP {
 	private static function call_tool( $name, $args ) {
 		$args = is_array( $args ) ? $args : array();
 		switch ( $name ) {
-			case 'check_ai_visibility':
+			case 'check_ai_readiness':
+			case 'check_ai_visibility': // Old name, kept so existing agents keep working.
 				$data = Hubbub_AI_Hub::run_check( isset( $args['url'] ) ? (string) $args['url'] : '' );
 				if ( is_wp_error( $data ) ) {
 					return array( 'isError' => true, 'content' => array( array( 'type' => 'text', 'text' => $data->get_error_message() ) ) );
@@ -205,7 +206,7 @@ class Hubbub_AI_Hub_MCP {
 						}
 					)
 				);
-				$data = array( 'updated' => $all['updated'], 'source' => home_url( '/tools/ai-ads-tracker/' ), 'products' => $list );
+				$data = array( 'updated' => $all['updated'], 'source' => home_url( '/tools/ai-ad-opportunities/' ), 'products' => $list );
 				break;
 			case 'list_top_cited_sites':
 				$data = Hubbub_AI_Hub::citations_view( isset( $args['kind'] ) ? (string) $args['kind'] : '', isset( $args['limit'] ) ? (int) $args['limit'] : 20 );

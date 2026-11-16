@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Hubbub AI Hub
- * Description: AI Visibility Checker, AI Crawler Directory and AI Ads Tracker for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.13.2
+ * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
+ * Version: 0.14.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.13.2' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.14.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -40,6 +40,7 @@ final class Hubbub_AI_Hub {
 		add_shortcode( 'hubbub_ai_citations', array( __CLASS__, 'citations_shortcode' ) );
 		add_shortcode( 'hubbub_ai_insights', array( __CLASS__, 'insights_shortcode' ) );
 		add_action( 'wp_head', array( __CLASS__, 'api_link' ) );
+		add_action( 'template_redirect', array( __CLASS__, 'redirect_old_slugs' ) );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'rest_pre_serve_request', array( __CLASS__, 'serve_markdown' ), 10, 3 );
 	}
@@ -215,6 +216,7 @@ final class Hubbub_AI_Hub {
 			'page'          => self::insights_url(),
 			'attribution'   => 'Data: Trakkr (https://trakkr.ai/data), CC BY 4.0, via Search Engine Hubbub.',
 			'themes'        => $d['themes'],
+			'summary'       => isset( $d['summary'] ) ? $d['summary'] : null,
 			'traffic_share' => $d['traffic_share'],
 			'insights'      => $list,
 			'trends'        => array_values(
@@ -332,7 +334,7 @@ final class Hubbub_AI_Hub {
 		if ( isset( $result['error'] ) ) {
 			return new WP_Error( 'hubbub_unreachable', $result['error'], array( 'status' => 422 ) );
 		}
-		$result['report'] = add_query_arg( 'url', rawurlencode( $url ), home_url( '/tools/ai-visibility-checker/' ) );
+		$result['report'] = add_query_arg( 'url', rawurlencode( $url ), self::page_url( 'checker' ) );
 		set_transient( $cache_key, $result, HOUR_IN_SECONDS );
 		return $result;
 	}
@@ -383,11 +385,29 @@ final class Hubbub_AI_Hub {
 	}
 
 	/** Tool registry used by the nav, landing page, schema and the machine-readable index. */
+	/** Addresses the tools had before they were renamed (Nov 2026), sent on to the new ones. */
+	const OLD_SLUGS = array(
+		'tools/ai-visibility-checker' => 'checker',
+		'tools/ai-ads-tracker'        => 'ads',
+	);
+
+	public static function redirect_old_slugs() {
+		if ( ! is_404() ) {
+			return;
+		}
+		$path = trim( (string) wp_parse_url( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '', PHP_URL_PATH ), '/' );
+		if ( isset( self::OLD_SLUGS[ $path ] ) ) {
+			$query = isset( $_SERVER['QUERY_STRING'] ) && '' !== $_SERVER['QUERY_STRING'] ? '?' . wp_unslash( $_SERVER['QUERY_STRING'] ) : '';
+			wp_safe_redirect( self::page_url( self::OLD_SLUGS[ $path ] ) . $query, 301 );
+			exit;
+		}
+	}
+
 	public static function tools() {
 		return array(
-			'checker'  => array( 'slug' => 'ai-visibility-checker', 'icon' => 'search', 'short' => 'Visibility Checker', 'name' => 'AI Visibility Checker', 'desc' => 'Check whether ChatGPT, Claude, Perplexity and Gemini can reach, read and cite a page. Score, fixes and a crawler-by-crawler breakdown.', 'api' => '/check?url=example.com', 'mcp' => 'check_ai_visibility' ),
+			'checker'  => array( 'slug' => 'ai-readiness-checker', 'icon' => 'search', 'short' => 'Readiness Checker', 'name' => 'AI Readiness Checker', 'desc' => 'Check whether ChatGPT, Claude, Perplexity and Gemini can reach, read and cite a page. Score, fixes and a crawler-by-crawler breakdown.', 'api' => '/check?url=example.com', 'mcp' => 'check_ai_readiness' ),
 			'crawlers' => array( 'slug' => 'ai-crawlers', 'icon' => 'bot', 'short' => 'Crawler Directory', 'name' => 'AI Crawler Directory', 'desc' => 'Every AI crawler, who runs it, what it does with your content and whether it obeys robots.txt. With a robots.txt builder.', 'api' => '/crawlers', 'mcp' => 'list_ai_crawlers' ),
-			'ads'      => array( 'slug' => 'ai-ads-tracker', 'icon' => 'spark', 'short' => 'AI Ads Tracker', 'name' => 'AI Ads Tracker', 'desc' => 'Every ad product inside AI assistants and AI search: status, markets, formats and how to buy. Sourced and dated.', 'api' => '/ads?status=live', 'mcp' => 'list_ai_ad_products' ),
+			'ads'      => array( 'slug' => 'ai-ad-opportunities', 'icon' => 'spark', 'short' => 'AI Ads Opportunities', 'name' => 'AI Ads Opportunities', 'desc' => 'Where you can advertise inside AI assistants and AI search: every ad product, its status, markets, formats and how to buy. Sourced and dated.', 'api' => '/ads?status=live', 'mcp' => 'list_ai_ad_products' ),
 			'citations' => array( 'slug' => 'ai-citation-index', 'icon' => 'chart', 'short' => 'Citation Index', 'name' => 'AI Citation Index', 'desc' => 'The websites AI answers cite most, ranked by share of 95.7M citations, with the kind of site each one is. Early version built on Trakkr\'s open index.', 'api' => '/citations?limit=20', 'mcp' => 'list_top_cited_sites' ),
 		);
 	}
@@ -398,11 +418,11 @@ final class Hubbub_AI_Hub {
 	}
 
 	private static function nav( $active ) {
-		$links = '<li><a href="' . esc_url( self::page_url() ) . '"' . ( 'tools' === $active ? ' aria-current="page"' : '' ) . '>All tools</a></li>';
+		$links  = '<li><a href="' . esc_url( self::page_url() ) . '"' . ( 'tools' === $active ? ' aria-current="page"' : '' ) . '>All tools</a></li>';
+		$links .= '<li><a href="' . esc_url( self::insights_url() ) . '"' . ( 'insights' === $active ? ' aria-current="page"' : '' ) . '>AI Search Insights</a></li>';
 		foreach ( self::tools() as $key => $t ) {
 			$links .= '<li><a href="' . esc_url( self::page_url( $key ) ) . '"' . ( $key === $active ? ' aria-current="page"' : '' ) . '>' . esc_html( $t['short'] ) . '</a></li>';
 		}
-		$links .= '<li><a href="' . esc_url( self::insights_url() ) . '"' . ( 'insights' === $active ? ' aria-current="page"' : '' ) . '>AI Search Insights</a></li>';
 		$links .= '<li class="hb-nav__end"><a href="#hb-agents">API &amp; MCP</a></li>';
 		return '<nav class="hb-nav" aria-label="AI tools"><ul>' . $links . '</ul></nav>';
 	}
@@ -450,7 +470,7 @@ final class Hubbub_AI_Hub {
 			$pans .= '<div role="tabpanel" id="hb-pan-' . $k . '" aria-labelledby="hb-tab-' . $k . '"' . ( $on ? '' : ' hidden' ) . '>' . $tab[1] . '</div>';
 		}
 		return '<section class="hb-agents" id="hb-agents"><h2 class="hb-h2">Use these tools in your AI assistant</h2>'
-			. '<p>Every tool is available through an MCP server and an open JSON API, so Claude, ChatGPT, Cursor or your own agents can run checks and pull the data directly. The server offers six tools: <code>check_ai_visibility</code>, <code>list_ai_crawlers</code>, <code>build_robots_txt</code>, <code>list_ai_ad_products</code>, <code>list_top_cited_sites</code> and <code>get_ai_search_insights</code>.</p>'
+			. '<p>Every tool is available through an MCP server and an open JSON API, so Claude, ChatGPT, Cursor or your own agents can run checks and pull the data directly. The server offers six tools: <code>check_ai_readiness</code>, <code>list_ai_crawlers</code>, <code>build_robots_txt</code>, <code>list_ai_ad_products</code>, <code>list_top_cited_sites</code> and <code>get_ai_search_insights</code>.</p>'
 			. '<div class="hb-tabs" role="tablist" aria-label="Set up with">' . $btns . '</div><div class="hb-tabpans">' . $pans . '</div></section>';
 	}
 
@@ -563,8 +583,8 @@ final class Hubbub_AI_Hub {
 		);
 		$res = rest_ensure_response(
 			array(
-				'source'   => 'Search Engine Hubbub AI Ads Tracker',
-				'page'     => home_url( '/tools/ai-ads-tracker/' ),
+				'source'   => 'Search Engine Hubbub AI Ads Opportunities',
+				'page'     => self::page_url( 'ads' ),
 				'license'  => 'Free to use with attribution and a link to the page above.',
 				'updated'  => $data['updated'],
 				'count'    => count( $out ),
@@ -702,8 +722,37 @@ final class Hubbub_AI_Hub {
 			. $card( 'citations', 'New · early version', $cites, 'See the index' )
 			. '</div></section>';
 
-		$inner = $hero . self::graph( $meta ) . $tiles;
+		$inner = $hero . self::brief() . self::graph( $meta ) . $tiles;
 		return self::shell( 'tools', $inner );
+	}
+
+	/**
+	 * The executive summary of AI Search Insights shown near the top of the Tools page.
+	 * Written into data/ai-insights.json ("summary") and refreshed in the Monday run.
+	 */
+	private static function brief() {
+		$d = self::insights();
+		if ( empty( $d['summary']['points'] ) ) {
+			return '';
+		}
+		$s     = $d['summary'];
+		$cards = '';
+		foreach ( $s['points'] as $x ) {
+			$cards .= '<a class="hb-brief__item" href="' . esc_url( self::insights_url() . '#hb-' . $x['theme'] ) . '">'
+				. '<span class="hb-brief__fig"><mark>' . esc_html( $x['figure'] ) . '</mark></span>'
+				. '<span class="hb-brief__text">' . esc_html( $x['text'] ) . '</span>'
+				. '<span class="hb-brief__take"><b>Our take:</b> ' . esc_html( $x['take'] ) . '</span>'
+				. '<span class="hb-brief__period">' . esc_html( $x['period'] ) . '</span></a>';
+		}
+		$n = count( $d['insights'] );
+		return '<section class="hb-brief" aria-labelledby="hb-brief-title">'
+			. '<header class="hb-brief__head"><div><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>AI Search Insights · Updated weekly</p>'
+			. '<h2 id="hb-brief-title">' . esc_html( $s['title'] ) . '</h2>'
+			. '<p class="hb-brief__meta">Drawn from data covering ' . esc_html( $s['range'] ) . '. Checked ' . esc_html( self::fmt_date( $s['checked'] ) ) . '. Each point shows its own date range.</p></div>'
+			. '<a class="hb-btn hb-brief__cta" href="' . esc_url( self::insights_url() ) . '">See all ' . (int) $n . ' insights' . self::icon( 'arrow' ) . '</a></header>'
+			. '<div class="hb-brief__grid">' . $cards . '</div>'
+			. '<p class="hb-brief__credit">Figures from <a href="' . esc_url( $d['source']['url'] ) . '" rel="noopener" target="_blank">Trakkr Data</a> (CC BY 4.0). Our take is Search Engine Hubbub\'s reading of them.</p>'
+			. '</section>';
 	}
 
 	/** Credit line for Trakkr's open data (CC BY 4.0 requires attribution and a link). */
@@ -1027,7 +1076,7 @@ final class Hubbub_AI_Hub {
 		}
 		echo '<link rel="alternate" type="text/markdown" title="Hubbub AI tools guide for LLMs" href="' . esc_url( rest_url( self::NS . '/llms' ) ) . '">' . "\n";
 		if ( 'ads' === $key ) {
-			echo '<link rel="alternate" type="application/json" title="Hubbub AI Ads Tracker" href="' . esc_url( rest_url( self::NS . '/ads' ) ) . '">' . "\n";
+			echo '<link rel="alternate" type="application/json" title="Hubbub AI Ads Opportunities" href="' . esc_url( rest_url( self::NS . '/ads' ) ) . '">' . "\n";
 		}
 		echo '<script type="application/ld+json">' . wp_json_encode( self::schema( $key ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
 	}
@@ -1105,8 +1154,8 @@ final class Hubbub_AI_Hub {
 
 	public static function llms_markdown() {
 		$t   = self::tools();
-		$md  = "# Search Engine Hubbub AI Tools\n\n> Free tools and live data for marketers working in AI search: an AI visibility checker, a directory of AI crawlers and a tracker of ad products inside AI assistants. Free to use with attribution.\n\n";
-		$md .= "## Connect an AI assistant (MCP)\n\n- MCP server (Streamable HTTP, no auth): " . rest_url( self::NS . '/mcp' ) . "\n- MCP tools: check_ai_visibility(url), list_ai_crawlers(purpose?, company?), build_robots_txt(block[]), list_ai_ad_products(status?), list_top_cited_sites(kind?, limit?), get_ai_search_insights(theme?)\n\n";
+		$md  = "# Search Engine Hubbub AI Tools\n\n> Free tools and live data for marketers working in AI search: an AI readiness checker, a directory of AI crawlers and a guide to ad opportunities inside AI assistants. Free to use with attribution.\n\n";
+		$md .= "## Connect an AI assistant (MCP)\n\n- MCP server (Streamable HTTP, no auth): " . rest_url( self::NS . '/mcp' ) . "\n- MCP tools: check_ai_readiness(url), list_ai_crawlers(purpose?, company?), build_robots_txt(block[]), list_ai_ad_products(status?), list_top_cited_sites(kind?, limit?), get_ai_search_insights(theme?)\n\n";
 		$md .= "## Tools\n\n";
 		foreach ( $t as $k => $x ) {
 			$md .= '- [' . $x['name'] . '](' . self::page_url( $k ) . '): ' . $x['desc'] . ' JSON: ' . rest_url( self::NS . $x['api'] ) . "\n";

@@ -2,9 +2,9 @@
 
 WordPress plugin behind the AI tools on [searchenginehubbub.com/tools](https://searchenginehubbub.com/tools/):
 
-- **AI Visibility Checker** `[hubbub_ai_checker]`
+- **AI Readiness Checker** `[hubbub_ai_checker]`
 - **AI Crawler Directory** and robots.txt builder `[hubbub_ai_crawlers]`
-- **AI Ads Tracker** `[hubbub_ai_ads]`
+- **AI Ads Opportunities** `[hubbub_ai_ads]`
 - **Tools landing page** `[hubbub_ai_tools]`
 - JSON API under `/wp-json/hubbub/v1/` (`check`, `crawlers`, `robots`, `ads`, `about`, `llms`) and an MCP server at `/wp-json/hubbub/v1/mcp`.
 

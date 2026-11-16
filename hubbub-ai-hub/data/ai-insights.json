@@ -481,5 +481,40 @@
     ]
    ]
   }
- ]
+ ],
+ "summary": {
+  "title": "What the data says right now",
+  "range": "Jan 2025 to Nov 2026",
+  "checked": "2026-11-16",
+  "points": [
+   {
+    "theme": "traffic",
+    "figure": "+49.4%",
+    "text": "AI referral traffic is up 49.4% in 30 days, and ChatGPT sends 90.8% of it.",
+    "take": "Report AI referrals as their own channel, and start with ChatGPT.",
+    "period": "Last 30 days, to Nov 2026"
+   },
+   {
+    "theme": "citations",
+    "figure": "1.84%",
+    "text": "Only 1.84% of what AI cites about a brand is on the brand's own website. Wikipedia is cited about five times as often.",
+    "take": "Coverage on other sites does most of the work.",
+    "period": "Jan 2025 to Mar 2026"
+   },
+   {
+    "theme": "searches",
+    "figure": "0.55%",
+    "text": "Only 0.55% of the searches AI runs use the person's exact words, and 23.3% add a brand they never mentioned.",
+    "take": "Cover the topic and the brands around a question, not one exact phrase.",
+    "period": "Sep to Oct 2026"
+   },
+   {
+    "theme": "crawlers",
+    "figure": "88.5%",
+    "text": "88.5% of pages get exactly one visit from an AI crawler and are never revisited.",
+    "take": "A page has to be readable the first time a bot calls.",
+    "period": "Jun 2025 to Feb 2026"
+   }
+  ]
+ }
 }

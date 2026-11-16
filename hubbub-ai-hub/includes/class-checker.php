@@ -1,6 +1,6 @@
 <?php
 /**
- * AI Visibility Checker: how readable and citable a URL is for AI crawlers and answer engines.
+ * AI Readiness Checker: how readable and citable a URL is for AI crawlers and answer engines.
  */
 
 if ( ! defined( 'ABSPATH' ) && ! defined( 'HUBBUB_AI_HUB_TEST' ) ) {
@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'HUBBUB_AI_HUB_TEST' ) ) {
 
 class Hubbub_AI_Hub_Checker {
 
-	const UA = 'HubbubAIVisibilityChecker/1.0 (+https://searchenginehubbub.com/tools/ai-visibility-checker/)';
+	const UA = 'HubbubAIReadinessChecker/1.0 (+https://searchenginehubbub.com/tools/ai-readiness-checker/)';
 
 	/** @var callable(string): array{code:int, body:string, headers:array, url:string, error:string} */
 	private $fetch;
