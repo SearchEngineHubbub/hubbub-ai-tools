@@ -778,3 +778,20 @@ a.hb-tile--mcp:hover { border-color: var(--accent); box-shadow: 0 24px 44px -24p
 .hb-whocites__list span { display: block; margin-top: .3rem; color: var(--mute); }
 .hb-whocites > p:not(.hb-label):not(.hb-tablenote) { max-width: 46rem; color: var(--mute); }
 @media (max-width: 640px) { .hb-arena ol li { grid-template-columns: 1.4rem minmax(0, 1fr) 2.8rem; } .hb-arena ol li .hb-meter { grid-column: 2 / -1; grid-row: 2; } }
+
+/* The long tail of AI bots */
+.hb-tail > p:not(.hb-label):not(.hb-tablenote) { max-width: 46rem; color: var(--mute); }
+.hb-tail .hb-h2 { margin-top: .35rem !important; }
+.hb-tail .hb-toolbar { margin-top: 1.1rem; }
+.hb-tail__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr)); gap: .75rem; margin-top: 1rem !important; }
+.hb-tail__bot { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .25rem .75rem; align-content: start; padding: .9rem 1rem; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); transition: border-color .2s, transform .2s; }
+.hb-tail__bot:hover { border-color: color-mix(in srgb, var(--text) 35%, transparent); transform: translateY(-1px); }
+.hb-tail__bot[hidden] { display: none; }
+.hb-tail__bot code { font-weight: 700; overflow-wrap: anywhere; }
+.hb-tail__bot .hb-tag { font-size: .72rem; padding: .15rem .5rem; }
+.hb-tail__op { grid-column: 1 / -1; color: var(--text); font-size: .85rem; }
+.hb-tail__about { grid-column: 1 / -1; color: var(--mute); font-size: .82rem; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.hb-tail__more { margin-top: 1rem; }
+.hb-tail__more[hidden] { display: none; }
+.hb-btn--ghost { background: var(--paper) !important; color: var(--text) !important; border: 1px solid var(--line) !important; }
+.hb-btn--ghost:hover { border-color: var(--text) !important; }

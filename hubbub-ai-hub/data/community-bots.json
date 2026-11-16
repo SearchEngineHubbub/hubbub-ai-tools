@@ -1,0 +1,1459 @@
+{
+ "updated": "2026-11-16",
+ "source": {
+  "name": "ai.robots.txt",
+  "url": "https://github.com/ai-robots-txt/ai.robots.txt",
+  "licence": "MIT",
+  "notice": "Copyright (c) 2024 ai.robots.txt. Used under the MIT licence."
+ },
+ "bots": [
+  {
+   "name": "AddSearchBot",
+   "operator": "Unclear at this time",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Unclear at this time",
+   "about": "AddSearchBot is a web crawler that indexes website content for AddSearch's AI-powered site search solution, collecting data to provide fast and accurate search results. More info can be found at…"
+  },
+  {
+   "name": "AgentDataBot",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "AgentDataBot visits public web pages to identify technology stacks, company details, and team members. The data builds AgentData's company-intelligence database for AI ag… More info can be found at…"
+  },
+  {
+   "name": "AgentTimes",
+   "operator": "The Agent Times",
+   "type": "training",
+   "function": "Data Scraper from RSS Feeds.",
+   "respects_robots": "Unclear at this time",
+   "about": "Scrapes data for AI news aggregation and republishing."
+  },
+  {
+   "name": "AGI Agent",
+   "operator": "AGI, Inc",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "AGI Agent is an AI assistant operated by AGI, Inc. that navigates websites to complete user-directed tasks, including online purchases and other actions. More info can be found at https://knownagents.com/agents/agi-agent"
+  },
+  {
+   "name": "AI2Bot",
+   "operator": "Ai2",
+   "type": "training",
+   "function": "Content is used to train open language models.",
+   "respects_robots": "Yes",
+   "about": "Explores 'certain domains' to find web content."
+  },
+  {
+   "name": "AI2Bot-DeepResearchEval",
+   "operator": "Ai2, a non-profit AI research institute",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "AI2Bot-DeepResearchEval retrieves resources used to evaluate deep-research queries performed by Ai2's open-source models. More info can be found at https://knownagents.com/agents/ai2bot-deepresearcheval"
+  },
+  {
+   "name": "Ai2Bot-Dolma",
+   "operator": "Ai2",
+   "type": "training",
+   "function": "Content is used to train open language models.",
+   "respects_robots": "Yes",
+   "about": "Explores 'certain domains' to find web content."
+  },
+  {
+   "name": "aiHitBot",
+   "operator": "aiHit",
+   "type": "other",
+   "function": "A massive, artificial intelligence/machine learning…",
+   "respects_robots": "Yes",
+   "about": "Scrapes data for AI systems."
+  },
+  {
+   "name": "AIWebIndex",
+   "operator": "Lyrenth",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Yes",
+   "about": "Builds an index of public pages and serves them to AI agents as extracted, readable text with attribution and a link back to the source. Does not train foundation models on crawled content. Identity can be checked three…"
+  },
+  {
+   "name": "amazon-kendra",
+   "operator": "Amazon",
+   "type": "search",
+   "function": "Collects data for AI natural language search",
+   "respects_robots": "Yes",
+   "about": "Amazon Kendra is a highly accurate intelligent search service that enables your users to search unstructured data using natural language. It returns specific answers to questions, giving users an experience that's close…"
+  },
+  {
+   "name": "amazon-QBusiness",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "amazon-QBusiness is an Amazon Q Business web crawler that fetches and indexes web content for Amazon Q Business applications. More info can be found at https://knownagents.com/agents/amazon-qbusiness"
+  },
+  {
+   "name": "AmazonBuyForMe",
+   "operator": "Amazon",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "AmazonBuyForMe is an Amazon bot that crawls websites as part of the Amazon Buy For Me service. This bot visits product pages and e-commerce websites to gather product inf… More info can be found at…"
+  },
+  {
+   "name": "Andibot",
+   "operator": "Andi",
+   "type": "search",
+   "function": "Search engine using generative AI, AI Search Assistant",
+   "respects_robots": "Unclear at this time",
+   "about": "Scrapes website and provides AI summary."
+  },
+  {
+   "name": "Anomura",
+   "operator": "Direqt",
+   "type": "search",
+   "function": "Collects data for AI search",
+   "respects_robots": "Yes",
+   "about": "Anomura is Direqt's search crawler, it discovers and indexes pages their customers websites."
+  },
+  {
+   "name": "anthropic-ai",
+   "operator": "Anthropic",
+   "type": "training",
+   "function": "Scrapes data to train Anthropic's AI products.",
+   "respects_robots": "Unclear at this time",
+   "about": "Scrapes data to train LLMs and AI products offered by Anthropic."
+  },
+  {
+   "name": "ApifyBot",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "ApifyBot is a web scraping and data extraction crawler by Apify that collects website content for use in AI, LLMs, RAG, and automation workflows. More info can be found at https://knownagents.com/agents/apifybot"
+  },
+  {
+   "name": "ApifyWebsiteContentCrawler",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "ApifyWebsiteContentCrawler is a web crawler by Apify that extracts and downloads full website content for use in AI, data analysis, and automation workflows. More info can be found at…"
+  },
+  {
+   "name": "Aranet-SearchBot",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "Undocumented AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/aranet-searchbot"
+  },
+  {
+   "name": "atlassian-bot",
+   "operator": "Atlassian",
+   "type": "search",
+   "function": "AI search, assistants and agents",
+   "respects_robots": "Yes",
+   "about": "atlassian-bot is a web crawler used to index website content for its AI search, assistants and agents available in its Rovo GenAI product."
+  },
+  {
+   "name": "Awario",
+   "operator": "Awario",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Awario is an AI data scraper operated by Awario. It's not currently known to be artificially intelligent or AI-related. If you think that's incorrect or can provide more detail about its purpose, please contact us. More…"
+  },
+  {
+   "name": "AzureAI-SearchBot",
+   "operator": "Unclear at this time",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/azureai-searchbot"
+  },
+  {
+   "name": "bedrockbot",
+   "operator": "Amazon",
+   "type": "other",
+   "function": "Data scraping for custom AI applications.",
+   "respects_robots": "Yes",
+   "about": "Connects to and crawls URLs that have been selected for use in a user's AWS bedrock application."
+  },
+  {
+   "name": "bigsur.ai",
+   "operator": "Big Sur AI that fetches website content to enable…",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "bigsur.ai is a web crawler operated by Big Sur AI that fetches website content to enable AI-powered web agents, sales assistants, and content marketing solutions for busi… More info can be found at…"
+  },
+  {
+   "name": "BixelBot",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "BixelBot collects public company and market signals for Bixel's structured company-data platform, which supplies verified business information to AI agents and developers… More info can be found at…"
+  },
+  {
+   "name": "Bravebot",
+   "operator": "https://safe.search.brave.com/help/brave-search-crawler",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Yes",
+   "about": "Bravebot is a web crawler by Brave that indexes pages for Brave Search, providing search data and AI-optimized context to power chatbots, agents, and RAG pipelines. More info can be found at…"
+  },
+  {
+   "name": "Brightbot",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "Brightbot is a web data collection crawler by Bright Data that extracts and structures public website content at scale, providing AI-ready data for model training, RAG pi… More info can be found at…"
+  },
+  {
+   "name": "Brightbot 1.0",
+   "operator": "https://brightdata.com/brightbot",
+   "type": "training",
+   "function": "LLM/AI training.",
+   "respects_robots": "Unclear at this time",
+   "about": "Scrapes data to train LLMs and AI products focused on website customer support, uses residential IPs and legit-looking user-agents to disguise itself."
+  },
+  {
+   "name": "BuddyBot",
+   "operator": "BuddyBotLearning",
+   "type": "other",
+   "function": "AI Learning Companion",
+   "respects_robots": "Unclear at this time",
+   "about": "BuddyBot is a voice-controlled AI learning companion targeted at childhooded STEM education."
+  },
+  {
+   "name": "Bytespider",
+   "operator": "ByteDance",
+   "type": "training",
+   "function": "LLM training.",
+   "respects_robots": "No",
+   "about": "Downloads data to train LLMS, including ChatGPT competitors."
+  },
+  {
+   "name": "CartAI Agentic Commerce",
+   "operator": "CartAI that accesses online stores to support user-directed…",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "CartAI Agentic Commerce is a signed browser agent operated by CartAI that accesses online stores to support user-directed shopping and checkout workflows. More info can be found at…"
+  },
+  {
+   "name": "Channel3Bot",
+   "operator": "Unclear at this time",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/channel3bot"
+  },
+  {
+   "name": "ChatGLM-Spider",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/chatglm-spider"
+  },
+  {
+   "name": "ChatGPT Agent",
+   "operator": "OpenAI",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Yes",
+   "about": "ChatGPT Agent is an AI agent created by OpenAI that can use a web browser. It can intelligently navigate and interact with websites to complete multi-step tasks on behalf… More info can be found at…"
+  },
+  {
+   "name": "Claude-Agent",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Claude-Agent is Anthropic's cloud browser agent for Claude Duet. It navigates websites and completes multi-step tasks on behalf of users. More info can be found at https://knownagents.com/agents/claude-agent"
+  },
+  {
+   "name": "Claude-Code",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Coding Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Claude Code is an AI coding agent by Anthropic that can build, debug, and ship code directly from the terminal, handling tasks like codebase onboarding, multi-file edits,… More info can be found at…"
+  },
+  {
+   "name": "Claude-Web",
+   "operator": "Anthropic",
+   "type": "assistant",
+   "function": "Undocumented AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Claude-Web is an AI-related agent operated by Anthropic. It's currently unclear exactly what it's used for, since there's no official documentation. If you can provide more detail, please contact us. More info can be…"
+  },
+  {
+   "name": "CledaraBot",
+   "operator": "Cledara that visits SaaS providers to complete…",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "CledaraBot is an AI agent operated by Cledara that visits SaaS providers to complete customer-approved administrative tasks, including invoice collection and user managem… More info can be found at…"
+  },
+  {
+   "name": "Cloudflare-AutoRAG",
+   "operator": "Cloudflare",
+   "type": "search",
+   "function": "Collects data for AI search",
+   "respects_robots": "Yes",
+   "about": "AutoRAG is an all-in-one AI search solution."
+  },
+  {
+   "name": "CloudflareBrowserRenderingCrawler",
+   "operator": "Cloudflare that returns rendered website content for…",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "CloudflareBrowserRenderingCrawler is a web crawler operated by Cloudflare that returns rendered website content for research, monitoring, and AI data workflows. More info can be found at…"
+  },
+  {
+   "name": "CloudVertexBot",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "CloudVertexBot is a Google-operated crawler available to site owners to request targeted crawls of their own sites for AI training purposes on the Vertex AI platform. More info can be found at…"
+  },
+  {
+   "name": "Code",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Coding Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Code (GitHub Copilot) is an AI coding agent that can autonomously plan, build, and execute development tasks, functioning as a collaborative AI pair programmer. More info can be found at…"
+  },
+  {
+   "name": "Codex",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Coding Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Codex is an AI coding agent by OpenAI that helps developers write, review, debug, and ship code. More info can be found at https://knownagents.com/agents/codex"
+  },
+  {
+   "name": "cohere-ai",
+   "operator": "Cohere",
+   "type": "assistant",
+   "function": "Retrieves data to provide responses to user-initiated…",
+   "respects_robots": "Unclear at this time",
+   "about": "Retrieves data based on user prompts."
+  },
+  {
+   "name": "cohere-training-data-crawler",
+   "operator": "Cohere to download training data for its LLMs (Large…",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "cohere-training-data-crawler is a web crawler operated by Cohere to download training data for its LLMs (Large Language Models) that power its enterprise AI products. More info can be found at…"
+  },
+  {
+   "name": "Cotoyogi",
+   "operator": "ROIS",
+   "type": "training",
+   "function": "AI LLM Scraper.",
+   "respects_robots": "Yes",
+   "about": "Scrapes data for AI training in Japanese language."
+  },
+  {
+   "name": "CragCrawler",
+   "operator": "CragSoftware, a Brazil-based software company specializing…",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "CragCrawler is a web scraping bot operated by CragSoftware, a Brazil-based software company specializing in data engineering and AI web scraping services. The bot is used… More info can be found at…"
+  },
+  {
+   "name": "Crawl4AI",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "Undocumented AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/crawl4ai"
+  },
+  {
+   "name": "Crawlspace",
+   "operator": "Crawlspace",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Yes",
+   "about": "Crawlspace is a web crawler platform that fetches and extracts website content for AI agents, RAG applications, and structured data workflows. More info can be found at https://knownagents.com/agents/crawlspace"
+  },
+  {
+   "name": "Cursor",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Coding Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Cursor is an AI coding agent that helps write, edit, and understand code. More info can be found at https://knownagents.com/agents/cursor"
+  },
+  {
+   "name": "Datenbank Crawler",
+   "operator": "Datenbank",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Datenbank Crawler is an AI data scraper operated by Datenbank. It's not currently known to be artificially intelligent or AI-related. If you think that's incorrect or can provide more detail about its purpose, please…"
+  },
+  {
+   "name": "DeepSeekBot",
+   "operator": "DeepSeek",
+   "type": "training",
+   "function": "Training language models and improving AI products",
+   "respects_robots": "No",
+   "about": "DeepSeekBot is a web crawler used by DeepSeek to train its language models and improve its AI products."
+  },
+  {
+   "name": "Devin",
+   "operator": "Devin AI",
+   "type": "assistant",
+   "function": "AI Coding Agents",
+   "respects_robots": "Yes",
+   "about": "Devin is a software engineering AI assistant that can browse websites and perform web-based tasks, functioning as a collaborative AI teammate for engineering teams. More info can be found at…"
+  },
+  {
+   "name": "Diffbot",
+   "operator": "Diffbot",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "At the discretion of Diffbot users.",
+   "about": "Diffbot is a web crawler that extracts and structures website content using AI-powered visual understanding, providing knowledge graph data for applications like market i… More info can be found at…"
+  },
+  {
+   "name": "Diffbot-User",
+   "operator": "Diffbot",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Yes",
+   "about": "Diffbot-User fetches URLs on behalf of human users interacting with Diffbot software. More info can be found at https://knownagents.com/agents/diffbot-user"
+  },
+  {
+   "name": "Dot",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Dot is an OpenAI AI agent that uses a cloud browser to research websites and carry out ongoing tasks for users. More info can be found at https://knownagents.com/agents/dot"
+  },
+  {
+   "name": "DoubaoBot",
+   "operator": "ByteDance",
+   "type": "assistant",
+   "function": "AI crawler for ByteDance's Doubao AI assistant.",
+   "respects_robots": "Unclear at this time",
+   "about": "DoubaoBot is a crawler operated by ByteDance to collect web content for its Doubao AI assistant. Distinct from Bytespider (general/training) and TikTokSpider (video)."
+  },
+  {
+   "name": "Echobot Bot",
+   "operator": "Echobox",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Echobot Bot is an AI data scraper operated by Echobox. It's not currently known to be artificially intelligent or AI-related. If you think that's incorrect or can provide more detail about its purpose, please contact…"
+  },
+  {
+   "name": "EchoboxBot",
+   "operator": "Echobox",
+   "type": "other",
+   "function": "Data collection to support AI-powered products.",
+   "respects_robots": "Unclear at this time",
+   "about": "Supports company's AI-powered social and email management products."
+  },
+  {
+   "name": "ElevenlabsBot",
+   "operator": "ElevenLabs",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Yes",
+   "about": "ElevenlabsBot fetches pages that customers add to or refresh in ElevenLabs agents' knowledge bases, making that content available in conversations. More info can be found at https://knownagents.com/agents/elevenlabsbot"
+  },
+  {
+   "name": "ElevenlabsCrawler",
+   "operator": "ElevenLabs",
+   "type": "training",
+   "function": "AI Data Scraper",
+   "respects_robots": "Yes",
+   "about": "ElevenlabsCrawler is ElevenLabs' web crawler that collects public content that may be used to train its generative AI models. More info can be found at https://knownagents.com/agents/elevenlabscrawler"
+  },
+  {
+   "name": "ERNIEBot",
+   "operator": "Baidu",
+   "type": "other",
+   "function": "Collects public web content for Baidu's ERNIE large…",
+   "respects_robots": "Unclear at this time",
+   "about": "ERNIEBot is a crawler operated by Baidu to collect public web content used for its ERNIE (Wenxin) large language models."
+  },
+  {
+   "name": "ExaBot",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "ExaBot is a web crawler that indexes web content to power Exa's AI search engine and semantic search APIs for AI applications. More info can be found at https://knownagents.com/agents/exabot"
+  },
+  {
+   "name": "ExaSearchBot",
+   "operator": "Exa",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Unclear at this time",
+   "about": "ExaSearchBot is a web crawler operated by Exa that discovers and indexes public web pages so their content can be found, retrieved, and cited through Exa. More info can be found at…"
+  },
+  {
+   "name": "ExaUser",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "ExaUser is Exa's on-demand fetcher that retrieves live website content when a user or an application built on the Exa API requests it. More info can be found at https://knownagents.com/agents/exauser"
+  },
+  {
+   "name": "FacebookBot",
+   "operator": "Meta/Facebook",
+   "type": "training",
+   "function": "Training language models",
+   "respects_robots": "Yes",
+   "about": "Officially used for training Meta \"speech recognition technology,\" unknown if used to train Meta AI specifically."
+  },
+  {
+   "name": "facebookexternalhit",
+   "operator": "Meta/Facebook",
+   "type": "other",
+   "function": "Ostensibly only for sharing, but likely used as an AI…",
+   "respects_robots": "No",
+   "about": "Note that excluding FacebookExternalHit will block incorporating OpenGraph data when sharing in social media, including rich links in Apple's Messages app. According to Meta, its purpose is \"to crawl the content of an…"
+  },
+  {
+   "name": "Factset_spyderbot",
+   "operator": "Factset",
+   "type": "training",
+   "function": "AI model training.",
+   "respects_robots": "Unclear at this time",
+   "about": "Scrapes data for AI training."
+  },
+  {
+   "name": "FirecrawlAgent",
+   "operator": "Firecrawl that extracts web content and converts it into…",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Yes",
+   "about": "FirecrawlAgent is a web crawler operated by Firecrawl that extracts web content and converts it into structured data for use in LLM and AI applications. More info can be found at…"
+  },
+  {
+   "name": "FriendlyCrawler",
+   "operator": "Unknown",
+   "type": "training",
+   "function": "We are using the data from the crawler to build datasets…",
+   "respects_robots": "Yes",
+   "about": "Unclear who the operator is; but data is used for training/machine learning"
+  },
+  {
+   "name": "GeistHaus-PageFetcher",
+   "operator": "GeistHaus, a company developing AI systems for therapy and…",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "GeistHaus-PageFetcher is a web crawler operated by GeistHaus, a company developing AI systems for therapy and psychological assessment. This bot fetches web pages as part… More info can be found at…"
+  },
+  {
+   "name": "Gemini-Deep-Research",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "Gemini-Deep-Research is the agent responsible for collecting and scanning resources used in Google Gemini's Deep Research feature, which acts as a personal research assis… More info can be found at…"
+  },
+  {
+   "name": "Google-Firebase",
+   "operator": "Google",
+   "type": "assistant",
+   "function": "Used as part of AI apps developed by users of Google's…",
+   "respects_robots": "Unclear at this time",
+   "about": "Supports Google's Firebase AI products."
+  },
+  {
+   "name": "Google-Gemini-CLI",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Coding Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Gemini CLI is an AI coding agent by Google that can query and edit large codebases, generate apps from images or PDFs, and automate complex workflows directly from the te… More info can be found at…"
+  },
+  {
+   "name": "Google-GeminiNotebook",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "Google-GeminiNotebook fetches individual URLs that users add as sources in Gemini Notebook so Google can analyze and summarize their content. More info can be found at https://knownagents.com/agents/google-gemininotebook"
+  },
+  {
+   "name": "Google-NotebookLM",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "Google-NotebookLM is Google's former Gemini Notebook fetcher identifier that continues to retrieve source URLs users add to their notebooks. More info can be found at https://knownagents.com/agents/google-notebooklm"
+  },
+  {
+   "name": "GoogleAgent-Mariner",
+   "operator": "Google",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "GoogleAgent-Mariner is an AI agent created by Google that can use a web browser. It can intelligently navigate and interact with websites to complete multi-step tasks on … More info can be found at…"
+  },
+  {
+   "name": "GoogleAgent-URLContext",
+   "operator": "Google that retrieves web content on behalf of Gemini API…",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "GoogleAgent-URLContext is a web fetcher operated by Google that retrieves web content on behalf of Gemini API users. When a developer provides a URL as context in a Gemin… More info can be found at…"
+  },
+  {
+   "name": "GoogleOther",
+   "operator": "Google",
+   "type": "training",
+   "function": "Scrapes data.",
+   "respects_robots": "Yes",
+   "about": "\"Used by various product teams for fetching publicly accessible content from sites. For example, it may be used for one-off crawls for internal research and development.\""
+  },
+  {
+   "name": "GoogleOther-Image",
+   "operator": "Google",
+   "type": "training",
+   "function": "Scrapes data.",
+   "respects_robots": "Yes",
+   "about": "\"Used by various product teams for fetching publicly accessible content from sites. For example, it may be used for one-off crawls for internal research and development.\""
+  },
+  {
+   "name": "GoogleOther-Video",
+   "operator": "Google",
+   "type": "training",
+   "function": "Scrapes data.",
+   "respects_robots": "Yes",
+   "about": "\"Used by various product teams for fetching publicly accessible content from sites. For example, it may be used for one-off crawls for internal research and development.\""
+  },
+  {
+   "name": "Grok Bot",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Grok Bot is a personal AI agent created by xAI that runs on a persistent cloud computer with a browser, filesystem, and terminal. It completes multi-step tasks across app… More info can be found at…"
+  },
+  {
+   "name": "GrokAppAndroid",
+   "operator": "xAI",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Unclear at this time",
+   "about": "Grok AI is an advanced AI assistant built by xAI that leverages real-time web and X data to produce context-aware, multimodal responses."
+  },
+  {
+   "name": "GrokBot",
+   "operator": "xAI",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Unclear at this time",
+   "about": "Used to collect publicly available web content to support the training of Grok AI models."
+  },
+  {
+   "name": "Haiku-SearchBot",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "Haiku-SearchBot retrieves webpages in response to user requests through Haiku's legal AI services. More info can be found at https://knownagents.com/agents/haiku-searchbot"
+  },
+  {
+   "name": "HarkBot",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "HarkBot visits web pages on behalf of signed-in Hark users as Hark carries out research, form-filling, and account actions. More info can be found at https://knownagents.com/agents/harkbot"
+  },
+  {
+   "name": "HatchFeed",
+   "operator": "Meta",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "No",
+   "about": "HatchFeed is the link-preview fetcher of Meta's Muse AI agent; https://agent.meta.ai in its user agent redirects to muse.ai. It fetches a page and its Open Graph images when Muse needs them for a user."
+  },
+  {
+   "name": "HenkBot",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "Henkbot crawls the web on behalf of Valyu, an AI search infrastructure provider that indexes content for use in AI-powered retrieval pipelines. More info can be found at https://knownagents.com/agents/henkbot"
+  },
+  {
+   "name": "Hunyuan",
+   "operator": "Tencent",
+   "type": "training",
+   "function": "Hunyuan is a training crawler operated by Tencent.",
+   "respects_robots": "Unclear at this time",
+   "about": "Hunyuan is a training crawler operated by Tencent. Its job is to read public web pages and feed that content into a machine-learning pipeline that trains future versions of the model."
+  },
+  {
+   "name": "iAskBot",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "Undocumented AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/iaskbot"
+  },
+  {
+   "name": "iaskspider",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "Undocumented AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/iaskspider"
+  },
+  {
+   "name": "iaskspider/2.0",
+   "operator": "iAsk",
+   "type": "assistant",
+   "function": "Crawls sites to provide answers to user queries.",
+   "respects_robots": "No",
+   "about": "Used to provide answers to user queries."
+  },
+  {
+   "name": "ICC-Crawler",
+   "operator": "NICT",
+   "type": "training",
+   "function": "Scrapes data to train and support AI technologies.",
+   "respects_robots": "Yes",
+   "about": "Use the collected data for artificial intelligence technologies; provide data to third parties, including commercial companies; those companies can use the data for their own business."
+  },
+  {
+   "name": "ImagesiftBot",
+   "operator": "ImageSift",
+   "type": "training",
+   "function": "ImageSiftBot is a web crawler that scrapes the internet for…",
+   "respects_robots": "Yes",
+   "about": "Once images and text are downloaded from a webpage, ImageSift analyzes this data from the page and stores the information in an index. Their web intelligence products use this index to enable search and retrieval of…"
+  },
+  {
+   "name": "imageSpider",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/imagespider"
+  },
+  {
+   "name": "img2dataset",
+   "operator": "img2dataset",
+   "type": "training",
+   "function": "Scrapes images for use in LLMs.",
+   "respects_robots": "Unclear at this time",
+   "about": "Downloads large sets of images into datasets for LLM training or other purposes."
+  },
+  {
+   "name": "Instinct",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Instinct is a personal AI agent that uses a phone and computer to complete everyday tasks such as ordering groceries, booking travel, arranging appointments, and communic… More info can be found at…"
+  },
+  {
+   "name": "ISSCyberRiskCrawler",
+   "operator": "ISS-Corporate",
+   "type": "training",
+   "function": "Scrapes data to train machine learning models.",
+   "respects_robots": "No",
+   "about": "Used to train machine learning based models to quantify cyber risk."
+  },
+  {
+   "name": "kagi-fetcher",
+   "operator": "Kagi that fetches web content to answer user queries…",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "kagi-fetcher is an AI Assistant operated by Kagi that fetches web content to answer user queries through Kagi AI, their suite of AI-powered tools including Assistant, Res… More info can be found at…"
+  },
+  {
+   "name": "Kangaroo Bot",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Kangaroo Bot is used by the company Kangaroo LLM to download data to train AI models tailored to Australian language and culture. More info can be found at https://knownagents.com/agents/kangaroo-bot"
+  },
+  {
+   "name": "KeenableBot",
+   "operator": "Keenable",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Unclear at this time",
+   "about": "KeenableBot is a web crawler operated by Keenable for indexing web content for AI search."
+  },
+  {
+   "name": "Kimi-Agent",
+   "operator": "Moonshot AI that browses websites while carrying out…",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Kimi-Agent is a browser-enabled AI agent operated by Moonshot AI that browses websites while carrying out user-directed research and other tasks. More info can be found at https://knownagents.com/agents/kimi-agent"
+  },
+  {
+   "name": "Kimi-SearchBot",
+   "operator": "Moonshot AI",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Yes",
+   "about": "Kimi-SearchBot powers Kimi's search features: it analyzes pages for relevance and builds the search index. Documented by Moonshot AI at https://www.kimi.ai/policies/kimi-crawlers"
+  },
+  {
+   "name": "Kimi-User",
+   "operator": "Moonshot AI that fetches web content on behalf of users…",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "Kimi-User is a web crawler operated by Moonshot AI that fetches web content on behalf of users interacting with Kimi. When a user asks Kimi to summarize an article or ans… More info can be found at…"
+  },
+  {
+   "name": "KimiBot",
+   "operator": "Moonshot AI",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Yes",
+   "about": "KimiBot crawls content potentially used to train Kimi's foundation models. Documented by Moonshot AI at https://www.kimi.ai/policies/kimi-crawlers"
+  },
+  {
+   "name": "KlaviyoAIBot",
+   "operator": "Klaviyo",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Yes",
+   "about": "KlaviyoAIBot is Klaviyo's web crawler that fetches publicly available pages from domains explicitly connected to user accounts to power the Kai Customer Agent feature. Th… More info can be found at…"
+  },
+  {
+   "name": "KunatoCrawler",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "Undocumented AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/kunatocrawler"
+  },
+  {
+   "name": "laion-huggingface-processor",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/laion-huggingface-processor"
+  },
+  {
+   "name": "LAIONDownloader",
+   "operator": "Large-scale Artificial Intelligence Open Network",
+   "type": "search",
+   "function": "AI tools and models for machine learning research.",
+   "respects_robots": "No",
+   "about": "LAIONDownloader is a bot by LAION, a non-profit organization that provides datasets, tools and models to liberate machine learning research."
+  },
+  {
+   "name": "LCC",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/lcc"
+  },
+  {
+   "name": "Lightpanda",
+   "operator": "Anyone who downloads the Lightpanda client. Possibly being…",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "At the discretion of Lightpanda users.",
+   "about": "Lightpanda is a custom-built headless browser designed for AI and automation."
+  },
+  {
+   "name": "Liner-User",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "Liner-User fetches web content for Liner to answer user questions with cited information. More info can be found at https://knownagents.com/agents/liner-user"
+  },
+  {
+   "name": "LinerBot",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "LinerBot is the web crawler used by Liner AI assistant to gather information from academic sources and websites to provide accurate answers with line-by-line source citat… More info can be found at…"
+  },
+  {
+   "name": "Linguee Bot",
+   "operator": "Linguee",
+   "type": "other",
+   "function": "AI powered translation service",
+   "respects_robots": "No",
+   "about": "Linguee Bot is a web crawler used by Linguee to gather training data for its AI powered translation service."
+  },
+  {
+   "name": "LinkupBot",
+   "operator": "Unclear at this time",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/linkupbot"
+  },
+  {
+   "name": "Manus-User",
+   "operator": "Butterfly Effect, a company based in China",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Manus-User is a browser-enabled AI agent operated by Butterfly Effect, a company based in China. It autonomously navigates websites, interprets content, and carries out m… More info can be found at…"
+  },
+  {
+   "name": "MiniMaxAgent",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "MiniMaxAgent browses and uses online information to complete complex user-directed tasks in MiniMax Agent. More info can be found at https://knownagents.com/agents/minimax-agent"
+  },
+  {
+   "name": "MistralAI-User/1.0",
+   "operator": "Mistral AI",
+   "type": "assistant",
+   "function": "Takes action based on user prompts.",
+   "respects_robots": "Yes",
+   "about": "MistralAI-User is for user actions in LeChat. When users ask LeChat a question, it may visit a web page to help answer and include a link to the source in its response."
+  },
+  {
+   "name": "MoonshotBot",
+   "operator": "Kimi",
+   "type": "training",
+   "function": "MoonshotBot is a training crawler.",
+   "respects_robots": "Unclear at this time",
+   "about": "MoonshotBot is a training crawler operated by Kimi. Its job is to read public web pages and feed that content into a machine-learning pipeline that trains future versions of the model."
+  },
+  {
+   "name": "Mozilla-Tabstack",
+   "operator": "Mozilla that performs programmatic, AI-driven interactions…",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Yes",
+   "about": "Mozilla-Tabstack is an AI agent operated by Mozilla that performs programmatic, AI-driven interactions with web content through Tabstack. More info can be found at https://knownagents.com/agents/mozilla-tabstack"
+  },
+  {
+   "name": "Muse",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Muse is a personal AI agent created by Meta that uses a web browser and connected apps to complete multi-step tasks such as filling out forms, booking travel, sending ema… More info can be found at…"
+  },
+  {
+   "name": "MyCentralAIScraperBot",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI data scraper",
+   "respects_robots": "Unclear at this time",
+   "about": "Operator and data use is unclear at this time."
+  },
+  {
+   "name": "NagetBot",
+   "operator": "Naget Inc (founded by Chris Samarinas, headquarter in…",
+   "type": "training",
+   "function": "AI data scraper",
+   "respects_robots": "Unclear at this time",
+   "about": "'Naget revolutionizes content discovery through an AI-powered ecosystem that transforms how we generate, organize, share, and discover valuable content.' (https://naget.com/) User-agent string links https://naget.ai/bot…"
+  },
+  {
+   "name": "nbot",
+   "operator": "NBot",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Unclear at this time",
+   "about": "NBot uses advanced AI to scan news outlets, industry blogs, newsletters, and social media."
+  },
+  {
+   "name": "netEstate Imprint Crawler",
+   "operator": "netEstate",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "netEstate Imprint Crawler is an AI data scraper operated by netEstate. If you think this is incorrect or can provide additional detail about its purpose, please contact us. More info can be found at…"
+  },
+  {
+   "name": "newsai",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI data scraper",
+   "respects_robots": "Unclear at this time",
+   "about": "User-agent string doen't contain an URL and there multiple sites using the newsai brand."
+  },
+  {
+   "name": "NotebookLM",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "NotebookLM is an AI-powered research and note-taking assistant that helps users synthesize information from their own uploaded sources, such as documents, transcripts, or web content. It can generate summaries, answer…"
+  },
+  {
+   "name": "NovaAct",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "NovaAct is Amazon's browser-using agent for navigating websites and completing multi-step tasks on behalf of users. More info can be found at https://knownagents.com/agents/novaact"
+  },
+  {
+   "name": "omgili",
+   "operator": "Webz.io",
+   "type": "other",
+   "function": "Data is sold.",
+   "respects_robots": "Yes",
+   "about": "Crawls sites for APIs used by Hootsuite, Sprinklr, NetBase, and other companies. Data also sold for research purposes or LLM training."
+  },
+  {
+   "name": "omgilibot",
+   "operator": "Webz.io",
+   "type": "other",
+   "function": "Data is sold.",
+   "respects_robots": "Yes",
+   "about": "Legacy user agent initially used for Omgili search engine. Unknown if still used, omgili agent still used by Webz.io."
+  },
+  {
+   "name": "OpenAI",
+   "operator": "OpenAI",
+   "type": "other",
+   "function": "Unclear at this time",
+   "respects_robots": "Yes",
+   "about": "The purpose of this bot is unclear at this time but it is a member of OpenAI's suite of crawlers."
+  },
+  {
+   "name": "opencode",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Coding Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "OpenCode is an open-source AI coding agent that helps developers write code from the terminal, IDE, or desktop, supporting multiple LLM providers and local models. More info can be found at…"
+  },
+  {
+   "name": "Operator",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Operator is an AI agent created by OpenAI that can use a web browser. It can intelligently navigate and interact with websites to complete multi-step tasks on behalf of a human user. More info can be found at…"
+  },
+  {
+   "name": "PanguBot",
+   "operator": "the Chinese company Huawei",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "PanguBot is a web crawler operated by the Chinese company Huawei. It's used to download training data for its multimodal LLM (Large Language Model) called PanGu. More info can be found at…"
+  },
+  {
+   "name": "Panscient",
+   "operator": "Panscient",
+   "type": "other",
+   "function": "Data collection and analysis using machine learning and AI.",
+   "respects_robots": "Yes",
+   "about": "Compiles data on businesses and business professionals that is structured using AI and machine learning."
+  },
+  {
+   "name": "panscient.com",
+   "operator": "Panscient",
+   "type": "other",
+   "function": "Data collection and analysis using machine learning and AI.",
+   "respects_robots": "Yes",
+   "about": "Compiles data on businesses and business professionals that is structured using AI and machine learning."
+  },
+  {
+   "name": "Payhawk Invoice Fetching Agent",
+   "operator": "Payhawk that retrieves invoices from supplier websites for…",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Payhawk Invoice Fetching Agent is a browser agent operated by Payhawk that retrieves invoices from supplier websites for users and attaches them to expense records. More info can be found at…"
+  },
+  {
+   "name": "PetalBot",
+   "operator": "Huawei",
+   "type": "search",
+   "function": "Used to provide recommendations in Hauwei assistant and AI…",
+   "respects_robots": "Yes",
+   "about": "Operated by Huawei to provide search and AI assistant services."
+  },
+  {
+   "name": "PhindBot",
+   "operator": "phind",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "PhindBot retrieves web pages to support Phind's developer-focused search and answer engine, which uses current web information to answer technical questions. More info can be found at…"
+  },
+  {
+   "name": "Poggio-Citations",
+   "operator": "Poggio, a company that provides AI sales enablement tools…",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "Poggio-Citations is a web crawler operated by Poggio, a company that provides AI sales enablement tools for creating tailored narratives, business cases, and account plan… More info can be found at…"
+  },
+  {
+   "name": "Poseidon Research Crawler",
+   "operator": "Poseidon Research",
+   "type": "search",
+   "function": "AI research crawler",
+   "respects_robots": "Unclear at this time",
+   "about": "Lab focused on scaling the interpretability research necessary to make better AI systems possible."
+  },
+  {
+   "name": "qodercli",
+   "operator": "Qoder that helps developers build, debug, and modify…",
+   "type": "assistant",
+   "function": "AI Coding Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "qodercli is a command-line AI coding agent operated by Qoder that helps developers build, debug, and modify software from the terminal. More info can be found at https://knownagents.com/agents/qodercli"
+  },
+  {
+   "name": "QualifiedBot",
+   "operator": "Qualified",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "QualifiedBot is Qualified's web crawler that analyzes customer websites to provide contextual information for their AI-powered chatbots and conversational marketing platf… More info can be found at…"
+  },
+  {
+   "name": "Querit-SearchBot",
+   "operator": "Querit that indexes web content for their search API…",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "Querit-SearchBot is a web crawler operated by Querit that indexes web content for their search API service, which is designed to provide real-time search results for larg… More info can be found at…"
+  },
+  {
+   "name": "QueritBot",
+   "operator": "Querit, a company providing a search API for large language…",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "QueritBot is a web crawler operated by Querit, a company providing a search API for large language model integration. This bot indexes web content to power the real-time … More info can be found at…"
+  },
+  {
+   "name": "QuillBot",
+   "operator": "Quillbot",
+   "type": "other",
+   "function": "Company offers AI detection, writing tools and other…",
+   "respects_robots": "Unclear at this time",
+   "about": "Operated by QuillBot as part of their suite of AI product offerings."
+  },
+  {
+   "name": "quillbot.com",
+   "operator": "Quillbot",
+   "type": "other",
+   "function": "Company offers AI detection, writing tools and other…",
+   "respects_robots": "Unclear at this time",
+   "about": "Operated by QuillBot as part of their suite of AI product offerings."
+  },
+  {
+   "name": "QwenBot",
+   "operator": "Alibaba",
+   "type": "other",
+   "function": "Collects public web content for Alibaba's Qwen (Tongyi…",
+   "respects_robots": "Unclear at this time",
+   "about": "QwenBot is a crawler operated by Alibaba to collect public web content for its Qwen (Tongyi Qianwen) large language models. Alibaba also operates TongyiBot."
+  },
+  {
+   "name": "Reflectionbot",
+   "operator": "Reflection",
+   "type": "assistant",
+   "function": "Undocumented AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "An undocumented crawler whose user agent links to Reflection, a company that builds AI models."
+  },
+  {
+   "name": "SBIntuitionsBot",
+   "operator": "SB Intuitions",
+   "type": "other",
+   "function": "Uses data gathered in AI development and information…",
+   "respects_robots": "Yes",
+   "about": "AI development and information analysis"
+  },
+  {
+   "name": "Scrapy",
+   "operator": "Zyte",
+   "type": "training",
+   "function": "Scrapes data for a variety of uses including training AI.",
+   "respects_robots": "Unclear at this time",
+   "about": "\"AI and machine learning applications often need large amounts of quality data, and web data extraction is a fast, efficient way to build structured data sets.\""
+  },
+  {
+   "name": "ScryBot",
+   "operator": "Scry",
+   "type": "assistant",
+   "function": "Used with AI agents to scrape data for answers to queries",
+   "respects_robots": "Unclear at this time",
+   "about": "An AI agent companion that allows you to enhance answers by scraping data"
+  },
+  {
+   "name": "SemrushBot-OCOB",
+   "operator": "Semrush",
+   "type": "other",
+   "function": "Crawls your site for ContentShake AI tool.",
+   "respects_robots": "Yes",
+   "about": "Data collected is used for the ContentShake AI tool reports."
+  },
+  {
+   "name": "SemrushBot-SWA",
+   "operator": "Semrush",
+   "type": "assistant",
+   "function": "Checks URLs on your site for SEO Writing Assistant.",
+   "respects_robots": "Yes",
+   "about": "Data collected is used for the SEO Writing Assistant tool to check if URL is accessible."
+  },
+  {
+   "name": "Shap-User",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "Shap-User accesses web content on behalf of users of Parallel Web Systems products. It identifies user-initiated requests rather than automatic web crawling. More info can be found at…"
+  },
+  {
+   "name": "ShapBot",
+   "operator": "Parallel",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Yes",
+   "about": "ShapBot is a web crawler by Parallel that collects and structures web content to power its search, extraction, and deep research APIs, providing AI agents with high-accur… More info can be found at…"
+  },
+  {
+   "name": "Sidetrade indexer bot",
+   "operator": "Sidetrade",
+   "type": "training",
+   "function": "Extracts data for a variety of uses including training AI.",
+   "respects_robots": "Unclear at this time",
+   "about": "AI product training."
+  },
+  {
+   "name": "Spider",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/spider"
+  },
+  {
+   "name": "TavilyBot",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "TavilyBot is a web crawler by Tavily that indexes and extracts content from billions of pages, providing real-time search, extraction, and research data to ground AI agen… More info can be found at…"
+  },
+  {
+   "name": "Terra Cotta",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Unclear at this time",
+   "about": "Terra Cotta is Ceramic's web crawler that indexes public content to power their web-scale search API for AI and LLMs. More info can be found at https://knownagents.com/agents/terra-cotta"
+  },
+  {
+   "name": "TerraCotta",
+   "operator": "Ceramic AI",
+   "type": "training",
+   "function": "AI Data Providers",
+   "respects_robots": "Yes",
+   "about": "TerraCotta is Ceramic's web crawler that indexes public content to power their web-scale search API for AI and LLMs. More info can be found at https://knownagents.com/agents/terracotta"
+  },
+  {
+   "name": "Thinkbot",
+   "operator": "Thinkbot",
+   "type": "other",
+   "function": "Insights on AI integration and automation.",
+   "respects_robots": "No",
+   "about": "Collects data for analysis on AI usage and automation."
+  },
+  {
+   "name": "TikTokSpider",
+   "operator": "ByteDance",
+   "type": "training",
+   "function": "LLM training.",
+   "respects_robots": "Unclear at this time",
+   "about": "Downloads data to train LLMS, as per Bytespider."
+  },
+  {
+   "name": "Timpibot",
+   "operator": "Timpi",
+   "type": "training",
+   "function": "Scrapes data for use in training LLMs.",
+   "respects_robots": "Unclear at this time",
+   "about": "Makes data available for training AI models."
+  },
+  {
+   "name": "TongyiBot",
+   "operator": "Alibaba that fetches web content for the Tongyi Qianwen…",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "TongyiBot is a web crawler operated by Alibaba that fetches web content for the Tongyi Qianwen assistant and related Qwen-generated answers. More info can be found at https://knownagents.com/agents/tongyibot"
+  },
+  {
+   "name": "Trae",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Coding Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Trae is an AI-powered coding agent developed by ByteDance that can understand codebases, fetch web content, and generate code. More info can be found at https://knownagents.com/agents/trae"
+  },
+  {
+   "name": "TwinAgent",
+   "operator": "Twin, a platform that creates automated workers to perform…",
+   "type": "assistant",
+   "function": "AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "TwinAgent is operated by Twin, a platform that creates automated workers to perform tasks by integrating with APIs and controlling web applications through browser automa… More info can be found at…"
+  },
+  {
+   "name": "UseAI",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "UseAI is a web crawler associated with Use AI, a platform that provides an AI workspace where users can chat with AI models, research the web, and perform various tasks. … More info can be found at…"
+  },
+  {
+   "name": "VelenPublicWebCrawler",
+   "operator": "Velen Crawler",
+   "type": "training",
+   "function": "Scrapes data for business data sets and machine learning…",
+   "respects_robots": "Yes",
+   "about": "\"Our goal with this crawler is to build business datasets and machine learning models to better understand the web.\""
+  },
+  {
+   "name": "WARDBot",
+   "operator": "WEBSPARK",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "WARDBot is an AI data scraper operated by WEBSPARK. It's not currently known to be artificially intelligent or AI-related. If you think that's incorrect or can provide more detail about its purpose, please contact us.…"
+  },
+  {
+   "name": "Webzio-Extended",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Webzio-Extended is a web crawler used by Webz.io to maintain a repository of web crawl data that it sells to other companies, including those using it to train AI models. More info can be found at…"
+  },
+  {
+   "name": "webzio-extended",
+   "operator": "Unclear at this time",
+   "type": "training",
+   "function": "AI Data Scrapers",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/webzio-extended"
+  },
+  {
+   "name": "wpbot",
+   "operator": "QuantumCloud",
+   "type": "other",
+   "function": "Live chat support and lead generation.",
+   "respects_robots": "Unclear at this time; opt out provided via Google Form",
+   "about": "wpbot is a used to support the functionality of the AI Chatbot for WordPress plugin. It supports the use of customer models, data collection and customer support."
+  },
+  {
+   "name": "WRTNBot",
+   "operator": "Unclear at this time",
+   "type": "assistant",
+   "function": "Undocumented AI Agents",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/wrtnbot"
+  },
+  {
+   "name": "xAI-Grok",
+   "operator": "xAI",
+   "type": "other",
+   "function": "xAI-Grok is an xAI crawler token associated with Grok…",
+   "respects_robots": "Unclear at this time",
+   "about": "xAI-Grok is an xAI crawler token associated with Grok content collection. It is classified as training because it performs automated collection rather than a user-triggered fetch."
+  },
+  {
+   "name": "YaK",
+   "operator": "Meltwater",
+   "type": "search",
+   "function": "According to the Meltwater Consumer Intelligence page 'By…",
+   "respects_robots": "Unclear at this time",
+   "about": "Retrieves data used for Meltwater's AI enabled consumer intelligence suite"
+  },
+  {
+   "name": "YandexAdditional",
+   "operator": "Yandex",
+   "type": "training",
+   "function": "Scrapes/analyzes data for the YandexGPT LLM.",
+   "respects_robots": "Yes",
+   "about": "Retrieves data used for YandexGPT quick answers features."
+  },
+  {
+   "name": "YandexAdditionalBot",
+   "operator": "Yandex",
+   "type": "training",
+   "function": "Scrapes/analyzes data for the YandexGPT LLM.",
+   "respects_robots": "Yes",
+   "about": "Retrieves data used for YandexGPT quick answers features."
+  },
+  {
+   "name": "YiBot",
+   "operator": "01.ai, an AI company founded by Kai-Fu Lee.",
+   "type": "training",
+   "function": "This bot crawls the web to gather data and content for…",
+   "respects_robots": "Unclear at this time",
+   "about": "YiBot/1.0 is an advanced artificial intelligence platform designed to enhance interaction and engagement across various applications. Its architecture allows for seamless integration into websites and applications…"
+  },
+  {
+   "name": "YiyanBot",
+   "operator": "Baidu that fetches web content for the yiyan",
+   "type": "assistant",
+   "function": "AI Assistants",
+   "respects_robots": "Unclear at this time",
+   "about": "YiyanBot is a web crawler operated by Baidu that fetches web content for the yiyan.baidu.com assistant and related ERNIE-generated answers. More info can be found at https://knownagents.com/agents/yiyanbot"
+  },
+  {
+   "name": "YouBot",
+   "operator": "You",
+   "type": "search",
+   "function": "Scrapes data for search engine and LLMs.",
+   "respects_robots": "Yes",
+   "about": "Retrieves data used for You.com web search engine and LLMs."
+  },
+  {
+   "name": "ZanistaBot",
+   "operator": "Unclear at this time",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Unclear at this time",
+   "about": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/zanistabot"
+  }
+ ]
+}

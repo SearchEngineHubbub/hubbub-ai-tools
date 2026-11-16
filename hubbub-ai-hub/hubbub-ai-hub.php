@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.17.0
+ * Version: 0.18.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.17.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.18.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -74,6 +74,16 @@ final class Hubbub_AI_Hub {
 		static $data = null;
 		if ( null === $data ) {
 			$data = self::load_data( 'crawlers' );
+		}
+		return $data;
+	}
+
+	/** The long tail of AI bots from the ai.robots.txt community list (MIT). */
+	public static function community_bots() {
+		static $data = null;
+		if ( null === $data ) {
+			$data = json_decode( (string) file_get_contents( HUBBUB_AI_HUB_DIR . 'data/community-bots.json' ), true );
+			$data = is_array( $data ) ? $data : array( 'updated' => '', 'bots' => array(), 'source' => array() );
 		}
 		return $data;
 	}
@@ -313,6 +323,17 @@ final class Hubbub_AI_Hub {
 				$lines[] = 'User-agent: ' . $t;
 			}
 			$lines[] = in_array( $purpose, $block, true ) ? 'Disallow: /' : 'Allow: /';
+		}
+		if ( in_array( 'longtail', $block, true ) ) {
+			$cb    = self::community_bots();
+			$lines[] = '';
+			$lines[] = '# The long tail: AI training scrapers and data providers from the ai.robots.txt community list (MIT)';
+			foreach ( $cb['bots'] as $b ) {
+				if ( 'training' === $b['type'] && preg_match( '/^[A-Za-z0-9._\/-]+$/', $b['name'] ) ) {
+					$lines[] = 'User-agent: ' . $b['name'];
+				}
+			}
+			$lines[] = 'Disallow: /';
 		}
 		$lines[] = '';
 		$lines[] = '# Googlebot, bingbot and Applebot are left out on purpose: blocking them removes you from';
@@ -569,12 +590,14 @@ final class Hubbub_AI_Hub {
 			. '<select class="hubbub-crawlers__company hb-input" aria-label="Operator">' . $opts . '</select></div>'
 			. '<p class="hb-count" aria-live="polite"></p>'
 			. '<div class="hb-tablewrap"><table class="hb-table hb-table--bots"><thead><tr><th scope="col">User agent</th><th scope="col">Operator</th><th scope="col">Purpose</th><th scope="col">Obeys robots.txt</th><th scope="col">Sources</th></tr></thead><tbody>' . $rows . '</tbody></table></div><p class="hb-tablenote">Visit shares and fake-request rates come from <a href="https://trakkr.ai/data/crawlers" rel="noopener" target="_blank">Trakkr</a>\'s server-log data (CC BY 4.0). ' . esc_html( self::insights()['crawler_stats_basis'] ) . '</p></section>'
+			. self::longtail()
 			. self::radar_section( 'crawlers' )
 			. self::verifier()
 			. '<section class="hb-section hb-builder"><h2 class="hb-h2">Build your robots.txt rules</h2><p>Choose what to block and copy the rules into your robots.txt. Search and user-request bots decide whether AI assistants can cite you. Googlebot, Bingbot and Applebot are left out, so your normal search rankings are not affected.</p>'
 			. '<div class="hb-builder__opts">' . $toggle( 'training', 'Block training bots.', 'Keeps your content out of AI model training.' )
 			. $toggle( 'search', 'Block AI search bots.', 'You will not be cited in ChatGPT search, Perplexity or Claude.' )
-			. $toggle( 'user', 'Block user-request fetchers.', 'Several of these ignore robots.txt anyway.' ) . '</div>'
+			. $toggle( 'user', 'Block user-request fetchers.', 'Several of these ignore robots.txt anyway.' )
+			. $toggle( 'longtail', 'Block the long tail of AI scrapers.', 'Adds the training scrapers and data providers from the community list below.' ) . '</div>'
 			. '<div class="hb-code hb-code--out"><pre class="hubbub-builder__out"></pre><button type="button" class="hb-copy hubbub-builder__copy">Copy</button></div></section>';
 		return self::shell( 'crawlers', $inner );
 	}
@@ -599,6 +622,32 @@ final class Hubbub_AI_Hub {
 			. '<p>Two live views from Cloudflare\'s network: which generative AI services people use most, and which AI crawlers are busiest.</p><div class="hb-radars__grid">'
 			. self::radar( 'AiServicesRankingXY', 'Most popular generative AI services', 'Ranking by DNS query popularity' )
 			. self::radar( 'AiBotTrafficXY', 'Traffic by AI bot', 'Share of AI bot HTTP requests over time' ) . '</div></section>';
+	}
+
+	/** The long tail of AI bots, from the community-run ai.robots.txt list. */
+	private static function longtail() {
+		$cb = self::community_bots();
+		if ( empty( $cb['bots'] ) ) {
+			return '';
+		}
+		$labels = array( 'search' => 'Search', 'assistant' => 'Assistant or agent', 'training' => 'Training or data', 'other' => 'Other' );
+		$counts = array_count_values( wp_list_pluck( $cb['bots'], 'type' ) );
+		$rows   = '';
+		foreach ( $cb['bots'] as $i => $b ) {
+			$tag   = array( 'search' => 'search', 'assistant' => 'user', 'training' => 'training', 'other' => 'other' )[ $b['type'] ];
+			$rows .= '<li class="hb-tail__bot" data-type="' . esc_attr( $b['type'] ) . '"' . ( $i >= 12 ? ' data-more' : '' ) . '>'
+				. '<code>' . esc_html( $b['name'] ) . '</code><span class="hb-tag hb-tag--' . $tag . '">' . esc_html( $labels[ $b['type'] ] ) . '</span>'
+				. '<span class="hb-tail__op">' . esc_html( $b['operator'] ) . '</span><span class="hb-tail__about">' . esc_html( $b['about'] ) . '</span></li>';
+		}
+		$segs = '<button type="button" class="is-on" data-t="">All ' . count( $cb['bots'] ) . '</button>';
+		foreach ( $labels as $k => $l ) {
+			$segs .= '<button type="button" data-t="' . $k . '">' . esc_html( $l ) . ' ' . (int) ( $counts[ $k ] ?? 0 ) . '</button>';
+		}
+		return '<section class="hb-section hb-tail" aria-labelledby="hb-tail-h"><p class="hb-label">Community list · Refreshed weekly</p><h2 class="hb-h2" id="hb-tail-h">The long tail: ' . count( $cb['bots'] ) . ' more AI bots</h2>'
+			. '<p>Beyond the major crawlers above, these are the smaller AI agents, scrapers and data providers the community has spotted in the wild. Use them to make sense of your server logs, or block the training ones with the robots.txt builder below.</p>'
+			. '<div class="hb-toolbar"><input type="search" class="hb-input hb-tail__q" placeholder="Search ' . count( $cb['bots'] ) . ' bots" aria-label="Search the long tail of AI bots"><div class="hb-seg" role="group" aria-label="Type">' . $segs . '</div></div>'
+			. '<ul class="hb-tail__list">' . $rows . '</ul><button type="button" class="hb-btn hb-btn--ghost hb-tail__more">Show all ' . count( $cb['bots'] ) . '</button>'
+			. '<p class="hb-tablenote">From <a href="' . esc_url( $cb['source']['url'] ) . '" rel="noopener" target="_blank">ai.robots.txt</a>, a community-maintained list (MIT licence), checked ' . esc_html( self::fmt_date( $cb['updated'] ) ) . '. Bots already in the directory above are left out.</p></section>';
 	}
 
 	/** The "Verify a bot" form on the Crawler Directory. */

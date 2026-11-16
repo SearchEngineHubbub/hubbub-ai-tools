@@ -235,7 +235,7 @@
     company.addEventListener('change', filter);
     filter();
 
-    var boxes = Array.prototype.slice.call(root.querySelectorAll('.hb-toggle input'));
+    var boxes = Array.prototype.slice.call(root.querySelectorAll('.hb-builder__opts input, .hb-toggle input'));
     var pre = root.querySelector('.hubbub-builder__out');
     var copy = root.querySelector('.hubbub-builder__copy');
     function build() {
@@ -283,6 +283,30 @@
         })
         .catch(function () { show('unknown', 'Something went wrong', 'We could not reach the checker. Try again in a moment.'); });
     });
+  }
+
+  function initTail(root) {
+    var sec = root.querySelector('.hb-tail');
+    if (!sec) return;
+    var q = sec.querySelector('.hb-tail__q'), more = sec.querySelector('.hb-tail__more');
+    var segs = Array.prototype.slice.call(sec.querySelectorAll('.hb-seg button'));
+    var bots = Array.prototype.slice.call(sec.querySelectorAll('.hb-tail__bot'));
+    var type = '', all = false;
+    function filter() {
+      var term = q.value.trim().toLowerCase(), n = 0, shown = 0;
+      bots.forEach(function (b) {
+        var hit = (!type || b.getAttribute('data-type') === type) && (!term || b.textContent.toLowerCase().indexOf(term) > -1);
+        var show = hit && (all || term || type || n < 12);
+        if (hit) n++;
+        b.hidden = !show;
+        if (show) shown++;
+      });
+      more.hidden = all || !!term || !!type || shown >= n;
+    }
+    segs.forEach(function (b) { b.addEventListener('click', function () { type = b.getAttribute('data-t'); segs.forEach(function (x) { x.classList.toggle('is-on', x === b); }); filter(); }); });
+    q.addEventListener('input', filter);
+    more.addEventListener('click', function () { all = true; filter(); });
+    filter();
   }
 
   function initAds(root) {
@@ -699,6 +723,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-checker'), initChecker);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-crawlers'), initCrawlers);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-crawlers'), initVerify);
+    Array.prototype.forEach.call(document.querySelectorAll('.hubbub-crawlers'), initTail);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-ads'), initAds);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-citations'), initCitations);
     Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initLines);
