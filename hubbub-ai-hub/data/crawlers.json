@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-14",
+ "updated": "2026-11-16",
  "purposes": {
   "search": "Indexes pages for AI search answers and citations",
   "training": "Collects content to train AI models",
@@ -330,6 +330,18 @@
    "note": "Bing's index, which Microsoft Copilot answers draw on. Not re-verified on 2026-11-14 (page needs JavaScript).",
    "verified": "2026-11-14",
    "web_search": true
+  },
+  {
+   "name": "AI training opt-out (shared)",
+   "token": "__usage_ai-training",
+   "company": "Shared standard",
+   "purpose": "training",
+   "respects_robots": "control token",
+   "ip_list": "",
+   "source": "https://datatracker.ietf.org/doc/draft-kelley-aipref-training-preference-signal/",
+   "note": "Not a crawler: one robots.txt group that opts a site out of AI training at OpenAI, Google, Microsoft and Anthropic. Anthropic has started honouring it, Microsoft from 1 Feb 2027, Google in 2027, OpenAI in the coming months. User-agent: * does not count. Draft standard announced 30 Oct 2026.",
+   "verified": "2026-11-16",
+   "web_search": false
   }
  ]
 }

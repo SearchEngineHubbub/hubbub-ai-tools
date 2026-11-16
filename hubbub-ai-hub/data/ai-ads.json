@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-14",
+ "updated": "2026-11-16",
  "statuses": {
   "live": "Live",
   "beta": "Beta",
@@ -16,14 +16,15 @@
    "surface": "ChatGPT",
    "status": "live",
    "markets": "89 countries (from 21 Oct 2026), starting with a US pilot in Feb 2026",
-   "formats": "Labelled sponsored unit below the answer, kept separate from it. Shown on Free and Go plans to logged-in adults only.",
+   "formats": "Labelled sponsored unit below the answer, kept separate from it, plus a visual ad shown while ChatGPT creates an image (seen live from 10 Nov 2026). Shown on Free and Go plans to logged-in adults only.",
    "buying": "Self-serve Ads Manager (ads.openai.com), ad-tech partners such as Criteo, and a Shopify app.",
    "pricing": "CPM at launch; CPC bidding added May 2026.",
    "announced": "2026-01-16",
-   "updated": "2026-10-21",
+   "updated": "2026-11-10",
    "sources": [
     "https://openai.com/index/our-approach-to-advertising-and-expanding-access/",
-    "https://ppc.land/advertisers-in-26-more-countries-gain-chatgpt-ads-bringing-the-total-to-89/"
+    "https://ppc.land/advertisers-in-26-more-countries-gain-chatgpt-ads-bringing-the-total-to-89/",
+    "https://www.seroundtable.com/openai-chatgpt-ads-visual-ads-42493.html"
    ],
    "official_source": true,
    "notes": "Country count and rollout dates come from trade press. Not shown to under-18s or next to health, mental health or political topics."

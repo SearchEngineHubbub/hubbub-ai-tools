@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Visibility Checker, AI Crawler Directory and AI Ads Tracker for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.11.1
+ * Version: 0.11.2
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.11.1' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.11.2' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
