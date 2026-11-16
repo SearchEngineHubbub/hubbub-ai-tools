@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.14.1
+ * Version: 0.15.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.14.1' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.15.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -42,6 +42,11 @@ final class Hubbub_AI_Hub {
 		add_action( 'wp_head', array( __CLASS__, 'api_link' ) );
 		add_action( 'template_redirect', array( __CLASS__, 'redirect_old_slugs' ) );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
+		// Short page titles on the page, longer search-friendly titles in <title> and social cards.
+		add_filter( 'document_title_parts', array( __CLASS__, 'seo_title_parts' ) );
+		foreach ( array( 'wpseo_title', 'wpseo_opengraph_title', 'wpseo_twitter_title' ) as $f ) {
+			add_filter( $f, array( __CLASS__, 'seo_title' ), 20 );
+		}
 		add_filter( 'rest_pre_serve_request', array( __CLASS__, 'serve_markdown' ), 10, 3 );
 	}
 
@@ -405,10 +410,10 @@ final class Hubbub_AI_Hub {
 
 	public static function tools() {
 		return array(
-			'checker'  => array( 'slug' => 'ai-readiness-checker', 'icon' => 'search', 'short' => 'Readiness Checker', 'name' => 'AI Readiness Checker', 'desc' => 'Check whether ChatGPT, Claude, Perplexity and Gemini can reach, read and cite a page. Score, fixes and a crawler-by-crawler breakdown.', 'api' => '/check?url=example.com', 'mcp' => 'check_ai_readiness' ),
-			'crawlers' => array( 'slug' => 'ai-crawlers', 'icon' => 'bot', 'short' => 'Crawler Directory', 'name' => 'AI Crawler Directory', 'desc' => 'Every AI crawler, who runs it, what it does with your content and whether it obeys robots.txt. With a robots.txt builder.', 'api' => '/crawlers', 'mcp' => 'list_ai_crawlers' ),
-			'ads'      => array( 'slug' => 'ai-ad-opportunities', 'icon' => 'spark', 'short' => 'AI Ads Opportunities', 'name' => 'AI Ads Opportunities', 'desc' => 'Where you can advertise inside AI assistants and AI search: every ad product, its status, markets, formats and how to buy. Sourced and dated.', 'api' => '/ads?status=live', 'mcp' => 'list_ai_ad_products' ),
-			'citations' => array( 'slug' => 'ai-citation-index', 'icon' => 'chart', 'short' => 'Citation Index', 'name' => 'AI Citation Index', 'desc' => 'The websites AI answers cite most, ranked by share of 95.7M citations, with the kind of site each one is. Early version built on Trakkr\'s open index.', 'api' => '/citations?limit=20', 'mcp' => 'list_top_cited_sites' ),
+			'checker'  => array( 'slug' => 'ai-readiness-checker', 'icon' => 'search', 'short' => 'Readiness Checker', 'name' => 'AI Readiness Checker', 'seo' => 'AI Readiness Checker: Is Your Page Ready for ChatGPT, Claude and Perplexity?', 'desc' => 'Check whether ChatGPT, Claude, Perplexity and Gemini can reach, read and cite a page. Score, fixes and a crawler-by-crawler breakdown.', 'api' => '/check?url=example.com', 'mcp' => 'check_ai_readiness' ),
+			'crawlers' => array( 'slug' => 'ai-crawlers', 'icon' => 'bot', 'short' => 'Crawler Directory', 'name' => 'AI Crawler Directory', 'seo' => 'AI Crawler Directory: Every AI Bot and a robots.txt Builder', 'desc' => 'Every AI crawler, who runs it, what it does with your content and whether it obeys robots.txt. With a robots.txt builder.', 'api' => '/crawlers', 'mcp' => 'list_ai_crawlers' ),
+			'ads'      => array( 'slug' => 'ai-ad-opportunities', 'icon' => 'spark', 'short' => 'AI Ads Opportunities', 'name' => 'AI Ads Opportunities', 'seo' => 'AI Ads Opportunities: Where You Can Advertise Inside AI Answers', 'desc' => 'Where you can advertise inside AI assistants and AI search: every ad product, its status, markets, formats and how to buy. Sourced and dated.', 'api' => '/ads?status=live', 'mcp' => 'list_ai_ad_products' ),
+			'citations' => array( 'slug' => 'ai-citation-index', 'icon' => 'chart', 'short' => 'Citation Index', 'name' => 'AI Citation Index', 'seo' => 'AI Citation Index: The Sites AI Answers Cite Most', 'desc' => 'The websites AI answers cite most, ranked by share of 95.7M citations, with the kind of site each one is. Early version built on Trakkr\'s open index.', 'api' => '/citations?limit=20', 'mcp' => 'list_top_cited_sites' ),
 		);
 	}
 
@@ -541,8 +546,9 @@ final class Hubbub_AI_Hub {
 		$toggle = function ( $value, $label, $hint ) {
 			return '<label class="hb-check-opt"><input type="checkbox" value="' . esc_attr( $value ) . '"><span><strong>' . esc_html( $label ) . '</strong> ' . esc_html( $hint ) . '</span></label>';
 		};
-		$summary = '<p class="hb-summary">' . count( $data['crawlers'] ) . ' crawlers from ' . count( $companies ) . ' companies: ' . $counts['search'] . ' for search, ' . $counts['training'] . ' for model training, ' . $counts['user'] . ' fetching pages on a user\'s request and ' . $counts['other'] . ' other. Checked against each company\'s documentation on ' . esc_html( self::fmt_date( $data['updated'] ) ) . '.</p>';
-		$inner = self::hero( 'Updated weekly', 'Every AI crawler, and what it does with your content', 'Who runs each bot, why it visits and whether it follows robots.txt.', $summary )
+		$summary = '<p class="hb-summary">' . count( $data['crawlers'] ) . ' crawlers from ' . count( $companies ) . ' companies, checked against each company\'s documentation on ' . esc_html( self::fmt_date( $data['updated'] ) ) . '.</p>';
+		$mix   = self::mixbar( 'Crawlers by purpose', array( array( 'search', $counts['search'], 'search' ), array( 'training', $counts['training'], 'training' ), array( 'user request', $counts['user'], 'user' ), array( 'other', $counts['other'], 'other' ) ) );
+		$inner = self::hero( 'Updated weekly', 'Every AI crawler, and what it does with your content', 'Who runs each bot, why it visits and whether it follows robots.txt.', $mix . $summary )
 			. '<section class="hb-section"><div class="hb-toolbar"><input type="search" class="hubbub-crawlers__q hb-input" placeholder="Search bots" aria-label="Search bots">'
 			. '<div class="hb-seg" role="group" aria-label="Purpose"><button type="button" class="is-on" data-p="">All</button><button type="button" data-p="search">Search</button><button type="button" data-p="training">Training</button><button type="button" data-p="user">User request</button><button type="button" data-p="other">Other</button></div>'
 			. '<select class="hubbub-crawlers__company hb-input" aria-label="Operator">' . $opts . '</select></div>'
@@ -645,8 +651,9 @@ final class Hubbub_AI_Hub {
 				. '<p class="hb-ad__src">Updated ' . esc_html( self::fmt_date( $p['updated'] ) ) . ( $p['announced'] ? ', first announced ' . esc_html( self::fmt_date( $p['announced'] ) ) : '' ) . '. ' . ( $p['official_source'] ? 'Official source' : 'Source' ) . ( count( $links ) > 1 ? 's' : '' ) . ': ' . implode( ', ', $links ) . '.</p>'
 				. '</article>';
 		}
-		$summary = '<p class="hb-summary">' . $counts['live'] . ' live, ' . $counts['test'] . ' in testing or announced, ' . $counts['ended'] . ' ended and ' . $counts['none'] . ' assistants with no ads yet. Checked ' . esc_html( self::fmt_date( $data['updated'] ) ) . '.</p>';
-		$inner = self::hero( 'Updated weekly', 'Where you can buy ads inside AI answers', 'Every ad product inside AI assistants and AI search, with its status, markets, formats and how to buy. Each entry links to its source.', $summary )
+		$summary = '<p class="hb-summary">' . count( $data['products'] ) . ' ad products and assistants, checked against their sources on ' . esc_html( self::fmt_date( $data['updated'] ) ) . '.</p>';
+		$mix   = self::mixbar( 'Ad products by status', array( array( 'live', $counts['live'], 'live' ), array( 'testing or announced', $counts['test'], 'test' ), array( 'ended', $counts['ended'], 'ended' ), array( 'no ads yet', $counts['none'], 'none' ) ) );
+		$inner = self::hero( 'Updated weekly', 'Where you can buy ads inside AI answers', 'Every ad product inside AI assistants and AI search, with its status, markets, formats and how to buy. Each entry links to its source.', $mix . $summary )
 			. '<section class="hb-section"><div class="hb-toolbar"><div class="hb-seg" role="group" aria-label="Status"><button type="button" class="is-on" data-p="">All</button><button type="button" data-p="live">Live</button><button type="button" data-p="test">Testing</button><button type="button" data-p="ended">Ended</button><button type="button" data-p="none">No ads</button></div></div>'
 			. '<p class="hb-count" aria-live="polite"></p>'
 			. '<div class="hb-adlist">' . $cards . '</div></section>';
@@ -793,13 +800,16 @@ final class Hubbub_AI_Hub {
 			return '';
 		}
 		$bits = array();
+		$bar  = '';
 		if ( ! empty( $x['visit_share'] ) ) {
 			$bits[] = '<b>' . esc_html( $x['visit_share'] ) . '</b> of AI crawler visits';
+			$pct    = (float) preg_replace( '/[^0-9.]/', '', $x['visit_share'] );
+			$bar    = '<span class="hb-bot__bar" aria-hidden="true"><i style="--w:' . max( 2, min( 100, round( $pct / 60 * 100, 1 ) ) ) . '%"></i></span>';
 		}
 		if ( ! empty( $x['fake_rate'] ) ) {
 			$bits[] = '<b>' . esc_html( $x['fake_rate'] ) . '</b> of requests using this name were fake';
 		}
-		return '<span class="hb-bot__stat">' . implode( ' · ', $bits ) . '</span>';
+		return '<span class="hb-bot__stat">' . $bar . implode( ' · ', $bits ) . '</span>';
 	}
 
 	public static function citations_shortcode() {
@@ -1063,6 +1073,53 @@ final class Hubbub_AI_Hub {
 			}
 		}
 		return '';
+	}
+
+	/** The longer search title for the current tool page, or ''. */
+	private static function seo_for_page() {
+		$key = self::current_tool();
+		$t   = self::tools();
+		if ( 'insights' === $key ) {
+			return 'AI Search Insights: The Latest Data on AI Search Traffic, Citations and Crawlers';
+		}
+		return isset( $t[ $key ]['seo'] ) ? $t[ $key ]['seo'] : '';
+	}
+
+	public static function seo_title_parts( $parts ) {
+		$seo = self::seo_for_page();
+		if ( $seo && isset( $parts['title'] ) ) {
+			$parts['title'] = $seo;
+		}
+		return $parts;
+	}
+
+	public static function seo_title( $title ) {
+		$seo  = self::seo_for_page();
+		$name = $seo ? get_the_title( get_queried_object_id() ) : '';
+		if ( ! $seo || '' === $name ) {
+			return $title;
+		}
+		$name = html_entity_decode( $name, ENT_QUOTES, 'UTF-8' );
+		return 0 === strpos( $title, $name ) ? $seo . substr( $title, strlen( $name ) ) : $title;
+	}
+
+	/** A stacked bar that splits a total into parts, with a legend. $parts: [ [label, count, class], ... ]. */
+	private static function mixbar( $label, $parts ) {
+		$total = array_sum( wp_list_pluck( $parts, 1 ) );
+		if ( ! $total ) {
+			return '';
+		}
+		$bar = '';
+		$key = '';
+		foreach ( $parts as $i => $p ) {
+			if ( ! $p[1] ) {
+				continue;
+			}
+			$w    = round( $p[1] / $total * 100, 2 );
+			$bar .= '<i class="hb-mixbar__seg is-' . esc_attr( $p[2] ) . '" style="--w:' . $w . '%;--d:' . ( $i * 90 ) . 'ms" title="' . esc_attr( $p[0] . ': ' . $p[1] ) . '"></i>';
+			$key .= '<li class="is-' . esc_attr( $p[2] ) . '"><b data-count="' . (int) $p[1] . '">' . (int) $p[1] . '</b> ' . esc_html( $p[0] ) . '</li>';
+		}
+		return '<div class="hb-mixbar" role="img" aria-label="' . esc_attr( $label ) . '"><div class="hb-mixbar__bar">' . $bar . '</div><ul class="hb-mixbar__key" aria-hidden="true">' . $key . '</ul></div>';
 	}
 
 	public static function body_class( $classes ) {

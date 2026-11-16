@@ -314,6 +314,29 @@
     });
   }
 
+  // Cards and rows fade up, one after another, as they scroll into view.
+  function initStagger(root) {
+    if (!('IntersectionObserver' in window) || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+    var els = root.querySelectorAll('.hb-ad, .hb-bot, .hb-tile, .hb-brief__item, .hb-insight, .hb-site');
+    var io = new IntersectionObserver(function (en) {
+      var n = 0;
+      en.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        io.unobserve(el);
+        el.style.transitionDelay = Math.min(n++, 8) * 55 + 'ms';
+        el.classList.add('is-seen');
+        setTimeout(function () { el.classList.remove('hb-rv', 'is-seen'); el.style.transitionDelay = ''; }, 1200 + n * 55);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -5% 0px' });
+    Array.prototype.forEach.call(els, function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.9) return; // Already on screen: leave it be.
+      el.classList.add('hb-rv');
+      io.observe(el);
+    });
+  }
+
   function initReveal(root) {
     var els = root.querySelectorAll('.hb-share, .hb-mix, .hb-table--sites, .hb-tiles, .hb-bigfigs, .hb-line');
     Array.prototype.forEach.call(els, function (el) {
@@ -411,8 +434,10 @@
       return n;
     }
     var svg = s('svg', { viewBox: '0 0 ' + W + ' ' + H, class: 'hb-graph__svg' + (compact ? ' is-compact' : ''), focusable: 'false' }, stage);
+    var HUES = { insights: 'var(--accent)', checker: '#2f7d43', crawlers: '#2563a6', ads: '#d4572a', citations: '#7a55d1' };
     var gRings = s('g', { class: 'hb-g-rings' }, svg);
     [0, 1].forEach(function (i) { s('circle', { cx: CX, cy: CY, r: G.hub, style: 'animation-delay:' + (i * 2.4) + 's' }, gRings); });
+    s('circle', { cx: CX, cy: CY, r: G.hub + (compact ? 22 : 14), class: 'hb-g-orbit' }, svg);
     var gEdges = s('g', {}, svg), gPulse = s('g', {}, svg), gNodes = s('g', {}, svg);
     var nodes = [], edges = [], byLabel = {};
 
@@ -435,6 +460,10 @@
     var sizers = [];
     function edge(a, b, cls, bend) {
       var e = { a: a, b: b, bend: bend || 0.06, el: s('path', { class: 'hb-g-edge ' + (cls || '') }, gEdges) };
+      var h = (b.data && HUES[b.data.id]) || (b.tool && HUES[b.tool.data.id]);
+      if (h && cls !== 'is-cross') e.el.style.setProperty('--h', h);
+      // Spokes carry a slow stream of dashes in towards the hub.
+      if (cls && cls.indexOf('is-spoke') === 0) { e.flow = s('path', { class: 'hb-g-flow' }, gEdges); e.flow.style.setProperty('--h', h || 'var(--accent)'); }
       edges.push(e);
       return e;
     }
@@ -452,6 +481,7 @@
       var a = (-90 + i * 360 / count) * Math.PI / 180, c = Math.cos(a), si = Math.sin(a);
       var tool = node({ kind: 'tool', data: t, hx: CX + c * G.tx, hy: CY + si * G.ty, amp: 2, topics: [] });
       tool.el = s('g', { class: 'hb-g-tool' + (i === 0 ? ' is-lead' : '') + (t.soon ? ' is-soon' : '') }, gNodes);
+      tool.el.style.setProperty('--h', HUES[t.id] || 'var(--text)');
       s('circle', { r: G.tr * 2.6, class: 'hb-g-hit' }, tool.el);
       s('circle', { r: G.tr * 1.9, class: 'hb-g-tool__halo' }, tool.el);
       s('circle', { r: G.tr, class: 'hb-g-tool__dot' }, tool.el);
@@ -466,6 +496,7 @@
         var tp = node({ kind: 'topic', hx: CX + bc * G.px, hy: CY + bs * G.py, amp: 3, tool: tool });
         tp.bx = tp.hx;
         tp.el = s('g', { class: 'hb-g-topic' }, gNodes);
+        tp.el.style.setProperty('--h', HUES[t.id] || 'var(--text)');
         s('circle', { r: G.dr * 3, class: 'hb-g-hit' }, tp.el);
         s('circle', { r: G.dr, class: 'hb-g-topic__dot' }, tp.el);
         var L = label(tp.el, lab, bc, bs, G.dr + (compact ? 10 : 7), 'hb-g-topic__tx', 0.1);
@@ -574,8 +605,12 @@
           if (dist < 120) { var f = (1 - dist / 120) * 10; px = vx / dist * f; py = vy / dist * f; }
         }
         n.px += (px - n.px) * 0.1; n.py += (py - n.py) * 0.1;
-        n.x = CX + (n.hx - CX) * k + tx + n.px;
-        n.y = CY + (n.hy - CY) * k + ty + n.py;
+        // Gentle parallax: outer nodes drift further with the pointer than inner ones.
+        var depth = n.kind === 'topic' ? 0.05 : n.kind === 'tool' ? 0.022 : 0;
+        var lx = ptr && !still ? (ptr.x - CX) * depth : 0, ly = ptr && !still ? (ptr.y - CY) * depth : 0;
+        n.lx = (n.lx || 0) + (lx - (n.lx || 0)) * 0.06; n.ly = (n.ly || 0) + (ly - (n.ly || 0)) * 0.06;
+        n.x = CX + (n.hx - CX) * k + tx + n.px + n.lx;
+        n.y = CY + (n.hy - CY) * k + ty + n.py + n.ly;
         n.el.setAttribute('transform', 'translate(' + n.x.toFixed(1) + ' ' + n.y.toFixed(1) + ')' + (n.kind === 'hub' ? '' : ' scale(' + (0.6 + 0.4 * k).toFixed(3) + ')'));
         n.el.style.opacity = k;
       });
@@ -583,19 +618,28 @@
         var c = ctrl(e);
         e.c = c;
         e.el.setAttribute('d', 'M' + e.a.x.toFixed(1) + ' ' + e.a.y.toFixed(1) + 'Q' + c.x.toFixed(1) + ' ' + c.y.toFixed(1) + ' ' + e.b.x.toFixed(1) + ' ' + e.b.y.toFixed(1));
+        if (e.flow) e.flow.setAttribute('d', 'M' + e.b.x.toFixed(1) + ' ' + e.b.y.toFixed(1) + 'Q' + c.x.toFixed(1) + ' ' + c.y.toFixed(1) + ' ' + e.a.x.toFixed(1) + ' ' + e.a.y.toFixed(1));
       });
       if (still) return;
-      if (age >= 1 && time - lastPulse > 900) {
+      if (age >= 1 && time - lastPulse > 520) {
         lastPulse = time;
         var tool = active && Math.random() < 0.7 ? active : tools[Math.floor(Math.random() * tools.length)];
         if (!tool.data.soon) {
           var leaf = tool.topics[Math.floor(Math.random() * tool.topics.length)];
-          pulses.push({ path: [tool.edge, leaf.edge], t: time, el: s('circle', { r: compact ? 5 : 2.75, class: 'hb-g-pulse' }, gPulse) });
+          var pe = s('circle', { r: compact ? 5 : 3, class: 'hb-g-pulse' }, gPulse);
+          pe.style.setProperty('--h', HUES[tool.data.id] || 'var(--accent)');
+          pulses.push({ path: [tool.edge, leaf.edge], leaf: leaf, t: time, el: pe });
         }
       }
       pulses = pulses.filter(function (p) {
         var q = (time - p.t) / 1800;
-        if (q >= 1) { gPulse.removeChild(p.el); return false; }
+        if (q >= 1) {
+          gPulse.removeChild(p.el);
+          // The topic lights up as the pulse lands.
+          p.leaf.el.classList.add('is-hit');
+          setTimeout(function () { p.leaf.el.classList.remove('is-hit'); }, 700);
+          return false;
+        }
         var e = q < 0.5 ? p.path[0] : p.path[1], f = q < 0.5 ? q * 2 : (q - 0.5) * 2;
         f = f * f * (3 - 2 * f);
         var pt = qpt(e.a, e.c, e.b, f);
@@ -631,6 +675,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-citations'), initCitations);
     Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initLines);
     Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initReveal);
+    Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initStagger);
     Array.prototype.forEach.call(document.querySelectorAll('.hb-graph[data-graph]'), initGraph);
   });
 })();

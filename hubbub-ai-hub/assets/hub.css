@@ -640,3 +640,85 @@ html body .hubbub-hub.hubbub-hub.hb-app .hb-line__data td, html body .hubbub-hub
 
 /* Without JavaScript the graph is not drawn, so the intro takes the full width. */
 html body .hubbub-hub.hubbub-hub.hb-app .hb-graph:not(.is-ready) { display: none; }
+
+
+/* Knowledge graph, livelier: colour per tool, flowing spokes, an orbit and drifting light. */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-graph { isolation: isolate; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-graph::before { content: ""; position: absolute; z-index: -1; inset: -20%; pointer-events: none;
+	background:
+		radial-gradient(22% 26% at 30% 30%, color-mix(in srgb, #2563a6 10%, transparent), transparent 70%),
+		radial-gradient(24% 28% at 72% 62%, color-mix(in srgb, #7a55d1 9%, transparent), transparent 70%),
+		radial-gradient(26% 30% at 50% 20%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+		radial-gradient(20% 24% at 25% 75%, color-mix(in srgb, #d4572a 8%, transparent), transparent 70%);
+	animation: hb-drift 22s ease-in-out infinite alternate; }
+@keyframes hb-drift { 0% { transform: translate3d(-3%, -2%, 0) rotate(0deg); } 100% { transform: translate3d(3%, 2%, 0) rotate(8deg); } }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-graph__stage { position: relative; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-orbit { fill: none; stroke: color-mix(in srgb, var(--text) 30%, transparent); stroke-width: 1; stroke-dasharray: 2 6; transform-origin: center; transform-box: fill-box; animation: hb-spin 40s linear infinite; }
+@keyframes hb-spin { to { transform: rotate(360deg); } }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-hub circle { filter: drop-shadow(0 12px 22px rgba(17, 17, 17, .28)); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-edge.is-leaf { stroke: color-mix(in srgb, var(--h, var(--text)) 30%, transparent); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-edge.is-spoke { stroke: color-mix(in srgb, var(--h, var(--text)) 40%, color-mix(in srgb, var(--text) 20%, transparent)); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-flow { fill: none; stroke: var(--h); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 2 14; opacity: .85; animation: hb-flow 1.6s linear infinite; }
+@keyframes hb-flow { to { stroke-dashoffset: -32; } }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-tool__dot { fill: var(--h, var(--text)); filter: drop-shadow(0 3px 6px color-mix(in srgb, var(--h, var(--text)) 45%, transparent)); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-tool.is-lead .hb-g-tool__dot { fill: var(--accent); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-tool__halo { stroke: color-mix(in srgb, var(--h, var(--text)) 45%, transparent); transform-origin: center; transform-box: fill-box; animation: hb-breathe-ring 3.6s ease-in-out infinite; }
+@keyframes hb-breathe-ring { 50% { transform: scale(1.18); opacity: .55; } }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-topic__dot { stroke: color-mix(in srgb, var(--h, var(--text)) 70%, transparent); transition: fill .3s, stroke .3s, transform .3s; transform-origin: center; transform-box: fill-box; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-topic.is-hit .hb-g-topic__dot { fill: var(--h, var(--accent)); transform: scale(1.6); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-topic.is-hit .hb-g-topic__tx { fill: var(--text); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-pulse { fill: var(--h, var(--accent)); filter: drop-shadow(0 0 5px var(--h, var(--accent))); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-tool.is-on .hb-g-tool__dot { fill: var(--h, var(--accent)); stroke: var(--paper); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-tool.is-on .hb-g-tool__halo { stroke: var(--h, var(--accent)); fill: color-mix(in srgb, var(--h, var(--accent)) 14%, transparent); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-g-topic.is-on .hb-g-topic__dot { fill: var(--h, var(--text)); stroke: var(--h, var(--text)); }
+html body .hubbub-hub.hubbub-hub.hb-app .has-active .hb-g-edge.is-on { stroke: var(--h, var(--text)); stroke-width: 1.5; }
+html body .hubbub-hub.hubbub-hub.hb-app .has-active .hb-g-edge.is-near.is-leaf { stroke: color-mix(in srgb, var(--h, var(--text)) 70%, transparent); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-graph__cap .hb-label { color: var(--mute); }
+@media (prefers-reduced-motion: reduce) { html body .hubbub-hub.hubbub-hub.hb-app .hb-graph::before, html body .hubbub-hub.hubbub-hub.hb-app .hb-g-orbit, html body .hubbub-hub.hubbub-hub.hb-app .hb-g-flow, html body .hubbub-hub.hubbub-hub.hb-app .hb-g-tool__halo { animation: none; } }
+
+/* ---------- Life: depth, colour and motion (v0.15) ---------- */
+
+/* Breakdown bar in the crawler and ads intros. */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar { max-width: 40rem; margin-top: 1.5rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar__bar { display: flex; gap: 3px; height: 12px; border-radius: 999px; overflow: hidden; background: var(--soft); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar__seg { display: block; flex: none; width: var(--w); background: var(--c, var(--mute)); transform-origin: left; animation: hb-grow .9s var(--d, 0ms) cubic-bezier(.2, .8, .2, 1) both; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar__key { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; margin-top: .7rem !important; color: var(--mute); font-size: .875rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar__key li::before { content: ""; display: inline-block; width: .6rem; height: .6rem; margin-right: .4rem; border-radius: 3px; background: var(--c, var(--mute)); vertical-align: -.02em; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar__key b { color: var(--text); font-weight: 700; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar .is-search { --c: #2563a6; } html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar .is-training { --c: #a23b72; } html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar .is-user { --c: var(--good); } html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar .is-other { --c: #b9b9b9; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar .is-live { --c: var(--good); } html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar .is-test { --c: var(--accent); } html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar .is-ended { --c: var(--bad); } html body .hubbub-hub.hubbub-hub.hb-app .hb-mixbar .is-none { --c: #c9c9c9; }
+@keyframes hb-grow { from { transform: scaleX(0); } }
+
+/* Crawler rows: hover highlight and a visit-share bar. */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-table tbody tr > * { transition: background-color .2s; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-table tbody th, html body .hubbub-hub.hubbub-hub.hb-app .hb-table thead th:first-child { padding-left: .9rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-table tbody tr:hover > * { background: color-mix(in srgb, var(--accent) 8%, var(--paper)); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-table tbody tr:hover > th:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-bot__bar { display: block; width: min(12rem, 70%); height: 4px; margin: .45rem 0 .3rem; border-radius: 2px; background: var(--soft); overflow: hidden; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-bot__bar i { display: block; width: var(--w); height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--text), color-mix(in srgb, var(--text) 55%, var(--accent))); transform-origin: left; animation: hb-grow 1.1s .2s cubic-bezier(.2, .8, .2, 1) both; }
+
+/* Ads as cards with a status edge. */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-adlist { display: grid; gap: 1rem; border-top: 0; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-ad { position: relative; padding: 1.4rem 1.5rem 1.25rem 1.75rem; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); overflow: hidden; transition: transform .25s, box-shadow .25s, border-color .25s; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-ad::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 4px; background: var(--c, var(--line)); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-ad--live { --c: var(--good); } html body .hubbub-hub.hubbub-hub.hb-app .hb-ad--beta, html body .hubbub-hub.hubbub-hub.hb-app .hb-ad--testing, html body .hubbub-hub.hubbub-hub.hb-app .hb-ad--announced { --c: var(--accent); } html body .hubbub-hub.hubbub-hub.hb-app .hb-ad--ended { --c: var(--bad); } html body .hubbub-hub.hubbub-hub.hb-app .hb-ad--unknown { --c: var(--mute); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-ad:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--text) 35%, transparent); box-shadow: 0 18px 36px -24px rgba(17, 17, 17, .35); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-status { padding: .2rem .65rem; border-radius: 999px; background: color-mix(in srgb, currentColor 10%, transparent); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-status--live::before { animation: hb-ping 2s infinite; }
+
+/* Cards that lift on hover. */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-insight, html body .hubbub-hub.hubbub-hub.hb-app .hb-brief__item, html body .hubbub-hub.hubbub-hub.hb-app .hb-theme { transition: transform .25s, box-shadow .25s, border-color .25s; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-insight:hover, html body .hubbub-hub.hubbub-hub.hb-app a.hb-brief__item:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -24px rgba(17, 17, 17, .35); }
+
+/* Scroll reveal, added by JavaScript only. */
+html body .hubbub-hub.hubbub-hub.hb-app .hb-rv { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s cubic-bezier(.2, .8, .2, 1); }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-rv.is-seen { opacity: 1; transform: none; }
+
+@media (max-width: 640px) {
+	html body .hubbub-hub.hubbub-hub.hb-app .hb-ad { padding: 1.1rem 1rem 1rem 1.25rem; }
+	html body .hubbub-hub.hubbub-hub.hb-app .hb-table tbody th { padding-left: 0; }
+	html body .hubbub-hub.hubbub-hub.hb-app .hb-table tbody tr:hover > th:first-child { box-shadow: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+	html body .hubbub-hub.hubbub-hub.hb-app .hb-rv { opacity: 1; transform: none; }
+}
