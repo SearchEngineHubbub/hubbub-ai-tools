@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Visibility Checker, AI Crawler Directory and AI Ads Tracker for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.13.1
+ * Version: 0.13.2
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.13.1' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.13.2' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -413,7 +413,7 @@ final class Hubbub_AI_Hub {
 	private static function hero( $eyebrow, $title, $sub, $extra = '', $class = '' ) {
 		$title = wp_strip_all_tags( $title );
 		return '<header class="hb-intro ' . esc_attr( $class ) . '">'
-			. ( $eyebrow ? '<p class="hb-kicker">' . esc_html( $eyebrow ) . '</p>' : '' )
+			. ( $eyebrow ? '<p class="hb-kicker"><span class="hb-live" aria-hidden="true"></span>' . esc_html( $eyebrow ) . '</p>' : '' )
 			. '<h2 class="hb-intro__title">' . esc_html( $title ) . '</h2><p class="hb-intro__sub">' . esc_html( $sub ) . '</p>' . $extra . '</header>';
 	}
 
@@ -484,7 +484,7 @@ final class Hubbub_AI_Hub {
 		foreach ( $groups as $g ) {
 			$how .= '<div><dt>' . esc_html( $g[0] ) . '</dt><dd>' . esc_html( $g[1] ) . '</dd></div>';
 		}
-		$inner = self::hero( '', 'Can AI assistants find and cite your page?', 'Enter a URL and we will load it the way ChatGPT, Claude, Perplexity and Gemini do, score it out of 100 and list what to fix.', $form )
+		$inner = self::hero( 'Free · Checks ' . $n . ' AI crawlers', 'Can AI assistants find and cite your page?', 'Enter a URL and we will load it the way ChatGPT, Claude, Perplexity and Gemini do, score it out of 100 and list what to fix.', $form )
 			. '<div class="hubbub-checker__out" aria-live="polite"></div>'
 			. '<section class="hb-section"><h2 class="hb-h2">What the checker looks at</h2><dl class="hb-deflist">' . $how . '</dl></section>'
 			. '<section class="hb-section"><h2 class="hb-h2">How pages that AI cites compare</h2><ul class="hb-bench">'
@@ -522,7 +522,7 @@ final class Hubbub_AI_Hub {
 			return '<label class="hb-check-opt"><input type="checkbox" value="' . esc_attr( $value ) . '"><span><strong>' . esc_html( $label ) . '</strong> ' . esc_html( $hint ) . '</span></label>';
 		};
 		$summary = '<p class="hb-summary">' . count( $data['crawlers'] ) . ' crawlers from ' . count( $companies ) . ' companies: ' . $counts['search'] . ' for search, ' . $counts['training'] . ' for model training, ' . $counts['user'] . ' fetching pages on a user\'s request and ' . $counts['other'] . ' other. Checked against each company\'s documentation on ' . esc_html( self::fmt_date( $data['updated'] ) ) . '.</p>';
-		$inner = self::hero( '', 'Every AI crawler, and what it does with your content', 'Who runs each bot, why it visits and whether it follows robots.txt.', $summary )
+		$inner = self::hero( 'Updated weekly', 'Every AI crawler, and what it does with your content', 'Who runs each bot, why it visits and whether it follows robots.txt.', $summary )
 			. '<section class="hb-section"><div class="hb-toolbar"><input type="search" class="hubbub-crawlers__q hb-input" placeholder="Search bots" aria-label="Search bots">'
 			. '<div class="hb-seg" role="group" aria-label="Purpose"><button type="button" class="is-on" data-p="">All</button><button type="button" data-p="search">Search</button><button type="button" data-p="training">Training</button><button type="button" data-p="user">User request</button><button type="button" data-p="other">Other</button></div>'
 			. '<select class="hubbub-crawlers__company hb-input" aria-label="Operator">' . $opts . '</select></div>'
@@ -626,7 +626,7 @@ final class Hubbub_AI_Hub {
 				. '</article>';
 		}
 		$summary = '<p class="hb-summary">' . $counts['live'] . ' live, ' . $counts['test'] . ' in testing or announced, ' . $counts['ended'] . ' ended and ' . $counts['none'] . ' assistants with no ads yet. Checked ' . esc_html( self::fmt_date( $data['updated'] ) ) . '.</p>';
-		$inner = self::hero( '', 'Where you can buy ads inside AI answers', 'Every ad product inside AI assistants and AI search, with its status, markets, formats and how to buy. Each entry links to its source.', $summary )
+		$inner = self::hero( 'Updated weekly', 'Where you can buy ads inside AI answers', 'Every ad product inside AI assistants and AI search, with its status, markets, formats and how to buy. Each entry links to its source.', $summary )
 			. '<section class="hb-section"><div class="hb-toolbar"><div class="hb-seg" role="group" aria-label="Status"><button type="button" class="is-on" data-p="">All</button><button type="button" data-p="live">Live</button><button type="button" data-p="test">Testing</button><button type="button" data-p="ended">Ended</button><button type="button" data-p="none">No ads</button></div></div>'
 			. '<p class="hb-count" aria-live="polite"></p>'
 			. '<div class="hb-adlist">' . $cards . '</div></section>';

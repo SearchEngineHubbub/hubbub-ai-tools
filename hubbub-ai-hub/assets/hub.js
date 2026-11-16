@@ -145,7 +145,7 @@
       card.appendChild(det);
     }
 
-    var share = el('div', 'hb-share');
+    var share = el('div', 'hb-sharebox');
     share.appendChild(el('span', null, 'Share this report'));
     var input = el('input');
     input.readOnly = true;

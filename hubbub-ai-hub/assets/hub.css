@@ -37,6 +37,7 @@ html body .hubbub-hub.hubbub-hub.hb-app dt { font-weight: inherit; }
 html body .hubbub-hub.hubbub-hub.hb-app dd { margin: 0; }
 html body .hubbub-hub.hubbub-hub.hb-app figure { margin: 0; }
 html body .hubbub-hub.hubbub-hub.hb-app th, html body .hubbub-hub.hubbub-hub.hb-app td { border: 0; }
+html body .hubbub-hub.hubbub-hub.hb-app th { font-family: inherit; letter-spacing: normal; text-transform: none; }
 html body .hubbub-hub.hubbub-hub.hb-app mark { padding: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; }
 html body .hubbub-hub.hubbub-hub.hb-app button { border-radius: 0; }
 html body .hubbub-hub.hubbub-hub.hb-app h2, html body .hubbub-hub.hubbub-hub.hb-app h3, html body .hubbub-hub.hubbub-hub.hb-app p, html body .hubbub-hub.hubbub-hub.hb-app ul, html body .hubbub-hub.hubbub-hub.hb-app ol, html body .hubbub-hub.hubbub-hub.hb-app dl, html body .hubbub-hub.hubbub-hub.hb-app dd { margin: 0; }
@@ -61,7 +62,8 @@ html body .hubbub-hub.hubbub-hub.hb-app .hb-nav a[aria-current="page"] { color: 
 /* Intro */
 html body .hubbub-hub.hubbub-hub.hb-app .hb-intro { max-width: 46rem; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-kicker { color: var(--mute); font-size: .875rem; margin-bottom: .5rem !important; }
-html body .hubbub-hub.hubbub-hub.hb-app .hb-intro__title { font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.2; font-weight: 700; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-intro .hb-kicker { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .75rem !important; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-intro__title { font-size: clamp(2rem, 4.2vw, 2.9rem); line-height: 1.08; font-weight: 800; letter-spacing: -.03em; text-wrap: balance; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-intro__sub { margin-top: .75rem !important; color: var(--mute); font-size: 1.125rem; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-summary { margin-top: 1rem !important; color: var(--mute); font-size: .95rem; }
 
@@ -223,10 +225,10 @@ html body .hubbub-hub.hubbub-hub.hb-app .hb-botrow__co { color: var(--mute); ove
 html body .hubbub-hub.hubbub-hub.hb-app .hb-botrow__state { margin-left: auto; color: var(--good); }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-botrow.is-blocked .hb-botrow__state { color: var(--bad); }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-dot { display: none; }
-html body .hubbub-hub.hubbub-hub.hb-app .hb-share { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: 1.5rem; }
-html body .hubbub-hub.hubbub-hub.hb-app .hb-share > span { color: var(--mute); font-size: .9rem; }
-html body .hubbub-hub.hubbub-hub.hb-app .hb-share input { flex: 1 1 16rem; min-width: 0; height: 2.5rem; padding: 0 .75rem; border: 1px solid var(--line); border-radius: 4px; background: var(--soft); color: var(--mute); font-size: .85rem; }
-html body .hubbub-hub.hubbub-hub.hb-app .hb-share .hb-btn { height: 2.5rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sharebox { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: 1.5rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sharebox > span { color: var(--mute); font-size: .9rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sharebox input { flex: 1 1 16rem; min-width: 0; height: 2.5rem; padding: 0 .75rem; border: 1px solid var(--line); border-radius: 4px; background: var(--soft); color: var(--mute); font-size: .85rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-sharebox .hb-btn { height: 2.5rem; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-loading { display: flex; gap: 1.25rem; align-items: center; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-spinner { width: 1.75rem; height: 1.75rem; flex: none; border: 2px solid var(--line); border-top-color: var(--text); border-radius: 50%; animation: hb-spin .8s linear infinite; }
 @keyframes hb-spin { to { transform: rotate(360deg); } }
@@ -369,7 +371,7 @@ html body .hubbub-hub.hubbub-hub.hb-app .hb-tag--more::before { display: none; }
 html body .hubbub-hub.hubbub-hub.hb-app a.hb-tile:hover .hb-tag { border-color: color-mix(in srgb, var(--text) 30%, transparent); }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-preview--live { list-style: none; padding: 0 !important; display: grid; gap: .5rem; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-preview--live li { display: flex; align-items: center; gap: .65rem; padding: .6rem .8rem; border-radius: 8px; background: var(--soft); font-size: .9rem; }
-html body .hubbub-hub.hubbub-hub.hb-app .hb-preview--live small { margin-left: auto; color: var(--mute); font-size: .78rem; }
+html body .hubbub-hub.hubbub-hub.hb-app .hb-preview--live small { margin-left: auto; white-space: nowrap; text-align: right; color: var(--mute); font-size: .78rem; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-dot { width: 8px; height: 8px; flex: none; border-radius: 50%; background: var(--good); animation: hb-ping 2s infinite; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-tile--mcp { background: var(--text); border-color: var(--text); color: var(--paper) !important; }
 html body .hubbub-hub.hubbub-hub.hb-app .hb-tile--mcp h3 { color: var(--paper) !important; }
