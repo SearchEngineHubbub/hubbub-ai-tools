@@ -40,7 +40,7 @@
   {
    "id": "arena",
    "title": "Which AI search do people prefer?",
-   "intro": "Blind, head-to-head votes on AI search answers from Search Arena, and what its researchers found makes an answer win."
+   "intro": "Blind, head-to-head votes on AI search answers from Search Arena, what its researchers found makes an answer win, and which models developers actually build with."
   }
  ],
  "traffic_share": {
@@ -635,5 +635,75 @@
    ]
   ],
   "paper": "https://arxiv.org/abs/2506.05334"
+ },
+ "openrouter": {
+  "period": "Week to 15 Nov 2026",
+  "checked": "2026-11-16",
+  "url": "https://openrouter.ai/rankings",
+  "licence": "CC BY 4.0",
+  "basis": "Tokens processed through OpenRouter, a service developers use to call hundreds of AI models through one API. It shows what developers build with, not what consumers use.",
+  "top": [
+   [
+    1,
+    "DeepSeek V4.1 Flash 1017",
+    "DeepSeek",
+    59.2
+   ],
+   [
+    2,
+    "Hy4",
+    "Tencent",
+    18.1
+   ],
+   [
+    3,
+    "DeepSeek V4.1 Flash",
+    "DeepSeek",
+    15.5
+   ],
+   [
+    4,
+    "GLM 5.3 Flash",
+    "Z.ai",
+    11.9
+   ],
+   [
+    5,
+    "GPT-6 Luna",
+    "OpenAI",
+    7.85
+   ],
+   [
+    6,
+    "Claude Opus 5.5",
+    "Anthropic",
+    6.98
+   ],
+   [
+    7,
+    "Step 5 Preview",
+    "StepFun",
+    6.41
+   ],
+   [
+    8,
+    "MiMo-V2.6-Flash",
+    "Xiaomi",
+    4.23
+   ],
+   [
+    9,
+    "GLM 5.3",
+    "Z.ai",
+    3.76
+   ],
+   [
+    10,
+    "GPT-6.1 Sol",
+    "OpenAI",
+    3.71
+   ]
+  ],
+  "note": "Cheap, fast models from DeepSeek, Tencent and Z.ai lead developer usage, while the Search Arena leaderboard above is led by flagship models from Alibaba, OpenAI and Anthropic. Popular with builders is not the same as preferred by searchers."
  }
 }

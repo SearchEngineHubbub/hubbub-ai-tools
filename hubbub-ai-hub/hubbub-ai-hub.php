@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.19.0
+ * Version: 0.20.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.19.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.20.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -21,6 +21,7 @@ require_once HUBBUB_AI_HUB_DIR . 'includes/class-robots.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-checker.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-verify.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-interest.php';
+require_once HUBBUB_AI_HUB_DIR . 'includes/class-news.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-mcp.php';
 require_once HUBBUB_AI_HUB_DIR . 'includes/class-updater.php';
 
@@ -246,6 +247,7 @@ final class Hubbub_AI_Hub {
 			'page'          => self::insights_url(),
 			'attribution'   => 'Data: Trakkr (https://trakkr.ai/data), CC BY 4.0, and the Search Arena study and leaderboard (arena.ai), via Search Engine Hubbub. Each insight names its own source.',
 			'search_arena'  => isset( $d['search_arena'] ) ? $d['search_arena'] : null,
+			'openrouter'    => isset( $d['openrouter'] ) ? $d['openrouter'] : null,
 			'themes'        => $d['themes'],
 			'summary'       => isset( $d['summary'] ) ? $d['summary'] : null,
 			'traffic_share' => $d['traffic_share'],
@@ -1007,7 +1009,7 @@ final class Hubbub_AI_Hub {
 				}
 				$extra = '<figure class="hb-share"><figcaption><strong>Who sends the visits</strong><span>' . esc_html( $d['traffic_share']['basis'] ) . ' <a href="' . esc_url( $d['traffic_share']['url'] ) . '" rel="noopener" target="_blank">Source</a></span></figcaption><ol>' . $bars . '</ol></figure>';
 			} elseif ( 'arena' === $id && ! empty( $d['search_arena'] ) ) {
-				$extra = self::arena_board( $d['search_arena'] );
+				$extra = self::arena_board( $d['search_arena'] ) . ( empty( $d['openrouter'] ) ? '' : self::openrouter_board( $d['openrouter'] ) );
 			} elseif ( 'citations' === $id ) {
 				$rows = '';
 				foreach ( array_slice( $c['sites'], 0, 10 ) as $x ) {
@@ -1027,7 +1029,25 @@ final class Hubbub_AI_Hub {
 			$body .= '<section class="hb-theme" id="hb-' . esc_attr( $id ) . '"><h2 class="hb-rule"><span>' . esc_html( $t['title'] ) . '</span></h2><p class="hb-theme__intro">' . esc_html( $t['intro'] ) . '</p>'
 				. $extra . '<div class="hb-insights">' . $items . '</div>' . $more . '</section>';
 		}
-		return self::shell( 'insights', $hero . $body . self::interest() . self::radar_section( 'insights' ) . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
+		return self::shell( 'insights', $hero . $body . self::interest() . self::news() . self::radar_section( 'insights' ) . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
+	}
+
+	/** Latest AI search headlines from official blogs and changelogs (headlines and links only). */
+	private static function news() {
+		$items = Hubbub_AI_Hub_News::items( 8 );
+		if ( ! $items ) {
+			return '';
+		}
+		$li = '';
+		foreach ( $items as $it ) {
+			$li .= '<li><span class="hb-news__meta"><b>' . esc_html( $it[3] ) . '</b><time datetime="' . esc_attr( gmdate( 'c', $it[2] ) ) . '">' . esc_html( wp_date( 'j M', $it[2] ) ) . '</time></span>'
+				. '<a href="' . esc_url( $it[1] ) . '" rel="noopener" target="_blank">' . esc_html( $it[0] ) . '</a></li>';
+		}
+		$names = array_keys( apply_filters( 'hubbub_ai_hub_news_feeds', Hubbub_AI_Hub_News::FEEDS ) );
+		return '<section class="hb-section hb-news" aria-labelledby="hb-news-h"><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Updated every few hours</p><h2 class="hb-h2" id="hb-news-h">Latest from the AI search platforms</h2>'
+			. '<p>New announcements straight from the official blogs, so you can see what changed this week. OpenAI and Google AI posts are filtered to the ones about search, ads, shopping and agents.</p>'
+			. '<ul class="hb-news__list">' . $li . '</ul>'
+			. '<p class="hb-tablenote">Headlines link to the original posts on ' . esc_html( implode( ', ', $names ) ) . '.</p></section>';
 	}
 
 	/** Interest in AI assistants: monthly English Wikipedia pageviews (CC0), fetched live and cached for a day. */
@@ -1084,6 +1104,18 @@ final class Hubbub_AI_Hub {
 		}
 		return '<figure class="hb-share hb-arena"><figcaption><strong>Top five on the Search Arena leaderboard</strong><span>Score from ' . esc_html( $a['votes'] ) . ' blind votes across ' . (int) $a['models'] . ' AI search systems. Leaderboard updated ' . esc_html( self::fmt_date( $a['updated'] ) ) . ', checked ' . esc_html( self::fmt_date( $a['checked'] ) ) . '. <a href="' . esc_url( $a['url'] ) . '" rel="noopener" target="_blank">Full leaderboard on Arena</a></span></figcaption>'
 			. '<ol>' . $rows . '</ol><p class="hb-arena__orgs">Top ten by company: ' . implode( ', ', $orgs ) . '. ' . esc_html( $a['note'] ) . '</p></figure>';
+	}
+
+	/** OpenRouter weekly model usage (rankings data is CC BY 4.0), quoted with a link. */
+	private static function openrouter_board( $o ) {
+		$max  = $o['top'][0][3];
+		$rows = '';
+		foreach ( $o['top'] as $r ) {
+			$rows .= '<li><span class="hb-arena__rank">' . (int) $r[0] . '</span><span class="hb-arena__name"><b>' . esc_html( $r[1] ) . '</b><small>' . esc_html( $r[2] ) . '</small></span>'
+				. '<span class="hb-meter"><i style="--w:' . round( max( 2, $r[3] / $max * 100 ), 1 ) . '%"></i></span><b class="hb-arena__score">' . esc_html( rtrim( rtrim( number_format( $r[3], 2 ), '0' ), '.' ) ) . 'T</b></li>';
+		}
+		return '<figure class="hb-share hb-arena hb-openrouter"><figcaption><strong>What developers build with: top ten models on OpenRouter</strong><span>' . esc_html( $o['basis'] ) . ' ' . esc_html( $o['period'] ) . ', in trillions of tokens.</span></figcaption>'
+			. '<ol>' . $rows . '</ol><p class="hb-arena__orgs">' . esc_html( $o['note'] ) . ' Source: <a href="' . esc_url( $o['url'] ) . '" rel="noopener" target="_blank">OpenRouter rankings</a> (' . esc_html( $o['licence'] ) . '), checked ' . esc_html( self::fmt_date( $o['checked'] ) ) . '.</p></figure>';
 	}
 
 	/** "Which AI cites what", from the Search Arena study, for the Citation Index. */
