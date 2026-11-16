@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.15.0
+ * Version: 0.15.1
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.15.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.15.1' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -678,18 +678,15 @@ final class Hubbub_AI_Hub {
 		$form = '<form class="hb-search hb-search--hero" role="search" method="get" action="' . esc_url( self::page_url( 'checker' ) ) . '">'
 			. '<label class="screen-reader-text" for="hubbub-home-url">Page to check</label>' . self::icon( 'search' )
 			. '<input id="hubbub-home-url" name="url" type="text" inputmode="url" placeholder="Check any page, e.g. yoursite.com" required>'
-			. '<button type="submit" class="hb-btn">Check page' . self::icon( 'arrow' ) . '</button></form>';
-		$stats = '<dl class="hb-figures">'
-			. '<div><dt>AI crawlers tracked</dt><dd class="hb-stat__num" data-count="' . (int) $nbots . '">' . (int) $nbots . '</dd></div>'
-			. '<div><dt>AI ad products</dt><dd class="hb-stat__num" data-count="' . (int) $nads . '">' . (int) $nads . '</dd></div>'
-			. '<div><dt>Live right now</dt><dd class="hb-stat__num" data-count="' . (int) $counts['live'] . '">' . (int) $counts['live'] . '</dd></div>'
-			. '<div><dt>MCP tools for agents</dt><dd class="hb-stat__num" data-count="6">6</dd></div></dl>';
+			. '<button type="submit" class="hb-btn">Check readiness' . self::icon( 'arrow' ) . '</button></form>';
 		$hero = '<header class="hb-stage hb-stage--hub">'
 			. '<p class="hb-kicker"><span class="hb-live" aria-hidden="true"></span>Free tools · Live data · MCP</p>'
 			. '<h2 class="hb-stage__title">The toolkit for <mark>AI search</mark> marketers</h2>'
 			. '<p class="hb-stage__sub">See how ChatGPT, Claude, Perplexity and Gemini find, read, cite and sell. Use it here, or plug it straight into your own AI.</p>'
 			. '</header>';
-		$quick = '<section class="hb-quick" aria-label="Check a page">' . $form . $stats . '</section>';
+		$quick = '<section class="hb-quick" aria-labelledby="hb-quick-h"><h2 class="hb-rule" id="hb-quick-h"><span>AI Readiness Checker</span></h2>'
+			. '<div class="hb-quick__card"><div class="hb-quick__text"><p class="hb-label">Free · No sign-in</p><h3>Is your page ready for AI search?</h3>'
+			. '<p>Paste any URL. We load it the way ChatGPT, Claude, Perplexity and Gemini do, score it out of 100 and list what to fix.</p></div>' . $form . '</div></section>';
 
 		// Tool cards, each with a small live preview drawn from the data.
 		$card = function ( $key, $label, $preview, $cta, $extra_class = '' ) use ( $t, $meta ) {
@@ -730,7 +727,7 @@ final class Hubbub_AI_Hub {
 			. $card( 'citations', 'New · early version', $cites, 'See the index' )
 			. '</div></section>';
 
-		$inner = $hero . self::graph( $meta ) . self::brief() . $quick . $tiles;
+		$inner = $hero . self::graph( $meta ) . '<h2 class="hb-rule"><span>AI Search Insights</span></h2>' . self::brief() . $quick . $tiles;
 		return self::shell( 'tools', $inner );
 	}
 
@@ -754,7 +751,7 @@ final class Hubbub_AI_Hub {
 		}
 		$n = count( $d['insights'] );
 		return '<section class="hb-brief" aria-labelledby="hb-brief-title">'
-			. '<header class="hb-brief__head"><div><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>AI Search Insights · Updated weekly</p>'
+			. '<header class="hb-brief__head"><div><p class="hb-label"><span class="hb-live" aria-hidden="true"></span>Updated weekly from open data</p>'
 			. '<h2 id="hb-brief-title">' . esc_html( $s['title'] ) . '</h2>'
 			. '<p class="hb-brief__meta">Drawn from data covering ' . esc_html( $s['range'] ) . '. Checked ' . esc_html( self::fmt_date( $s['checked'] ) ) . '. Each point shows its own date range.</p></div>'
 			. '<a class="hb-btn hb-brief__cta" href="' . esc_url( self::insights_url() ) . '">See all ' . (int) $n . ' insights' . self::icon( 'arrow' ) . '</a></header>'
