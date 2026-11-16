@@ -1,0 +1,299 @@
+{
+ "updated": "2026-11-16",
+ "source": {
+  "name": "Trakkr Data",
+  "url": "https://trakkr.ai/data",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/"
+ },
+ "themes": [
+  {
+   "id": "traffic",
+   "title": "Where AI traffic comes from",
+   "intro": "Visits that AI assistants send to websites, measured in the analytics of thousands of sites."
+  },
+  {
+   "id": "citations",
+   "title": "What AI cites",
+   "intro": "Which pages and sites AI answers link to when they talk about brands."
+  },
+  {
+   "id": "searches",
+   "title": "How AI searches",
+   "intro": "What actually gets searched when you ask an AI assistant a question."
+  },
+  {
+   "id": "crawlers",
+   "title": "How AI crawlers behave",
+   "intro": "What AI bots do on real sites, from server logs."
+  },
+  {
+   "id": "readiness",
+   "title": "Is the web ready for AI?",
+   "intro": "How many sites have adopted llms.txt and other AI-facing features, and whether it helps."
+  },
+  {
+   "id": "models",
+   "title": "Do AI assistants agree?",
+   "intro": "How often different AI models recommend the same brand for the same question."
+  }
+ ],
+ "traffic_share": {
+  "basis": "Share of visits referred by AI assistants, last 30 days, across about 4,200 sites using Google Analytics 4.",
+  "url": "https://trakkr.ai/data/ai-traffic",
+  "rows": [
+   [
+    "ChatGPT",
+    90.8
+   ],
+   [
+    "Gemini",
+    4.8
+   ],
+   [
+    "Claude",
+    1.6
+   ],
+   [
+    "Perplexity",
+    1.5
+   ],
+   [
+    "Copilot",
+    1.2
+   ],
+   [
+    "Others",
+    0.1
+   ]
+  ]
+ },
+ "insights": [
+  {
+   "theme": "traffic",
+   "figure": "+49.4%",
+   "headline": "AI referrals to websites are up 49.4% on 30 days ago, to about 88,000 visits a day across the panel.",
+   "detail": "About 4,200 sites using Google Analytics 4",
+   "period": "Last 30 days",
+   "url": "https://trakkr.ai/data/ai-traffic",
+   "id": "traffic-1"
+  },
+  {
+   "theme": "traffic",
+   "figure": "101%",
+   "headline": "Education and public-sector sites saw AI referrals grow fastest: up 101% in 30 days.",
+   "detail": "185 sites in that sector",
+   "period": "Last 30 days",
+   "url": "https://trakkr.ai/data/ai-traffic",
+   "id": "traffic-2"
+  },
+  {
+   "theme": "citations",
+   "figure": "74%",
+   "headline": "of links AI cites appear in one answer, then never again.",
+   "detail": "Links cited in AI answers about brands",
+   "period": "Mar 2026",
+   "url": "https://trakkr.ai/data/citations",
+   "id": "citations-3"
+  },
+  {
+   "theme": "citations",
+   "figure": "1.84%",
+   "headline": "Only 1.84% of what AI cites about a brand is on the brand's own website.",
+   "detail": "337,362 citations across 882 brands",
+   "period": "Jan 2025 to Mar 2026",
+   "url": "https://trakkr.ai/data/owned-vs-earned",
+   "id": "citations-4"
+  },
+  {
+   "theme": "citations",
+   "figure": "5x",
+   "headline": "Wikipedia is cited about a brand roughly five times as often as the brand's own site (9.6% vs 1.84%).",
+   "detail": "337,362 citations across 882 brands",
+   "period": "Jan 2025 to Mar 2026",
+   "url": "https://trakkr.ai/data/owned-vs-earned",
+   "id": "citations-5"
+  },
+  {
+   "theme": "citations",
+   "figure": "80%",
+   "headline": "of pages AI cites carry schema markup, against about 39% across the web.",
+   "detail": "1,465 cited pages on 950 sites",
+   "period": "Mar 2026",
+   "url": "https://trakkr.ai/data/content",
+   "id": "citations-6"
+  },
+  {
+   "theme": "citations",
+   "figure": "2,290",
+   "headline": "words is the average length of a page AI cites, about three times the web average of 750.",
+   "detail": "1,465 cited pages on 950 sites",
+   "period": "Mar 2026",
+   "url": "https://trakkr.ai/data/content",
+   "id": "citations-7"
+  },
+  {
+   "theme": "citations",
+   "figure": "4.77x",
+   "headline": "Review and directory pages are cited 4.77 times more often than their share of crawler visits would predict.",
+   "detail": "337K citations matched to 11M crawler visits",
+   "period": "Mar 2026",
+   "url": "https://trakkr.ai/data/content",
+   "id": "citations-8"
+  },
+  {
+   "theme": "citations",
+   "figure": "+3.6 pts",
+   "headline": "When AI first cites a brand's own comparison page, the brand's recommendation rate rises 3.6 points that week. Exploratory, not proof.",
+   "detail": "970 pages first cited May to Aug 2026",
+   "period": "Oct 2026",
+   "url": "https://trakkr.ai/data/comparison-pages",
+   "id": "citations-9"
+  },
+  {
+   "theme": "searches",
+   "figure": "0.55%",
+   "headline": "of the searches AI runs use the exact words the person typed. That is about 1 in 180.",
+   "detail": "112,119 prompt and search pairs",
+   "period": "Sep to Oct 2026",
+   "url": "https://trakkr.ai/data/query-fanout",
+   "id": "searches-10"
+  },
+  {
+   "theme": "searches",
+   "figure": "23.3%",
+   "headline": "of AI searches add a brand name that wasn't in the person's prompt.",
+   "detail": "112,119 prompt and search pairs, 825 brands",
+   "period": "Sep to Oct 2026",
+   "url": "https://trakkr.ai/data/query-fanout",
+   "id": "searches-11"
+  },
+  {
+   "theme": "searches",
+   "figure": "43% → 0.3%",
+   "headline": "43.2% of prompts are phrased as questions, but only 0.3% of the searches AI runs are.",
+   "detail": "112,119 prompt and search pairs",
+   "period": "Sep to Oct 2026",
+   "url": "https://trakkr.ai/data/query-fanout",
+   "id": "searches-12"
+  },
+  {
+   "theme": "searches",
+   "figure": "9.6%",
+   "headline": "of AI searches add a year to the query, usually the current one.",
+   "detail": "112,119 prompt and search pairs",
+   "period": "Sep to Oct 2026",
+   "url": "https://trakkr.ai/data/query-fanout",
+   "id": "searches-13"
+  },
+  {
+   "theme": "crawlers",
+   "figure": "57.2%",
+   "headline": "of AI crawler visits come from GPTBot, OpenAI's training crawler. OAI-SearchBot is next at 15.1%.",
+   "detail": "576K AI bot visits on 84 sites",
+   "period": "Jun 2025 to Feb 2026",
+   "url": "https://trakkr.ai/data/crawlers",
+   "id": "crawlers-14"
+  },
+  {
+   "theme": "crawlers",
+   "figure": "88.5%",
+   "headline": "of pages get exactly one visit from an AI crawler and are never revisited.",
+   "detail": "Server logs from 84 sites",
+   "period": "Jun 2025 to Feb 2026",
+   "url": "https://trakkr.ai/data/crawlers",
+   "id": "crawlers-15"
+  },
+  {
+   "theme": "crawlers",
+   "figure": "44%",
+   "headline": "of requests claiming to be GrokBot were fake, where they could be checked. PerplexityBot 12%, ClaudeBot 7%, GPTBot 6%.",
+   "detail": "Server logs from 127 sites",
+   "period": "Aug to Oct 2026",
+   "url": "https://trakkr.ai/data/security",
+   "id": "crawlers-16"
+  },
+  {
+   "theme": "readiness",
+   "figure": "33,743",
+   "headline": "sites publish an llms.txt file, out of 834K domains scanned.",
+   "detail": "Web census of 834K domains",
+   "period": "Mar 2026",
+   "url": "https://trakkr.ai/data/web",
+   "id": "readiness-17"
+  },
+  {
+   "theme": "readiness",
+   "figure": "No lift",
+   "headline": "Sites with llms.txt earn the same median citations as sites without (3 vs 3).",
+   "detail": "37,894 domains that AI cites",
+   "period": "Mar 2026",
+   "url": "https://trakkr.ai/data/web",
+   "id": "readiness-18"
+  },
+  {
+   "theme": "readiness",
+   "figure": "24.1% vs 1.5%",
+   "headline": "llms.txt adoption: 24.1% of SaaS and developer-tool sites, but 1.5% of government and academic sites.",
+   "detail": "37,894 domains that AI cites",
+   "period": "Mar 2026",
+   "url": "https://trakkr.ai/data/web",
+   "id": "readiness-19"
+  },
+  {
+   "theme": "models",
+   "figure": "4%",
+   "headline": "of questions get the same top brand from every AI model compared.",
+   "detail": "825K prompts and 6.4M answers across 8 models",
+   "period": "Aug 2025 to Mar 2026",
+   "url": "https://trakkr.ai/data/models",
+   "id": "models-20"
+  },
+  {
+   "theme": "models",
+   "figure": "35% vs 10%",
+   "headline": "Claude and DeepSeek pick the same brand most often (35%); Perplexity and Meta AI least (10%).",
+   "detail": "Pairwise comparisons across 8 models",
+   "period": "Aug 2025 to Mar 2026",
+   "url": "https://trakkr.ai/data/models",
+   "id": "models-21"
+  }
+ ],
+ "crawler_stats": {
+  "GPTBot": {
+   "visit_share": "57.2%",
+   "fake_rate": "5.7%"
+  },
+  "OAI-SearchBot": {
+   "visit_share": "15.1%"
+  },
+  "Amazonbot": {
+   "visit_share": "6.7%"
+  },
+  "ClaudeBot": {
+   "visit_share": "3.8%",
+   "fake_rate": "7.4%"
+  },
+  "PerplexityBot": {
+   "fake_rate": "11.7%"
+  },
+  "meta-externalfetcher": {
+   "visit_share": "7.9%"
+  },
+  "ChatGPT-User": {
+   "visit_share": "<0.1%"
+  },
+  "Perplexity-User": {
+   "visit_share": "<0.1%"
+  },
+  "MistralAI-User": {
+   "visit_share": "0.1%"
+  }
+ },
+ "crawler_stats_basis": "Share of AI crawler visits: server logs of 84 sites, Jun 2025 to Feb 2026. Fake rate: requests using the bot's name that failed verification, 127 sites, Aug to Oct 2026.",
+ "benchmarks": {
+  "schema": "80% of pages AI cites carry schema markup (web average about 39%).",
+  "llms_txt": "About 4% of domains publish llms.txt (33,743 of 834K), and it made no measurable difference to citations.",
+  "length": "Pages AI cites average 2,290 words."
+ }
+}

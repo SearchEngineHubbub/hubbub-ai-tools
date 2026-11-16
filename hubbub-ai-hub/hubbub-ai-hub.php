@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Visibility Checker, AI Crawler Directory and AI Ads Tracker for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.11.2
+ * Version: 0.12.0
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.11.2' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.12.0' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -37,6 +37,8 @@ final class Hubbub_AI_Hub {
 		add_shortcode( 'hubbub_ai_crawlers', array( __CLASS__, 'crawlers_shortcode' ) );
 		add_shortcode( 'hubbub_ai_ads', array( __CLASS__, 'ads_shortcode' ) );
 		add_shortcode( 'hubbub_ai_tools', array( __CLASS__, 'tools_shortcode' ) );
+		add_shortcode( 'hubbub_ai_citations', array( __CLASS__, 'citations_shortcode' ) );
+		add_shortcode( 'hubbub_ai_insights', array( __CLASS__, 'insights_shortcode' ) );
 		add_action( 'wp_head', array( __CLASS__, 'api_link' ) );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'rest_pre_serve_request', array( __CLASS__, 'serve_markdown' ), 10, 3 );
@@ -52,7 +54,8 @@ final class Hubbub_AI_Hub {
 		if ( $page && in_array( $page->post_status, array( 'private', 'draft', 'publish' ), true ) ) {
 			$raw  = html_entity_decode( wp_strip_all_tags( preg_replace( '/<!--.*?-->/s', '', $page->post_content ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 			$live = json_decode( trim( $raw ), true );
-			$key  = 'crawlers' === $name ? 'crawlers' : 'products';
+			$keys = array( 'crawlers' => 'crawlers', 'ai-ads' => 'products', 'citations' => 'sites', 'ai-insights' => 'insights' );
+			$key  = $keys[ $name ];
 			if ( is_array( $live ) && ! empty( $live[ $key ] ) && ! empty( $live['updated'] ) && strcmp( $live['updated'], $file['updated'] ) >= 0 ) {
 				return $live;
 			}
@@ -66,6 +69,28 @@ final class Hubbub_AI_Hub {
 			$data = self::load_data( 'crawlers' );
 		}
 		return $data;
+	}
+
+	/** Open data from Trakkr (CC BY 4.0): headline AI search figures. */
+	public static function insights() {
+		static $data = null;
+		if ( null === $data ) {
+			$data = self::load_data( 'ai-insights' );
+		}
+		return $data;
+	}
+
+	/** Open data from Trakkr (CC BY 4.0): the sites AI answers cite most. */
+	public static function citations() {
+		static $data = null;
+		if ( null === $data ) {
+			$data = self::load_data( 'citations' );
+		}
+		return $data;
+	}
+
+	public static function insights_url() {
+		return home_url( '/knowledge-hub/ai-search/' );
 	}
 
 	public static function routes() {
@@ -106,6 +131,31 @@ final class Hubbub_AI_Hub {
 				),
 			)
 		);
+		register_rest_route(
+			self::NS,
+			'/citations',
+			array(
+				'methods'             => 'GET',
+				'permission_callback' => '__return_true',
+				'callback'            => array( __CLASS__, 'rest_citations' ),
+				'args'                => array(
+					'kind'  => array( 'type' => 'string' ),
+					'limit' => array( 'type' => 'integer', 'minimum' => 1, 'maximum' => 100 ),
+				),
+			)
+		);
+		register_rest_route(
+			self::NS,
+			'/insights',
+			array(
+				'methods'             => 'GET',
+				'permission_callback' => '__return_true',
+				'callback'            => array( __CLASS__, 'rest_insights' ),
+				'args'                => array(
+					'theme' => array( 'type' => 'string', 'enum' => array( 'traffic', 'citations', 'searches', 'crawlers', 'readiness', 'models' ) ),
+				),
+			)
+		);
 		register_rest_route( self::NS, '/about', array( 'methods' => 'GET', 'permission_callback' => '__return_true', 'callback' => array( __CLASS__, 'rest_about' ) ) );
 		register_rest_route( self::NS, '/llms', array( 'methods' => 'GET', 'permission_callback' => '__return_true', 'callback' => array( __CLASS__, 'rest_llms' ) ) );
 		register_rest_route(
@@ -120,6 +170,66 @@ final class Hubbub_AI_Hub {
 				),
 			)
 		);
+	}
+
+	/** Filtered views of the open data, shared by the REST API and the MCP server. */
+	public static function citations_view( $kind = '', $limit = 0 ) {
+		$d     = self::citations();
+		$sites = array_values(
+			array_filter(
+				$d['sites'],
+				function ( $x ) use ( $kind ) {
+					return ! $kind || 0 === strcasecmp( $x['kind'], $kind );
+				}
+			)
+		);
+		if ( $limit ) {
+			$sites = array_slice( $sites, 0, (int) $limit );
+		}
+		return array(
+			'updated'         => $d['updated'],
+			'index_built'     => $d['index_built'],
+			'since'           => $d['since'],
+			'total_citations' => $d['total_citations'],
+			'total_sites'     => $d['total_sites'],
+			'method'          => $d['method'],
+			'share_unit'      => 'percent of all citations',
+			'page'            => self::page_url( 'citations' ),
+			'attribution'     => 'Data: Trakkr Citation Index (' . $d['source_page'] . '), CC BY 4.0, via Search Engine Hubbub.',
+			'sites'           => $sites,
+		);
+	}
+
+	public static function insights_view( $theme = '' ) {
+		$d    = self::insights();
+		$list = array_values(
+			array_filter(
+				$d['insights'],
+				function ( $x ) use ( $theme ) {
+					return ! $theme || $x['theme'] === $theme;
+				}
+			)
+		);
+		return array(
+			'updated'       => $d['updated'],
+			'page'          => self::insights_url(),
+			'attribution'   => 'Data: Trakkr (https://trakkr.ai/data), CC BY 4.0, via Search Engine Hubbub.',
+			'themes'        => $d['themes'],
+			'traffic_share' => $d['traffic_share'],
+			'insights'      => $list,
+		);
+	}
+
+	public static function rest_citations( WP_REST_Request $req ) {
+		$res = rest_ensure_response( self::citations_view( (string) $req['kind'], (int) $req['limit'] ) );
+		$res->header( 'Access-Control-Allow-Origin', '*' );
+		return $res;
+	}
+
+	public static function rest_insights( WP_REST_Request $req ) {
+		$res = rest_ensure_response( self::insights_view( (string) $req['theme'] ) );
+		$res->header( 'Access-Control-Allow-Origin', '*' );
+		return $res;
 	}
 
 	public static function rest_crawlers( WP_REST_Request $req ) {
@@ -270,6 +380,7 @@ final class Hubbub_AI_Hub {
 			'checker'  => array( 'slug' => 'ai-visibility-checker', 'icon' => 'search', 'short' => 'Visibility Checker', 'name' => 'AI Visibility Checker', 'desc' => 'Check whether ChatGPT, Claude, Perplexity and Gemini can reach, read and cite a page. Score, fixes and a crawler-by-crawler breakdown.', 'api' => '/check?url=example.com', 'mcp' => 'check_ai_visibility' ),
 			'crawlers' => array( 'slug' => 'ai-crawlers', 'icon' => 'bot', 'short' => 'Crawler Directory', 'name' => 'AI Crawler Directory', 'desc' => 'Every AI crawler, who runs it, what it does with your content and whether it obeys robots.txt. With a robots.txt builder.', 'api' => '/crawlers', 'mcp' => 'list_ai_crawlers' ),
 			'ads'      => array( 'slug' => 'ai-ads-tracker', 'icon' => 'spark', 'short' => 'AI Ads Tracker', 'name' => 'AI Ads Tracker', 'desc' => 'Every ad product inside AI assistants and AI search: status, markets, formats and how to buy. Sourced and dated.', 'api' => '/ads?status=live', 'mcp' => 'list_ai_ad_products' ),
+			'citations' => array( 'slug' => 'ai-citation-index', 'icon' => 'chart', 'short' => 'Citation Index', 'name' => 'AI Citation Index', 'desc' => 'The websites AI answers cite most, ranked by share of 95.7M citations, with the kind of site each one is. Early version built on Trakkr\'s open index.', 'api' => '/citations?limit=20', 'mcp' => 'list_top_cited_sites' ),
 		);
 	}
 
@@ -283,6 +394,7 @@ final class Hubbub_AI_Hub {
 		foreach ( self::tools() as $key => $t ) {
 			$links .= '<li><a href="' . esc_url( self::page_url( $key ) ) . '"' . ( $key === $active ? ' aria-current="page"' : '' ) . '>' . esc_html( $t['short'] ) . '</a></li>';
 		}
+		$links .= '<li><a href="' . esc_url( self::insights_url() ) . '"' . ( 'insights' === $active ? ' aria-current="page"' : '' ) . '>AI Search Insights</a></li>';
 		$links .= '<li class="hb-nav__end"><a href="#hb-agents">API &amp; MCP</a></li>';
 		return '<nav class="hb-nav" aria-label="AI tools"><ul>' . $links . '</ul></nav>';
 	}
@@ -330,7 +442,7 @@ final class Hubbub_AI_Hub {
 			$pans .= '<div role="tabpanel" id="hb-pan-' . $k . '" aria-labelledby="hb-tab-' . $k . '"' . ( $on ? '' : ' hidden' ) . '>' . $tab[1] . '</div>';
 		}
 		return '<section class="hb-agents" id="hb-agents"><h2 class="hb-h2">Use these tools in your AI assistant</h2>'
-			. '<p>Every tool is available through an MCP server and an open JSON API, so Claude, ChatGPT, Cursor or your own agents can run checks and pull the data directly. The server offers four tools: <code>check_ai_visibility</code>, <code>list_ai_crawlers</code>, <code>build_robots_txt</code> and <code>list_ai_ad_products</code>.</p>'
+			. '<p>Every tool is available through an MCP server and an open JSON API, so Claude, ChatGPT, Cursor or your own agents can run checks and pull the data directly. The server offers six tools: <code>check_ai_visibility</code>, <code>list_ai_crawlers</code>, <code>build_robots_txt</code>, <code>list_ai_ad_products</code>, <code>list_top_cited_sites</code> and <code>get_ai_search_insights</code>.</p>'
 			. '<div class="hb-tabs" role="tablist" aria-label="Set up with">' . $btns . '</div><div class="hb-tabpans">' . $pans . '</div></section>';
 	}
 
@@ -366,7 +478,12 @@ final class Hubbub_AI_Hub {
 		}
 		$inner = self::hero( '', 'Can AI assistants find and cite your page?', 'Enter a URL and we will load it the way ChatGPT, Claude, Perplexity and Gemini do, score it out of 100 and list what to fix.', $form )
 			. '<div class="hubbub-checker__out" aria-live="polite"></div>'
-			. '<section class="hb-section"><h2 class="hb-h2">What the checker looks at</h2><dl class="hb-deflist">' . $how . '</dl></section>';
+			. '<section class="hb-section"><h2 class="hb-h2">What the checker looks at</h2><dl class="hb-deflist">' . $how . '</dl></section>'
+			. '<section class="hb-section"><h2 class="hb-h2">How pages that AI cites compare</h2><ul class="hb-bench">'
+			. '<li><strong>Schema</strong>' . esc_html( self::insights()['benchmarks']['schema'] ) . '</li>'
+			. '<li><strong>llms.txt</strong>' . esc_html( self::insights()['benchmarks']['llms_txt'] ) . '</li>'
+			. '<li><strong>Length</strong>' . esc_html( self::insights()['benchmarks']['length'] ) . '</li></ul>'
+			. '<p class="hb-tablenote">Benchmarks from <a href="https://trakkr.ai/data/content" rel="noopener" target="_blank">Trakkr</a> (CC BY 4.0). More in <a href="' . esc_url( self::insights_url() ) . '">AI Search Insights</a>.</p></section>';
 		return self::shell( 'checker', $inner );
 	}
 
@@ -381,7 +498,7 @@ final class Hubbub_AI_Hub {
 			$robots = strtolower( $c['respects_robots'] );
 			$rclass = 'yes' === $robots ? 'ok' : ( 'no' === $robots ? 'no' : 'meh' );
 			$rows  .= '<tr class="hb-bot" data-purpose="' . esc_attr( $c['purpose'] ) . '" data-company="' . esc_attr( $c['company'] ) . '">'
-				. '<th scope="row"><code>' . esc_html( $c['token'] ) . '</code><span class="hb-bot__note">' . esc_html( $c['note'] ) . '</span></th>'
+				. '<th scope="row"><code>' . esc_html( $c['token'] ) . '</code><span class="hb-bot__note">' . esc_html( $c['note'] ) . '</span>' . self::bot_stat( $c['token'] ) . '</th>'
 				. '<td data-label="Operator">' . esc_html( $c['company'] ) . '</td>'
 				. '<td data-label="Purpose"><span class="hb-tag hb-tag--' . esc_attr( $c['purpose'] ) . '">' . esc_html( $labels[ $c['purpose'] ] ) . '</span></td>'
 				. '<td data-label="Obeys robots.txt" class="hb-robots hb-robots--' . $rclass . '">' . esc_html( ucfirst( $c['respects_robots'] ) ) . '</td>'
@@ -402,7 +519,7 @@ final class Hubbub_AI_Hub {
 			. '<div class="hb-seg" role="group" aria-label="Purpose"><button type="button" class="is-on" data-p="">All</button><button type="button" data-p="search">Search</button><button type="button" data-p="training">Training</button><button type="button" data-p="user">User request</button><button type="button" data-p="other">Other</button></div>'
 			. '<select class="hubbub-crawlers__company hb-input" aria-label="Operator">' . $opts . '</select></div>'
 			. '<p class="hb-count" aria-live="polite"></p>'
-			. '<div class="hb-tablewrap"><table class="hb-table hb-table--bots"><thead><tr><th scope="col">User agent</th><th scope="col">Operator</th><th scope="col">Purpose</th><th scope="col">Obeys robots.txt</th><th scope="col">Sources</th></tr></thead><tbody>' . $rows . '</tbody></table></div></section>'
+			. '<div class="hb-tablewrap"><table class="hb-table hb-table--bots"><thead><tr><th scope="col">User agent</th><th scope="col">Operator</th><th scope="col">Purpose</th><th scope="col">Obeys robots.txt</th><th scope="col">Sources</th></tr></thead><tbody>' . $rows . '</tbody></table></div><p class="hb-tablenote">Visit shares and fake-request rates come from <a href="https://trakkr.ai/data/crawlers" rel="noopener" target="_blank">Trakkr</a>\'s server-log data (CC BY 4.0). ' . esc_html( self::insights()['crawler_stats_basis'] ) . '</p></section>'
 			. '<section class="hb-section hb-builder"><h2 class="hb-h2">Build your robots.txt rules</h2><p>Choose what to block and copy the rules into your robots.txt. Search and user-request bots decide whether AI assistants can cite you. Googlebot, Bingbot and Applebot are left out, so your normal search rankings are not affected.</p>'
 			. '<div class="hb-builder__opts">' . $toggle( 'training', 'Block training bots.', 'Keeps your content out of AI model training.' )
 			. $toggle( 'search', 'Block AI search bots.', 'You will not be cited in ChatGPT search, Perplexity or Claude.' )
@@ -520,6 +637,7 @@ final class Hubbub_AI_Hub {
 			'checker'  => 'Free · 12 checks across ' . $nbots . ' AI crawlers',
 			'crawlers' => $nbots . ' crawlers · checked ' . self::fmt_date( $crawl['updated'] ),
 			'ads'      => $nads . ' products · checked ' . self::fmt_date( $ads['updated'] ),
+			'citations' => self::citations()['total_citations'] . ' citations · ' . self::citations()['total_sites'] . ' sites',
 		);
 
 		$form = '<form class="hb-search hb-search--hero" role="search" method="get" action="' . esc_url( self::page_url( 'checker' ) ) . '">'
@@ -530,7 +648,7 @@ final class Hubbub_AI_Hub {
 			. '<div><dt>AI crawlers tracked</dt><dd class="hb-stat__num" data-count="' . (int) $nbots . '">' . (int) $nbots . '</dd></div>'
 			. '<div><dt>AI ad products</dt><dd class="hb-stat__num" data-count="' . (int) $nads . '">' . (int) $nads . '</dd></div>'
 			. '<div><dt>Live right now</dt><dd class="hb-stat__num" data-count="' . (int) $counts['live'] . '">' . (int) $counts['live'] . '</dd></div>'
-			. '<div><dt>MCP tools for agents</dt><dd class="hb-stat__num" data-count="4">4</dd></div></dl>';
+			. '<div><dt>MCP tools for agents</dt><dd class="hb-stat__num" data-count="6">6</dd></div></dl>';
 		$hero = '<header class="hb-stage">'
 			. '<p class="hb-kicker"><span class="hb-live" aria-hidden="true"></span>Free tools · Live data · MCP</p>'
 			. '<h2 class="hb-stage__title">The toolkit for <mark>AI search</mark> marketers</h2>'
@@ -560,6 +678,11 @@ final class Hubbub_AI_Hub {
 		}
 		$live = '<ul class="hb-preview hb-preview--live" aria-hidden="true">' . $live . '</ul>';
 
+		$cites = '';
+		foreach ( array_slice( self::citations()['sites'], 0, 5 ) as $c ) {
+			$cites .= '<li><span>' . esc_html( $c['site'] ) . '</span><i style="--w:' . round( $c['share'] / self::citations()['sites'][0]['share'] * 100 ) . '%"></i><b>' . esc_html( $c['share'] ) . '%</b></li>';
+		}
+		$cites = '<ol class="hb-preview hb-preview--sites" aria-hidden="true">' . $cites . '</ol>';
 		$tiles = '<section class="hb-tiles" aria-label="Tools">'
 			. '<h2 class="hb-rule"><span>The tools</span></h2>'
 			. '<div class="hb-tiles__grid">'
@@ -567,13 +690,159 @@ final class Hubbub_AI_Hub {
 			. $card( 'crawlers', 'Updated weekly', $bots, 'Browse the directory' )
 			. $card( 'ads', $counts['live'] . ' live now', $live, 'See what is live' )
 			. '<a class="hb-tile hb-tile--mcp" href="#hb-agents"><span class="hb-label">For AI agents</span><h3>MCP server</h3><p>Give Claude, ChatGPT or Cursor every tool here. One URL, no sign-in.</p>'
-			. '<code class="hb-tile__code">' . esc_html( rest_url( self::NS . '/mcp' ) ) . '</code><span class="hb-tile__foot"><span>4 tools · JSON API too</span><span class="hb-cta">Connect your AI' . self::icon( 'arrow' ) . '</span></span></a>'
-			. '<div class="hb-tile hb-tile--soon"><span class="hb-label">Coming soon</span><h3>AI Citation Index</h3><p>Each month we will ask the leading AI assistants the same marketing questions and publish which sources they cite.</p>'
-			. '<div class="hb-preview hb-preview--bars" aria-hidden="true"><i style="--h:84%"></i><i style="--h:66%"></i><i style="--h:52%"></i><i style="--h:40%"></i><i style="--h:28%"></i><i style="--h:18%"></i></div></div>'
+			. '<code class="hb-tile__code">' . esc_html( rest_url( self::NS . '/mcp' ) ) . '</code><span class="hb-tile__foot"><span>6 tools · JSON API too</span><span class="hb-cta">Connect your AI' . self::icon( 'arrow' ) . '</span></span></a>'
+			. $card( 'citations', 'New · early version', $cites, 'See the index' )
 			. '</div></section>';
 
 		$inner = $hero . self::graph( $meta ) . $tiles;
 		return self::shell( 'tools', $inner );
+	}
+
+	/** Credit line for Trakkr's open data (CC BY 4.0 requires attribution and a link). */
+	private static function credit( $what, $url, $date ) {
+		return '<aside class="hb-credit"><span class="hb-label">Source</span><p>' . esc_html( $what ) . ' from <a href="' . esc_url( $url ) . '" rel="noopener" target="_blank">Trakkr Data</a>, used under <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener license" target="_blank">CC BY 4.0</a>. Checked by Search Engine Hubbub on ' . esc_html( self::fmt_date( $date ) ) . ' and refreshed weekly. Figures are as Trakkr published them; we have not changed them.</p></aside>';
+	}
+
+	/** Bar of each kind of site's share among the top cited sites. */
+	private static function kind_mix( $sites ) {
+		$kinds = array();
+		$total = 0;
+		foreach ( $sites as $x ) {
+			$kinds[ $x['kind'] ] = ( $kinds[ $x['kind'] ] ?? 0 ) + $x['share'];
+			$total              += $x['share'];
+		}
+		arsort( $kinds );
+		$bar = '';
+		$key = '';
+		$i   = 0;
+		foreach ( $kinds as $k => $v ) {
+			$pct  = round( $v / $total * 100, 1 );
+			$bar .= '<i class="hb-mix__seg hb-mix--' . $i . '" style="--w:' . $pct . '%" title="' . esc_attr( $k . ': ' . $pct . '%' ) . '"></i>';
+			$key .= '<li><i class="hb-mix--' . $i . '"></i>' . esc_html( $k ) . ' <b>' . $pct . '%</b></li>';
+			$i++;
+		}
+		return '<figure class="hb-mix"><figcaption class="hb-label">Kinds of site in the top ' . count( $sites ) . ', by share of their citations</figcaption><div class="hb-mix__bar">' . $bar . '</div><ul class="hb-mix__key">' . $key . '</ul></figure>';
+	}
+
+	/** Real-world figures for a crawler from Trakkr's server-log data, if any. */
+	private static function bot_stat( $token ) {
+		static $stats = null;
+		if ( null === $stats ) {
+			$stats = array_change_key_case( self::insights()['crawler_stats'], CASE_LOWER );
+		}
+		$x = $stats[ strtolower( $token ) ] ?? null;
+		if ( ! $x ) {
+			return '';
+		}
+		$bits = array();
+		if ( ! empty( $x['visit_share'] ) ) {
+			$bits[] = '<b>' . esc_html( $x['visit_share'] ) . '</b> of AI crawler visits';
+		}
+		if ( ! empty( $x['fake_rate'] ) ) {
+			$bits[] = '<b>' . esc_html( $x['fake_rate'] ) . '</b> of requests using this name were fake';
+		}
+		return '<span class="hb-bot__stat">' . implode( ' · ', $bits ) . '</span>';
+	}
+
+	public static function citations_shortcode() {
+		self::enqueue();
+		$d     = self::citations();
+		$sites = $d['sites'];
+		$max   = $sites[0]['share'];
+		$kinds = array_values( array_unique( wp_list_pluck( $sites, 'kind' ) ) );
+		sort( $kinds );
+		$seg   = '<button type="button" class="is-on" data-p="">All</button>';
+		foreach ( $kinds as $k ) {
+			$seg .= '<button type="button" data-p="' . esc_attr( $k ) . '">' . esc_html( $k ) . '</button>';
+		}
+		$rows = '';
+		foreach ( $sites as $x ) {
+			$rows .= '<tr class="hb-site" data-kind="' . esc_attr( $x['kind'] ) . '"><td class="hb-site__rank">' . (int) $x['rank'] . '</td>'
+				. '<th scope="row">' . esc_html( $x['site'] ) . '</th>'
+				. '<td data-label="Kind" class="hb-site__kind"><span class="hb-kind">' . esc_html( $x['kind'] ) . '</span></td>'
+				. '<td data-label="Share of citations" class="hb-site__share"><span class="hb-meter"><i style="--w:' . round( $x['share'] / $max * 100, 1 ) . '%"></i></span><b>' . esc_html( $x['share'] ) . '%</b></td>'
+				. '<td data-label="Pages cited" class="hb-num hb-site__pages">' . esc_html( number_format( $x['pages_cited'] ) ) . '</td>'
+				. '<td data-label="Brands cited for" class="hb-num hb-site__brands">' . esc_html( number_format( $x['brands_cited_for'] ) ) . '</td></tr>';
+		}
+		$top3  = array_slice( $sites, 0, 3 );
+		$intro = self::hero( 'Early version · Updated weekly', 'The websites AI answers cite most', 'When ChatGPT, Gemini, Perplexity and Claude answer questions about brands, these are the sites they link to. Ranked by share of ' . $d['total_citations'] . ' citations across ' . $d['total_sites'] . ' sites.' )
+			. '<dl class="hb-figures hb-figures--left">'
+			. '<div><dt>Citations counted</dt><dd>' . esc_html( $d['total_citations'] ) . '</dd></div>'
+			. '<div><dt>Sites cited</dt><dd>' . esc_html( $d['total_sites'] ) . '</dd></div>'
+			. '<div><dt>Most cited</dt><dd>' . esc_html( $top3[0]['site'] ) . '</dd></div>'
+			. '<div><dt>Tracked since</dt><dd>' . esc_html( $d['since'] ) . '</dd></div></dl>';
+		$body = '<section class="hb-section">' . self::kind_mix( $sites )
+			. '<div class="hb-toolbar"><div class="hb-seg" role="group" aria-label="Kind of site">' . $seg . '</div></div><p class="hb-count" aria-live="polite">' . count( $sites ) . ' sites</p>'
+			. '<div class="hb-tablewrap"><table class="hb-table hb-table--sites"><thead><tr><th scope="col">#</th><th scope="col">Site</th><th scope="col">Kind</th><th scope="col">Share of citations</th><th scope="col" class="hb-num">Pages cited</th><th scope="col" class="hb-num">Brands cited for</th></tr></thead><tbody>' . $rows . '</tbody></table></div></section>'
+			. '<section class="hb-section hb-split"><div><h2 class="hb-h2">How it is measured</h2><p>' . esc_html( $d['method'] ) . ' The index was last rebuilt on ' . esc_html( $d['index_built'] ) . '.</p></div>'
+			. '<div><h2 class="hb-h2">What comes next</h2><p>Our own monthly index will ask ChatGPT, Gemini, Perplexity and Claude the same marketing questions and show which sources each one cites, so you can see differences between assistants. Until then, this early version uses Trakkr\'s open index.</p></div></section>'
+			. self::credit( 'The citation index is', $d['source_page'], $d['updated'] );
+		return self::shell( 'citations', $intro . $body );
+	}
+
+	public static function insights_shortcode() {
+		self::enqueue();
+		$d      = self::insights();
+		$c      = self::citations();
+		$themes = array();
+		foreach ( $d['themes'] as $t ) {
+			$themes[ $t['id'] ] = $t;
+		}
+		$jump = '';
+		foreach ( $themes as $id => $t ) {
+			$jump .= '<a href="#hb-' . esc_attr( $id ) . '">' . esc_html( $t['title'] ) . '</a>';
+		}
+		$lead = array();
+		foreach ( array( 'citations-3', 'searches-10', 'crawlers-15', 'readiness-18' ) as $id ) {
+			foreach ( $d['insights'] as $x ) {
+				if ( $x['id'] === $id ) {
+					$lead[] = $x;
+				}
+			}
+		}
+		$cards = '';
+		foreach ( $lead as $x ) {
+			$cards .= '<div><dd>' . esc_html( $x['figure'] ) . '</dd><dt>' . esc_html( $x['headline'] ) . '</dt></div>';
+		}
+		$hero = '<header class="hb-stage hb-stage--insights"><p class="hb-kicker"><span class="hb-live" aria-hidden="true"></span>Free data · Updated weekly</p>'
+			. '<h2 class="hb-stage__title">AI search, <mark>by the numbers</mark></h2>'
+			. '<p class="hb-stage__sub">How AI assistants send traffic, choose what to cite, search the web and crawl your site. Free to read, share and reuse with a credit.</p>'
+			. '<nav class="hb-jump" aria-label="Sections">' . $jump . '</nav></header>'
+			. '<dl class="hb-bigfigs">' . $cards . '</dl>';
+
+		$body = '';
+		foreach ( $themes as $id => $t ) {
+			$items = '';
+			foreach ( $d['insights'] as $x ) {
+				if ( $x['theme'] !== $id || in_array( $x, $lead, true ) ) {
+					continue;
+				}
+				$cite   = $x['headline'] . ' (' . $x['period'] . '. Source: Trakkr, via Search Engine Hubbub ' . self::insights_url() . ')';
+				$items .= '<article class="hb-insight"><p class="hb-insight__fig">' . esc_html( $x['figure'] ) . '</p><p class="hb-insight__text">' . esc_html( $x['headline'] ) . '</p>'
+					. '<p class="hb-insight__meta">' . esc_html( $x['detail'] ) . ' · ' . esc_html( $x['period'] ) . '</p>'
+					. '<p class="hb-insight__foot"><a href="' . esc_url( $x['url'] ) . '" rel="noopener" target="_blank">Source</a><button type="button" class="hb-copy hb-copy--text" data-copy="' . esc_attr( $cite ) . '">Copy stat</button></p></article>';
+			}
+			$extra = '';
+			if ( 'traffic' === $id ) {
+				$bars = '';
+				$top  = $d['traffic_share']['rows'][0][1];
+				foreach ( $d['traffic_share']['rows'] as $r ) {
+					$bars .= '<li><span>' . esc_html( $r[0] ) . '</span><span class="hb-meter"><i style="--w:' . max( 0.6, round( $r[1] / $top * 100, 1 ) ) . '%"></i></span><b>' . esc_html( $r[1] ) . '%</b></li>';
+				}
+				$extra = '<figure class="hb-share"><figcaption><strong>Who sends the visits</strong><span>' . esc_html( $d['traffic_share']['basis'] ) . ' <a href="' . esc_url( $d['traffic_share']['url'] ) . '" rel="noopener" target="_blank">Source</a></span></figcaption><ol>' . $bars . '</ol></figure>';
+			} elseif ( 'citations' === $id ) {
+				$rows = '';
+				foreach ( array_slice( $c['sites'], 0, 10 ) as $x ) {
+					$rows .= '<li><span>' . esc_html( $x['site'] ) . '</span><span class="hb-meter"><i style="--w:' . round( $x['share'] / $c['sites'][0]['share'] * 100, 1 ) . '%"></i></span><b>' . esc_html( $x['share'] ) . '%</b></li>';
+				}
+				$extra = '<figure class="hb-share"><figcaption><strong>The 10 sites AI cites most</strong><span>Share of ' . esc_html( $c['total_citations'] ) . ' citations. <a href="' . esc_url( self::page_url( 'citations' ) ) . '">See all 45 in the AI Citation Index</a></span></figcaption><ol>' . $rows . '</ol></figure>';
+			}
+			$links = array( 'crawlers' => array( 'crawlers', 'Check every AI crawler in the directory' ), 'readiness' => array( 'checker', 'Check how ready your page is' ), 'citations' => array( 'citations', 'Open the AI Citation Index' ) );
+			$more  = isset( $links[ $id ] ) ? '<p class="hb-more"><a href="' . esc_url( self::page_url( $links[ $id ][0] ) ) . '">' . esc_html( $links[ $id ][1] ) . '</a> →</p>' : '';
+			$body .= '<section class="hb-theme" id="hb-' . esc_attr( $id ) . '"><h2 class="hb-rule"><span>' . esc_html( $t['title'] ) . '</span></h2><p class="hb-theme__intro">' . esc_html( $t['intro'] ) . '</p>'
+				. $extra . '<div class="hb-insights">' . $items . '</div>' . $more . '</section>';
+		}
+		return self::shell( 'insights', $hero . $body . self::credit( 'All figures on this page are', $d['source']['url'], $d['updated'] ) );
 	}
 
 	/**
@@ -586,16 +855,15 @@ final class Hubbub_AI_Hub {
 			'checker'   => array( 'Schema', 'Canonical', 'Authorship', 'llms.txt', 'robots.txt' ),
 			'crawlers'  => array( 'GPTBot', 'ClaudeBot', 'PerplexityBot', 'Applebot', 'Google-Extended' ),
 			'ads'       => array( 'AI Mode', 'AI Overviews', 'Copilot', 'ChatGPT Ads' ),
-			'citations' => array( 'Share of voice', 'Prompts', 'Sources' ),
+			'citations' => array( 'YouTube', 'Reddit', 'Wikipedia' ),
 		);
 		$nodes = array();
-		$mini  = array( 'checker' => 'Checker', 'crawlers' => 'Crawlers', 'ads' => 'Ads' );
+		$mini  = array( 'checker' => 'Checker', 'crawlers' => 'Crawlers', 'ads' => 'Ads', 'citations' => 'Citations' );
 		foreach ( self::tools() as $k => $t ) {
 			$nodes[] = array( 'id' => $k, 'label' => $t['short'], 'mini' => $mini[ $k ], 'meta' => $meta[ $k ], 'desc' => $t['desc'], 'url' => self::page_url( $k ), 'topics' => $topics[ $k ] );
 		}
-		$nodes[] = array( 'id' => 'citations', 'label' => 'Citation Index', 'mini' => 'Citations', 'meta' => 'Coming soon', 'desc' => 'Which sources the leading AI assistants cite for the same marketing questions, tracked monthly.', 'url' => '', 'soon' => true, 'topics' => $topics['citations'] );
 		$links = array(
-			array( 'robots.txt', 'GPTBot' ), array( 'Google-Extended', 'AI Mode' ), array( 'ChatGPT Ads', 'Share of voice' ), array( 'Sources', 'Schema' ),
+			array( 'robots.txt', 'GPTBot' ), array( 'Google-Extended', 'AI Mode' ), array( 'Schema', 'Wikipedia' ), array( 'ChatGPT Ads', 'YouTube' ),
 		);
 		$data = array( 'hub' => 'Knowledge Hub', 'tools' => $nodes, 'links' => $links );
 		return '<figure class="hb-graph" aria-hidden="true" data-graph="' . esc_attr( wp_json_encode( $data ) ) . '">'
@@ -613,7 +881,7 @@ final class Hubbub_AI_Hub {
 		if ( ! $post || empty( $post->post_content ) ) {
 			return '';
 		}
-		foreach ( array( 'hubbub_ai_checker' => 'checker', 'hubbub_ai_crawlers' => 'crawlers', 'hubbub_ai_ads' => 'ads', 'hubbub_ai_tools' => 'tools' ) as $sc => $key ) {
+		foreach ( array( 'hubbub_ai_checker' => 'checker', 'hubbub_ai_crawlers' => 'crawlers', 'hubbub_ai_ads' => 'ads', 'hubbub_ai_citations' => 'citations', 'hubbub_ai_insights' => 'insights', 'hubbub_ai_tools' => 'tools' ) as $sc => $key ) {
 			if ( has_shortcode( $post->post_content, $sc ) ) {
 				return $key;
 			}
@@ -663,6 +931,11 @@ final class Hubbub_AI_Hub {
 			$graph[] = array( '@type' => 'CollectionPage', 'name' => 'Hubbub AI Marketing Tools', 'url' => self::page_url(), 'description' => 'Free tools and live data for marketers working in AI search, with an MCP server and JSON API for AI agents.', 'publisher' => $org, 'mainEntity' => array( '@type' => 'ItemList', 'itemListElement' => $items ) );
 			return array( '@context' => 'https://schema.org', '@graph' => $graph );
 		}
+		if ( 'insights' === $key ) {
+			$d       = self::insights();
+			$graph[] = array( '@type' => 'Dataset', 'name' => 'AI Search Insights', 'description' => 'Headline figures on AI search: AI referral traffic, what AI cites, how AI searches, AI crawler behaviour and AI-readiness of the web.', 'url' => self::insights_url(), 'dateModified' => $d['updated'], 'creator' => $org, 'isBasedOn' => $d['source']['url'], 'isAccessibleForFree' => true, 'license' => 'https://creativecommons.org/licenses/by/4.0/', 'distribution' => array( '@type' => 'DataDownload', 'encodingFormat' => 'application/json', 'contentUrl' => rest_url( self::NS . '/insights' ) ) );
+			return array( '@context' => 'https://schema.org', '@graph' => $graph );
+		}
 		$x       = $t[ $key ];
 		$graph[] = array(
 			'@type'               => 'WebApplication',
@@ -677,7 +950,7 @@ final class Hubbub_AI_Hub {
 			'potentialAction'     => 'checker' === $key ? array( '@type' => 'SearchAction', 'target' => self::page_url( 'checker' ) . '?url={url}', 'query-input' => 'required name=url' ) : null,
 		);
 		if ( 'checker' !== $key ) {
-			$data    = 'ads' === $key ? self::ads_data() : self::data();
+			$data    = 'ads' === $key ? self::ads_data() : ( 'citations' === $key ? self::citations() : self::data() );
 			$graph[] = array(
 				'@type'               => 'Dataset',
 				'name'                => $x['name'],
@@ -687,7 +960,7 @@ final class Hubbub_AI_Hub {
 				'creator'             => $org,
 				'isAccessibleForFree' => true,
 				'license'             => 'https://creativecommons.org/licenses/by/4.0/',
-				'distribution'        => array( '@type' => 'DataDownload', 'encodingFormat' => 'application/json', 'contentUrl' => rest_url( self::NS . ( 'ads' === $key ? '/ads' : '/crawlers' ) ) ),
+				'distribution'        => array( '@type' => 'DataDownload', 'encodingFormat' => 'application/json', 'contentUrl' => rest_url( self::NS . ( 'ads' === $key ? '/ads' : ( 'citations' === $key ? '/citations' : '/crawlers' ) ) ) ),
 			);
 		}
 		$graph[0] = array_filter( $graph[0], function ( $v ) { return null !== $v; } );
@@ -719,13 +992,14 @@ final class Hubbub_AI_Hub {
 	public static function llms_markdown() {
 		$t   = self::tools();
 		$md  = "# Search Engine Hubbub AI Tools\n\n> Free tools and live data for marketers working in AI search: an AI visibility checker, a directory of AI crawlers and a tracker of ad products inside AI assistants. Free to use with attribution.\n\n";
-		$md .= "## Connect an AI assistant (MCP)\n\n- MCP server (Streamable HTTP, no auth): " . rest_url( self::NS . '/mcp' ) . "\n- MCP tools: check_ai_visibility(url), list_ai_crawlers(purpose?, company?), build_robots_txt(block[]), list_ai_ad_products(status?)\n\n";
+		$md .= "## Connect an AI assistant (MCP)\n\n- MCP server (Streamable HTTP, no auth): " . rest_url( self::NS . '/mcp' ) . "\n- MCP tools: check_ai_visibility(url), list_ai_crawlers(purpose?, company?), build_robots_txt(block[]), list_ai_ad_products(status?), list_top_cited_sites(kind?, limit?), get_ai_search_insights(theme?)\n\n";
 		$md .= "## Tools\n\n";
 		foreach ( $t as $k => $x ) {
 			$md .= '- [' . $x['name'] . '](' . self::page_url( $k ) . '): ' . $x['desc'] . ' JSON: ' . rest_url( self::NS . $x['api'] ) . "\n";
 		}
+		$md .= '- [AI Search Insights](' . self::insights_url() . '): headline figures on AI referral traffic, citations, AI searches, crawlers and llms.txt adoption. JSON: ' . rest_url( self::NS . '/insights' ) . " (theme = traffic, citations, searches, crawlers, readiness, models)\n";
 		$md .= "- robots.txt rules for AI crawlers: " . rest_url( self::NS . '/robots?block=training' ) . " (block = training, search, user, other)\n\n";
-		$md .= "## Data\n\n- Crawler data updated " . self::data()['updated'] . ', ' . count( self::data()['crawlers'] ) . " crawlers, each checked against the operator's own documentation.\n- Ads data updated " . self::ads_data()['updated'] . ', ' . count( self::ads_data()['products'] ) . " products, each with sources.\n- Please cite Search Engine Hubbub and link to the tool page when you use this data.\n";
+		$md .= "## Data\n\n- Citation and insights figures come from Trakkr's open data (https://trakkr.ai/data, CC BY 4.0). Credit Trakkr and Search Engine Hubbub when you reuse them.\n- Crawler data updated " . self::data()['updated'] . ', ' . count( self::data()['crawlers'] ) . " crawlers, each checked against the operator's own documentation.\n- Ads data updated " . self::ads_data()['updated'] . ', ' . count( self::ads_data()['products'] ) . " products, each with sources.\n- Please cite Search Engine Hubbub and link to the tool page when you use this data.\n";
 		return $md;
 	}
 

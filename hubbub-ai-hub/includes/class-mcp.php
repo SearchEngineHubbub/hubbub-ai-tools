@@ -134,6 +134,31 @@ class Hubbub_AI_Hub_MCP {
 				),
 				'annotations' => array( 'readOnlyHint' => true ),
 			),
+			array(
+				'name'        => 'list_top_cited_sites',
+				'title'       => 'List the sites AI answers cite most',
+				'description' => 'Ranks the websites that AI answers (ChatGPT, Gemini, Perplexity, Claude) cite most when answering questions about brands, by share of about 95.7M citations, with kind of site (Social, Reviews, News, Reference and more), pages cited and brands cited for. Data from Trakkr\'s open Citation Index (CC BY 4.0); credit Trakkr and Search Engine Hubbub.',
+				'inputSchema' => array(
+					'type'       => 'object',
+					'properties' => array(
+						'kind'  => array( 'type' => 'string', 'description' => 'Filter by kind of site, e.g. Social, Reviews, News, Reference, Academic, App stores, Tech, E-commerce, Other' ),
+						'limit' => array( 'type' => 'integer', 'minimum' => 1, 'maximum' => 100 ),
+					),
+				),
+				'annotations' => array( 'readOnlyHint' => true ),
+			),
+			array(
+				'name'        => 'get_ai_search_insights',
+				'title'       => 'Get AI search statistics',
+				'description' => 'Returns sourced, dated headline statistics about AI search: share of AI referral traffic by assistant, what AI cites (own site vs Wikipedia, schema, page length), how AI rewrites searches, AI crawler behaviour and fake bots, llms.txt adoption and whether AI models agree. Data from Trakkr (CC BY 4.0); credit Trakkr and Search Engine Hubbub.',
+				'inputSchema' => array(
+					'type'       => 'object',
+					'properties' => array(
+						'theme' => array( 'type' => 'string', 'enum' => array( 'traffic', 'citations', 'searches', 'crawlers', 'readiness', 'models' ) ),
+					),
+				),
+				'annotations' => array( 'readOnlyHint' => true ),
+			),
 		);
 	}
 
@@ -181,6 +206,12 @@ class Hubbub_AI_Hub_MCP {
 					)
 				);
 				$data = array( 'updated' => $all['updated'], 'source' => home_url( '/tools/ai-ads-tracker/' ), 'products' => $list );
+				break;
+			case 'list_top_cited_sites':
+				$data = Hubbub_AI_Hub::citations_view( isset( $args['kind'] ) ? (string) $args['kind'] : '', isset( $args['limit'] ) ? (int) $args['limit'] : 20 );
+				break;
+			case 'get_ai_search_insights':
+				$data = Hubbub_AI_Hub::insights_view( isset( $args['theme'] ) ? (string) $args['theme'] : '' );
 				break;
 			default:
 				return null;

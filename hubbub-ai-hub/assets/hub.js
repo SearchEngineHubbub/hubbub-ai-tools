@@ -275,6 +275,32 @@
     set('');
   }
 
+  function initCitations(root) {
+    var segs = Array.prototype.slice.call(root.querySelectorAll('.hb-seg button'));
+    var rows = Array.prototype.slice.call(root.querySelectorAll('.hb-site'));
+    var count = root.querySelector('.hb-count');
+    function set(k) {
+      segs.forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-p') === k); });
+      var n = 0;
+      rows.forEach(function (r) { var show = !k || r.getAttribute('data-kind') === k; r.hidden = !show; if (show) n++; });
+      count.textContent = n === rows.length ? rows.length + ' sites' : 'Showing ' + n + ' of ' + rows.length + ' sites';
+    }
+    segs.forEach(function (b) { b.addEventListener('click', function () { set(b.getAttribute('data-p')); }); });
+    set('');
+  }
+
+  // Grow meters and bars when they scroll into view.
+  function initReveal(root) {
+    var els = root.querySelectorAll('.hb-share, .hb-mix, .hb-table--sites, .hb-tiles, .hb-bigfigs');
+    Array.prototype.forEach.call(els, function (el) {
+      if (!('IntersectionObserver' in window)) { el.classList.add('is-seen'); return; }
+      var io = new IntersectionObserver(function (en) {
+        if (en[0].isIntersecting) { el.classList.add('is-seen'); io.disconnect(); }
+      }, { threshold: 0.15 });
+      io.observe(el);
+    });
+  }
+
   function initCommon(root) {
     // Copy buttons.
     Array.prototype.forEach.call(root.querySelectorAll('[data-copy]'), function (b) {
@@ -568,14 +594,8 @@
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-checker'), initChecker);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-crawlers'), initCrawlers);
     Array.prototype.forEach.call(document.querySelectorAll('.hubbub-ads'), initAds);
+    Array.prototype.forEach.call(document.querySelectorAll('.hubbub-citations'), initCitations);
+    Array.prototype.forEach.call(document.querySelectorAll('.hb-app'), initReveal);
     Array.prototype.forEach.call(document.querySelectorAll('.hb-graph[data-graph]'), initGraph);
-    // Animate the tool card previews when they come into view.
-    Array.prototype.forEach.call(document.querySelectorAll('.hb-tiles'), function (sec) {
-      if (!('IntersectionObserver' in window)) { sec.classList.add('is-seen'); return; }
-      var io = new IntersectionObserver(function (en) {
-        if (en[0].isIntersecting) { sec.classList.add('is-seen'); io.disconnect(); }
-      }, { threshold: 0.2 });
-      io.observe(sec);
-    });
   });
 })();
