@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Hubbub AI Hub
  * Description: AI Readiness Checker, AI Crawler Directory, AI Ads Opportunities, AI Citation Index and AI Search Insights for the Search Engine Hubbub Knowledge Hub, with a public JSON API for people and AI agents.
- * Version: 0.21.0
+ * Version: 0.21.1
  * Author: Search Engine Hubbub
  * License: GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HUBBUB_AI_HUB_VERSION', '0.21.0' );
+define( 'HUBBUB_AI_HUB_VERSION', '0.21.1' );
 define( 'HUBBUB_AI_HUB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HUBBUB_AI_HUB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -592,7 +592,7 @@ final class Hubbub_AI_Hub {
 			. '<div class="hb-seg" role="group" aria-label="Purpose"><button type="button" class="is-on" data-p="">All</button><button type="button" data-p="search">Search</button><button type="button" data-p="training">Training</button><button type="button" data-p="user">User request</button><button type="button" data-p="other">Other</button></div>'
 			. '<select class="hubbub-crawlers__company hb-input" aria-label="Operator">' . $opts . '</select></div>'
 			. '<p class="hb-count" aria-live="polite"></p>'
-			. '<div class="hb-tablewrap"><table class="hb-table hb-table--bots"><thead><tr><th scope="col">User agent</th><th scope="col">Operator</th><th scope="col">Purpose</th><th scope="col">Obeys robots.txt</th><th scope="col">Sources</th></tr></thead><tbody>' . $rows . '</tbody></table></div><p class="hb-tablenote">Visit shares and fake-request rates come from <a href="https://trakkr.ai/data/crawlers" rel="noopener" target="_blank">Trakkr</a>\'s server-log data (CC BY 4.0). ' . esc_html( self::insights()['crawler_stats_basis'] ) . '</p></section>'
+			. '<div class="hb-tablewrap"><table class="hb-table hb-table--bots"><thead><tr><th scope="col">User agent</th><th scope="col">Operator</th><th scope="col">Purpose</th><th scope="col">Obeys robots.txt</th><th scope="col">Sources</th></tr></thead><tbody>' . $rows . '</tbody></table></div><p class="hb-tablenote">Reach and fake-request rates come from <a href="https://trakkr.ai/data/crawlers" rel="noopener" target="_blank">Trakkr</a>\'s server-log data (CC BY 4.0). ' . esc_html( self::insights()['crawler_stats_basis'] ) . '</p></section>'
 			. self::longtail()
 			. self::radar_section( 'crawlers' )
 			. self::verifier()
@@ -911,7 +911,11 @@ final class Hubbub_AI_Hub {
 		}
 		$bits = array();
 		$bar  = '';
-		if ( ! empty( $x['visit_share'] ) ) {
+		if ( ! empty( $x['reach'] ) ) {
+			$bits[] = 'Visited <b>' . esc_html( $x['reach'] ) . '</b> of sites in the last 4 weeks';
+			$pct    = (float) preg_replace( '/[^0-9.]/', '', $x['reach'] );
+			$bar    = '<span class="hb-bot__bar" aria-hidden="true"><i style="--w:' . max( 2, min( 100, $pct ) ) . '%"></i></span>';
+		} elseif ( ! empty( $x['visit_share'] ) ) {
 			$bits[] = '<b>' . esc_html( $x['visit_share'] ) . '</b> of AI crawler visits';
 			$pct    = (float) preg_replace( '/[^0-9.]/', '', $x['visit_share'] );
 			$bar    = '<span class="hb-bot__bar" aria-hidden="true"><i style="--w:' . max( 2, min( 100, round( $pct / 60 * 100, 1 ) ) ) . '%"></i></span>';
@@ -939,8 +943,8 @@ final class Hubbub_AI_Hub {
 				. '<th scope="row">' . esc_html( $x['site'] ) . '</th>'
 				. '<td data-label="Kind" class="hb-site__kind"><span class="hb-kind">' . esc_html( $x['kind'] ) . '</span></td>'
 				. '<td data-label="Share of citations" class="hb-site__share"><span class="hb-meter"><i style="--w:' . round( $x['share'] / $max * 100, 1 ) . '%"></i></span><b>' . esc_html( $x['share'] ) . '%</b></td>'
-				. '<td data-label="Pages cited" class="hb-num hb-site__pages">' . esc_html( number_format( $x['pages_cited'] ) ) . '</td>'
-				. '<td data-label="Brands cited for" class="hb-num hb-site__brands">' . esc_html( number_format( $x['brands_cited_for'] ) ) . '</td></tr>';
+				. '<td data-label="Pages cited" class="hb-num hb-site__pages">' . esc_html( isset( $x['pages_cited'] ) ? number_format( $x['pages_cited'] ) : '–' ) . '</td>'
+				. '<td data-label="Brands cited for" class="hb-num hb-site__brands">' . esc_html( isset( $x['brands_cited_for'] ) ? number_format( $x['brands_cited_for'] ) : '–' ) . '</td></tr>';
 		}
 		$top3  = array_slice( $sites, 0, 3 );
 		$intro = self::hero( 'Early version · Updated weekly', 'The websites AI answers cite most', 'When ChatGPT, Gemini, Perplexity and Claude answer questions about brands, these are the sites they link to. Ranked by share of ' . $d['total_citations'] . ' citations across ' . $d['total_sites'] . ' sites.' )

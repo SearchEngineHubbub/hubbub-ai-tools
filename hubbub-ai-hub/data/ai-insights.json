@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-16",
+ "updated": "2026-11-23",
  "source": {
   "name": "Trakkr Data",
   "url": "https://trakkr.ai/data",
@@ -44,51 +44,47 @@
   }
  ],
  "traffic_share": {
-  "basis": "Share of visits referred by AI assistants, last 30 days, across about 4,200 sites using Google Analytics 4.",
+  "basis": "Share of pageviews referred by AI assistants, last 30 days to 19 Nov 2026, across 6,860 sites using Google Analytics 4.",
   "url": "https://trakkr.ai/data/ai-traffic",
   "rows": [
    [
     "ChatGPT",
-    90.8
-   ],
-   [
-    "Gemini",
-    4.8
+    90.6
    ],
    [
     "Claude",
-    1.6
+    5.7
    ],
    [
-    "Perplexity",
-    1.5
+    "Gemini",
+    2.0
    ],
    [
     "Copilot",
-    1.2
+    1.0
    ],
    [
     "Others",
-    0.1
+    0.8
    ]
   ]
  },
  "insights": [
   {
    "theme": "traffic",
-   "figure": "+49.4%",
-   "headline": "AI referrals to websites are up 49.4% on 30 days ago, to about 88,000 visits a day across the panel.",
-   "detail": "About 4,200 sites using Google Analytics 4",
-   "period": "Last 30 days",
+   "figure": "+36.8%",
+   "headline": "AI referrals to websites are up 36.8% on the previous 30 days, to a record of about 255,000 pageviews a day across the panel.",
+   "detail": "6,860 sites using Google Analytics 4",
+   "period": "30 days to 19 Nov 2026",
    "url": "https://trakkr.ai/data/ai-traffic",
    "id": "traffic-1"
   },
   {
    "theme": "traffic",
-   "figure": "101%",
-   "headline": "Education and public-sector sites saw AI referrals grow fastest: up 101% in 30 days.",
-   "detail": "185 sites in that sector",
-   "period": "Last 30 days",
+   "figure": "+57.1%",
+   "headline": "Lifestyle and health sites saw AI referrals grow fastest: up 57.1% in 30 days.",
+   "detail": "1,714 sites in that sector",
+   "period": "30 days to 19 Nov 2026",
    "url": "https://trakkr.ai/data/ai-traffic",
    "id": "traffic-2"
   },
@@ -121,7 +117,7 @@
   },
   {
    "theme": "citations",
-   "figure": "80%",
+   "figure": "68%",
    "headline": "of pages AI cites carry schema markup, against about 39% across the web.",
    "detail": "1,465 cited pages on 950 sites",
    "period": "Mar 2026",
@@ -130,8 +126,8 @@
   },
   {
    "theme": "citations",
-   "figure": "2,290",
-   "headline": "words is the average length of a page AI cites, about three times the web average of 750.",
+   "figure": "2,521",
+   "headline": "words is the average length of the most-cited pages (the top 10%), against 2,305 for the least-cited half. Longer pages get cited more.",
    "detail": "1,465 cited pages on 950 sites",
    "period": "Mar 2026",
    "url": "https://trakkr.ai/data/content",
@@ -139,8 +135,8 @@
   },
   {
    "theme": "citations",
-   "figure": "4.77x",
-   "headline": "Review and directory pages are cited 4.77 times more often than their share of crawler visits would predict.",
+   "figure": "4.8x",
+   "headline": "Review and directory pages are cited 4.8 times more often than their share of crawler visits would predict.",
    "detail": "337K citations matched to 11M crawler visits",
    "period": "Mar 2026",
    "url": "https://trakkr.ai/data/content",
@@ -193,10 +189,10 @@
   },
   {
    "theme": "crawlers",
-   "figure": "57.2%",
-   "headline": "of AI crawler visits come from GPTBot, OpenAI's training crawler. OAI-SearchBot is next at 15.1%.",
-   "detail": "576K AI bot visits on 84 sites",
-   "period": "Jun 2025 to Feb 2026",
+   "figure": "82%",
+   "headline": "of sites were visited by OAI-SearchBot in the last four weeks, the widest reach of any AI crawler. ClaudeBot reached 80% and GPTBot 71%.",
+   "detail": "136 sites connected to Trakkr",
+   "period": "4 weeks to 15 Nov 2026",
    "url": "https://trakkr.ai/data/crawlers",
    "id": "crawlers-14"
   },
@@ -238,8 +234,8 @@
   },
   {
    "theme": "readiness",
-   "figure": "24.1% vs 1.5%",
-   "headline": "llms.txt adoption: 24.1% of SaaS and developer-tool sites, but 1.5% of government and academic sites.",
+   "figure": "24.1% vs 11.5%",
+   "headline": "llms.txt adoption: 24.1% of SaaS and developer-tool sites, but 11.5% of government and academic sites.",
    "detail": "37,894 domains that AI cites",
    "period": "Mar 2026",
    "url": "https://trakkr.ai/data/web",
@@ -306,40 +302,35 @@
  ],
  "crawler_stats": {
   "GPTBot": {
-   "visit_share": "57.2%",
-   "fake_rate": "5.7%"
+   "fake_rate": "5.7%",
+   "reach": "71%"
   },
   "OAI-SearchBot": {
-   "visit_share": "15.1%"
+   "reach": "82%"
   },
   "Amazonbot": {
-   "visit_share": "6.7%"
+   "reach": "63%"
   },
   "ClaudeBot": {
-   "visit_share": "3.8%",
-   "fake_rate": "7.4%"
+   "fake_rate": "7.4%",
+   "reach": "80%"
   },
   "PerplexityBot": {
-   "fake_rate": "11.7%"
-  },
-  "meta-externalfetcher": {
-   "visit_share": "7.9%"
+   "fake_rate": "11.7%",
+   "reach": "59%"
   },
   "ChatGPT-User": {
-   "visit_share": "<0.1%"
+   "reach": "58%"
   },
-  "Perplexity-User": {
-   "visit_share": "<0.1%"
-  },
-  "MistralAI-User": {
-   "visit_share": "0.1%"
+  "Applebot": {
+   "reach": "54%"
   }
  },
- "crawler_stats_basis": "Share of AI crawler visits: server logs of 84 sites, Jun 2025 to Feb 2026. Fake rate: requests using the bot's name that failed verification, 127 sites, Aug to Oct 2026.",
+ "crawler_stats_basis": "Reach: share of 136 sites connected to Trakkr that each crawler visited in the 4 weeks to 15 Nov 2026. Fake rate: requests using the bot's name that failed verification, 127 sites, Aug to Oct 2026.",
  "benchmarks": {
-  "schema": "80% of pages AI cites carry schema markup (web average about 39%).",
+  "schema": "68% of pages AI cites carry schema markup (web average about 39%).",
   "llms_txt": "About 4% of domains publish llms.txt (33,743 of 834K), and it made no measurable difference to citations.",
-  "length": "Pages AI cites average 2,290 words."
+  "length": "The most-cited pages average 2,521 words, against 2,305 for the least-cited half."
  },
  "trends": [
   {
@@ -347,129 +338,129 @@
    "theme": "traffic",
    "title": "Pageviews from AI, day by day",
    "unit": "count",
-   "basis": "7-day average of daily pageviews from AI assistants across 6,635 sites using Google Analytics 4. Data through 3 Nov 2026.",
-   "change": "+8.1% on the previous 30 days",
+   "basis": "7-day average of daily pageviews from AI assistants across 6,860 sites using Google Analytics 4. Data through 19 Nov 2026.",
+   "change": "+36.8% on the previous 30 days",
    "url": "https://trakkr.ai/data",
    "points": [
     [
-     "5 Oct 2026",
-     238914
-    ],
-    [
-     "6 Oct 2026",
-     235841
-    ],
-    [
-     "7 Oct 2026",
-     233143
-    ],
-    [
-     "8 Oct 2026",
-     229501
-    ],
-    [
-     "9 Oct 2026",
-     224675
-    ],
-    [
-     "10 Oct 2026",
-     219354
-    ],
-    [
-     "11 Oct 2026",
-     212297
-    ],
-    [
-     "12 Oct 2026",
-     203392
-    ],
-    [
-     "13 Oct 2026",
-     193728
-    ],
-    [
-     "14 Oct 2026",
-     184472
-    ],
-    [
-     "15 Oct 2026",
-     177844
-    ],
-    [
-     "16 Oct 2026",
-     176042
-    ],
-    [
-     "17 Oct 2026",
-     177638
-    ],
-    [
-     "18 Oct 2026",
-     183060
-    ],
-    [
-     "19 Oct 2026",
-     192044
-    ],
-    [
-     "20 Oct 2026",
-     204331
-    ],
-    [
      "21 Oct 2026",
-     218012
+     172485
     ],
     [
      "22 Oct 2026",
-     232597
+     184411
     ],
     [
      "23 Oct 2026",
-     245050
+     194641
     ],
     [
      "24 Oct 2026",
-     255357
+     203117
     ],
     [
      "25 Oct 2026",
-     263831
+     210092
     ],
     [
      "26 Oct 2026",
-     270609
+     215492
     ],
     [
      "27 Oct 2026",
-     275761
+     219746
     ],
     [
      "28 Oct 2026",
-     279599
+     223452
     ],
     [
      "29 Oct 2026",
-     281156
+     225790
     ],
     [
      "30 Oct 2026",
-     280614
+     226577
     ],
     [
      "31 Oct 2026",
-     278349
+     226110
     ],
     [
      "1 Nov 2026",
-     275407
+     225238
     ],
     [
      "2 Nov 2026",
-     272494
+     224761
     ],
     [
      "3 Nov 2026",
-     267459
+     224377
+    ],
+    [
+     "4 Nov 2026",
+     224054
+    ],
+    [
+     "5 Nov 2026",
+     223621
+    ],
+    [
+     "6 Nov 2026",
+     223183
+    ],
+    [
+     "7 Nov 2026",
+     223490
+    ],
+    [
+     "8 Nov 2026",
+     223979
+    ],
+    [
+     "9 Nov 2026",
+     224621
+    ],
+    [
+     "10 Nov 2026",
+     226270
+    ],
+    [
+     "11 Nov 2026",
+     228918
+    ],
+    [
+     "12 Nov 2026",
+     232013
+    ],
+    [
+     "13 Nov 2026",
+     235987
+    ],
+    [
+     "14 Nov 2026",
+     239430
+    ],
+    [
+     "15 Nov 2026",
+     242815
+    ],
+    [
+     "16 Nov 2026",
+     246314
+    ],
+    [
+     "17 Nov 2026",
+     249390
+    ],
+    [
+     "18 Nov 2026",
+     252250
+    ],
+    [
+     "19 Nov 2026",
+     254930
     ]
    ]
   },
@@ -501,13 +492,17 @@
    "theme": "traffic",
    "title": "ChatGPT's share of AI referral visits, week by week",
    "unit": "pct",
-   "basis": "Recorded by Search Engine Hubbub each Monday from Trakkr's AI traffic data (last 30 days, about 4,200 GA4 sites). Shown once there are three weeks of readings.",
+   "basis": "Recorded by Search Engine Hubbub each Monday from Trakkr's AI traffic data (last 30 days, about 6,860 GA4 sites). Shown once there are three weeks of readings.",
    "change": "",
    "url": "https://trakkr.ai/data/ai-traffic",
    "points": [
     [
      "16 Nov 2026",
      90.8
+    ],
+    [
+     "23 Nov 2026",
+     90.6
     ]
    ]
   },
@@ -523,6 +518,10 @@
     [
      "16 Nov 2026",
      95.7
+    ],
+    [
+     "23 Nov 2026",
+     98.9
     ]
    ]
   }
@@ -530,14 +529,14 @@
  "summary": {
   "title": "What the data says right now",
   "range": "Jan 2025 to Nov 2026",
-  "checked": "2026-11-16",
+  "checked": "2026-11-23",
   "points": [
    {
     "theme": "traffic",
-    "figure": "+49.4%",
-    "text": "AI referral traffic is up 49.4% in 30 days, and ChatGPT sends 90.8% of it.",
+    "figure": "+36.8%",
+    "text": "AI referral traffic is up 36.8% in 30 days. ChatGPT still sends 90.6% of it, but Claude's share rose 3.7 points to 5.7%.",
     "take": "Report AI referrals as their own channel, and start with ChatGPT.",
-    "period": "Last 30 days, to Nov 2026"
+    "period": "30 days to 19 Nov 2026"
    },
    {
     "theme": "citations",
@@ -637,8 +636,8 @@
   "paper": "https://arxiv.org/abs/2506.05334"
  },
  "openrouter": {
-  "period": "Week to 15 Nov 2026",
-  "checked": "2026-11-16",
+  "period": "Week to 21 Nov 2026",
+  "checked": "2026-11-23",
   "url": "https://openrouter.ai/rankings",
   "licence": "CC BY 4.0",
   "basis": "Tokens processed through OpenRouter, a service developers use to call hundreds of AI models through one API. It shows what developers build with, not what consumers use.",
@@ -647,63 +646,63 @@
     1,
     "DeepSeek V4.1 Flash 1017",
     "DeepSeek",
-    59.2
+    63.3
    ],
    [
     2,
-    "Hy4",
-    "Tencent",
-    18.1
+    "DeepSeek V4.1 Flash",
+    "DeepSeek",
+    15.3
    ],
    [
     3,
-    "DeepSeek V4.1 Flash",
-    "DeepSeek",
-    15.5
+    "GLM 5.3 Flash",
+    "Z.ai",
+    11.6
    ],
    [
     4,
-    "GLM 5.3 Flash",
-    "Z.ai",
-    11.9
+    "GPT-6 Luna",
+    "OpenAI",
+    8.51
    ],
    [
     5,
-    "GPT-6 Luna",
-    "OpenAI",
-    7.85
+    "Claude Opus 5.5",
+    "Anthropic",
+    7.06
    ],
    [
     6,
-    "Claude Opus 5.5",
-    "Anthropic",
-    6.98
+    "Hy4 flash",
+    "Tencent",
+    6.51
    ],
    [
     7,
-    "Step 5 Preview",
-    "StepFun",
-    6.41
+    "MiniMax M3.1 Flash",
+    "MiniMax",
+    4.2
    ],
    [
     8,
-    "MiMo-V2.6-Flash",
-    "Xiaomi",
-    4.23
+    "Kimi K3.1 Pro",
+    "Moonshot AI",
+    3.88
    ],
    [
     9,
-    "GLM 5.3",
-    "Z.ai",
-    3.76
+    "Step 5 Preview",
+    "StepFun",
+    3.84
    ],
    [
     10,
-    "GPT-6.1 Sol",
-    "OpenAI",
-    3.71
+    "MiMo-V2.6-Flash",
+    "Xiaomi",
+    3.83
    ]
   ],
-  "note": "Cheap, fast models from DeepSeek, Tencent and Z.ai lead developer usage, while the Search Arena leaderboard above is led by flagship models from Alibaba, OpenAI and Anthropic. Popular with builders is not the same as preferred by searchers."
+  "note": "Cheap, fast models from DeepSeek and Z.ai lead developer usage, while the Search Arena leaderboard above is led by flagship models from Alibaba, OpenAI and Anthropic. Popular with builders is not the same as preferred by searchers."
  }
 }

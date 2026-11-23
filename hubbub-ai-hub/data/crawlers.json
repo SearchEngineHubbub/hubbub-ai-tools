@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-16",
+ "updated": "2026-11-23",
  "purposes": {
   "search": "Indexes pages for AI search answers and citations",
   "training": "Collects content to train AI models",
@@ -16,7 +16,7 @@
    "ip_list": "https://openai.com/searchbot.json",
    "source": "https://developers.openai.com/api/docs/bots",
    "note": "Lets pages appear and be cited in ChatGPT search.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -28,7 +28,7 @@
    "ip_list": "https://openai.com/gptbot.json",
    "source": "https://developers.openai.com/api/docs/bots",
    "note": "Collects content for training OpenAI's models.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -40,7 +40,7 @@
    "ip_list": "https://openai.com/chatgpt-user.json",
    "source": "https://developers.openai.com/api/docs/bots",
    "note": "Fetches a page when a ChatGPT user asks; OpenAI says robots.txt rules may not apply.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -52,7 +52,7 @@
    "ip_list": "https://openai.com/adsbot.json",
    "source": "https://developers.openai.com/api/docs/bots",
    "note": "Checks landing pages submitted as ChatGPT ads; not used for training.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -64,7 +64,7 @@
    "ip_list": "https://claude.com/crawling/bots.json",
    "source": "https://support.claude.com/en/articles/8896518",
    "note": "Collects content that may be used to train Anthropic's models.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -76,7 +76,7 @@
    "ip_list": "https://claude.com/crawling/bots.json",
    "source": "https://support.claude.com/en/articles/8896518",
    "note": "Improves search results in Claude.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -88,7 +88,18 @@
    "ip_list": "https://claude.com/crawling/bots.json",
    "source": "https://support.claude.com/en/articles/8896518",
    "note": "Fetches pages when Claude users ask questions.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
+   "web_search": false
+  },
+  {
+   "name": "Claude-Agent",
+   "token": "Claude-Agent",
+   "company": "Anthropic",
+   "purpose": "user",
+   "respects_robots": "not stated",
+   "source": "https://support.claude.com/en/articles/18234133",
+   "note": "Anthropic-hosted browsers (including Claude Duet) acting on a user's behalf. Anthropic publishes its addresses at claude.com/.well-known/sail; check the IP, as the name is easy to fake.",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -100,7 +111,7 @@
    "ip_list": "https://developers.google.com/static/crawling/ipranges/common-crawlers.json",
    "source": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
    "note": "Google Search index, which also feeds AI Overviews and AI Mode. Use nosnippet to limit AI features.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": true
   },
   {
@@ -112,7 +123,7 @@
    "ip_list": "",
    "source": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
    "note": "Not a crawler: a robots.txt token controlling use in Gemini training and grounding. Does not affect Search.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -124,7 +135,18 @@
    "ip_list": "https://developers.google.com/static/crawling/ipranges/user-triggered-agents.json",
    "source": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers",
    "note": "Agents on Google infrastructure browsing on a user's request.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
+   "web_search": false
+  },
+  {
+   "name": "Google-GeminiNotebook",
+   "token": "Google-GeminiNotebook",
+   "company": "Google",
+   "purpose": "user",
+   "respects_robots": "no",
+   "source": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers",
+   "note": "Fetches URLs that Gemini Notebook users add as sources. Replaces Google-NotebookLM. Google says user-triggered fetchers generally ignore robots.txt.",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -136,7 +158,7 @@
    "ip_list": "https://developers.google.com/static/crawling/ipranges/common-crawlers.json",
    "source": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
    "note": "Crawls requested by site owners for Vertex AI Agents.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -148,7 +170,7 @@
    "ip_list": "https://www.perplexity.ai/perplexitybot.json",
    "source": "https://docs.perplexity.ai/guides/bots",
    "note": "Surfaces and links sites in Perplexity; not used for model training.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -160,7 +182,7 @@
    "ip_list": "https://www.perplexity.ai/perplexity-user.json",
    "source": "https://docs.perplexity.ai/guides/bots",
    "note": "Fetches pages for a user's question; generally ignores robots.txt.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -172,7 +194,7 @@
    "ip_list": "http://search.developer.apple.com/applebot.json",
    "source": "https://support.apple.com/en-us/119829",
    "note": "Spotlight, Siri and Safari search; may also help train Apple models.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": true
   },
   {
@@ -184,7 +206,7 @@
    "ip_list": "",
    "source": "https://support.apple.com/en-us/119829",
    "note": "Not a crawler: opts content out of Apple model training.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -196,7 +218,7 @@
    "ip_list": "https://developer.amazon.com/amazonbot/ip-addresses/",
    "source": "https://developer.amazon.com/amazonbot",
    "note": "Improves Amazon products; may be used to train Amazon AI models.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -208,7 +230,7 @@
    "ip_list": "https://developer.amazon.com/amazonbot/searchbot-ip-addresses/",
    "source": "https://developer.amazon.com/amazonbot",
    "note": "Search experiences such as Alexa; not used for training.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -220,7 +242,7 @@
    "ip_list": "https://developer.amazon.com/amazonbot/live-ip-addresses/",
    "source": "https://developer.amazon.com/amazonbot",
    "note": "Live fetches for Alexa users.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -232,7 +254,7 @@
    "ip_list": "",
    "source": "https://developers.facebook.com/docs/sharing/webmasters/crawler/",
    "note": "Trains Meta AI models or indexes content for products.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -244,7 +266,7 @@
    "ip_list": "",
    "source": "https://developers.facebook.com/docs/sharing/webmasters/crawler/",
    "note": "Improves Meta AI search and cites content in Meta AI answers.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -256,7 +278,7 @@
    "ip_list": "",
    "source": "https://developers.facebook.com/docs/sharing/webmasters/crawler/",
    "note": "Fetches links at a user's request; may bypass robots.txt.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -268,7 +290,7 @@
    "ip_list": "https://mistral.ai/mistralai-index-ips.json",
    "source": "https://docs.mistral.ai/robots",
    "note": "Indexing only; not used for training.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -280,7 +302,7 @@
    "ip_list": "",
    "source": "https://docs.mistral.ai/robots",
    "note": "Builds training datasets; disallow in robots.txt to opt out.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -292,7 +314,7 @@
    "ip_list": "https://mistral.ai/mistralai-user-ips.json",
    "source": "https://docs.mistral.ai/robots",
    "note": "User actions in Mistral's assistant; not used for training.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {
@@ -304,7 +326,7 @@
    "ip_list": "https://duckduckgo.com/duckassistbot.json",
    "source": "https://duckduckgo.com/duckduckgo-help-pages/results/duckassistbot",
    "note": "Real-time fetches for DuckDuckGo's cited AI answers; not used for training.",
-   "verified": "2026-11-14",
+   "verified": "2026-11-23",
    "web_search": false
   },
   {

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-16",
+ "updated": "2026-11-23",
  "source": {
   "name": "Trakkr Data",
   "url": "https://trakkr.ai/data",
@@ -7,17 +7,17 @@
   "licence_url": "https://creativecommons.org/licenses/by/4.0/"
  },
  "source_page": "https://trakkr.ai/data/citations",
- "index_built": "13 Nov 2026",
+ "index_built": "19 Nov 2026",
  "since": "3 Oct 2025",
- "total_citations": "95.7M",
- "total_sites": "810K",
+ "total_citations": "98.9M",
+ "total_sites": "826K",
  "method": "Every link an AI answer cites for a brand Trakkr studies, trimmed to its site and counted. The public index does not split citations by AI engine.",
  "sites": [
   {
    "rank": 1,
    "site": "youtube.com",
    "kind": "Social",
-   "share": 2.64,
+   "share": 2.62,
    "pages_cited": 144406,
    "brands_cited_for": 1553
   },
@@ -25,7 +25,7 @@
    "rank": 2,
    "site": "google.com",
    "kind": "Other",
-   "share": 1.65,
+   "share": 1.7,
    "pages_cited": 114103,
    "brands_cited_for": 1066
   },
@@ -33,7 +33,7 @@
    "rank": 3,
    "site": "reddit.com",
    "kind": "Social",
-   "share": 1.38,
+   "share": 1.36,
    "pages_cited": 67159,
    "brands_cited_for": 1733
   },
@@ -41,7 +41,7 @@
    "rank": 4,
    "site": "en.wikipedia.org",
    "kind": "Reference",
-   "share": 1.19,
+   "share": 1.16,
    "pages_cited": 27437,
    "brands_cited_for": 1937
   },
@@ -57,7 +57,7 @@
    "rank": 6,
    "site": "facebook.com",
    "kind": "Social",
-   "share": 0.54,
+   "share": 0.55,
    "pages_cited": 37019,
    "brands_cited_for": 1280
   },
@@ -73,7 +73,7 @@
    "rank": 8,
    "site": "cars.com",
    "kind": "Other",
-   "share": 0.36,
+   "share": 0.37,
    "pages_cited": 9278,
    "brands_cited_for": 137
   },
@@ -81,7 +81,7 @@
    "rank": 9,
    "site": "pmc.ncbi.nlm.nih.gov",
    "kind": "Academic",
-   "share": 0.35,
+   "share": 0.34,
    "pages_cited": 13870,
    "brands_cited_for": 526
   },
@@ -113,7 +113,7 @@
    "rank": 13,
    "site": "forbes.com",
    "kind": "News",
-   "share": 0.26,
+   "share": 0.25,
    "pages_cited": 7211,
    "brands_cited_for": 1145
   },
@@ -153,7 +153,7 @@
    "rank": 18,
    "site": "apps.apple.com",
    "kind": "App stores",
-   "share": 0.18,
+   "share": 0.19,
    "pages_cited": 10236,
    "brands_cited_for": 635
   },
@@ -169,7 +169,7 @@
    "rank": 20,
    "site": "techradar.com",
    "kind": "Tech",
-   "share": 0.18,
+   "share": 0.17,
    "pages_cited": 3011,
    "brands_cited_for": 902
   },
@@ -209,7 +209,7 @@
    "rank": 25,
    "site": "f6s.com",
    "kind": "Other",
-   "share": 0.16,
+   "share": 0.15,
    "pages_cited": 6146,
    "brands_cited_for": 830
   },
@@ -217,7 +217,7 @@
    "rank": 26,
    "site": "worldmetrics.org",
    "kind": "Other",
-   "share": 0.14,
+   "share": 0.13,
    "pages_cited": 5423,
    "brands_cited_for": 594
   },
@@ -247,14 +247,6 @@
   },
   {
    "rank": 30,
-   "site": "wifitalents.com",
-   "kind": "Other",
-   "share": 0.11,
-   "pages_cited": 5130,
-   "brands_cited_for": 605
-  },
-  {
-   "rank": 31,
    "site": "consumerreports.org",
    "kind": "Reviews",
    "share": 0.11,
@@ -262,31 +254,31 @@
    "brands_cited_for": 290
   },
   {
+   "rank": 31,
+   "site": "wifitalents.com",
+   "kind": "Other",
+   "share": 0.1,
+   "pages_cited": 5130,
+   "brands_cited_for": 605
+  },
+  {
    "rank": 32,
+   "site": "toyota.com",
+   "kind": "Other",
+   "share": 0.098,
+   "pages_cited": 2369,
+   "brands_cited_for": 81
+  },
+  {
+   "rank": 33,
    "site": "nerdwallet.com",
    "kind": "Other",
-   "share": 0.099,
+   "share": 0.098,
    "pages_cited": 2691,
    "brands_cited_for": 329
   },
   {
-   "rank": 33,
-   "site": "gitnux.org",
-   "kind": "Other",
-   "share": 0.098,
-   "pages_cited": 4925,
-   "brands_cited_for": 605
-  },
-  {
    "rank": 34,
-   "site": "medium.com",
-   "kind": "Social",
-   "share": 0.097,
-   "pages_cited": 6857,
-   "brands_cited_for": 854
-  },
-  {
-   "rank": 35,
    "site": "dqsglobal.com",
    "kind": "Other",
    "share": 0.096,
@@ -294,12 +286,20 @@
    "brands_cited_for": 17
   },
   {
+   "rank": 35,
+   "site": "medium.com",
+   "kind": "Social",
+   "share": 0.096,
+   "pages_cited": 6857,
+   "brands_cited_for": 854
+  },
+  {
    "rank": 36,
-   "site": "toyota.com",
+   "site": "gitnux.org",
    "kind": "Other",
    "share": 0.095,
-   "pages_cited": 2369,
-   "brands_cited_for": 81
+   "pages_cited": 4925,
+   "brands_cited_for": 605
   },
   {
    "rank": 37,
@@ -313,7 +313,7 @@
    "rank": 38,
    "site": "gov.uk",
    "kind": "Other",
-   "share": 0.088,
+   "share": 0.091,
    "pages_cited": 2680,
    "brands_cited_for": 219
   },
@@ -321,25 +321,25 @@
    "rank": 39,
    "site": "salesforce.com",
    "kind": "Other",
-   "share": 0.088,
+   "share": 0.09,
    "pages_cited": 2990,
    "brands_cited_for": 460
   },
   {
    "rank": 40,
-   "site": "guideflow.com",
-   "kind": "Other",
-   "share": 0.085,
-   "pages_cited": 1399,
-   "brands_cited_for": 516
+   "site": "amazon.com",
+   "kind": "E-commerce",
+   "share": 0.086,
+   "pages_cited": 5578,
+   "brands_cited_for": 324
   },
   {
    "rank": 41,
-   "site": "sciencedirect.com",
-   "kind": "Academic",
-   "share": 0.085,
-   "pages_cited": 5072,
-   "brands_cited_for": 495
+   "site": "guideflow.com",
+   "kind": "Other",
+   "share": 0.086,
+   "pages_cited": 1399,
+   "brands_cited_for": 516
   },
   {
    "rank": 42,
@@ -350,28 +350,25 @@
    "brands_cited_for": 837
   },
   {
-   "rank": 43,
-   "site": "amazon.com",
-   "kind": "E-commerce",
-   "share": 0.084,
-   "pages_cited": 5578,
-   "brands_cited_for": 324
+   "site": "learn.microsoft.com",
+   "share": 0.083,
+   "kind": "Tech"
   },
   {
    "rank": 44,
-   "site": "zipdo.co",
+   "site": "landroverusa.com",
    "kind": "Other",
-   "share": 0.084,
-   "pages_cited": 3794,
-   "brands_cited_for": 560
+   "share": 0.083,
+   "pages_cited": 291,
+   "brands_cited_for": 37
   },
   {
    "rank": 45,
-   "site": "landroverusa.com",
-   "kind": "Other",
+   "site": "sciencedirect.com",
+   "kind": "Academic",
    "share": 0.082,
-   "pages_cited": 291,
-   "brands_cited_for": 37
+   "pages_cited": 5072,
+   "brands_cited_for": 495
   }
  ]
 }

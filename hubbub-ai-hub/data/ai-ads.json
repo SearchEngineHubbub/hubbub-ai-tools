@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-16",
+ "updated": "2026-11-23",
  "statuses": {
   "live": "Live",
   "beta": "Beta",
@@ -20,14 +20,15 @@
    "buying": "Self-serve Ads Manager (ads.openai.com), ad-tech partners such as Criteo, and a Shopify app.",
    "pricing": "CPM at launch; CPC bidding added May 2026.",
    "announced": "2026-01-16",
-   "updated": "2026-11-10",
+   "updated": "2026-11-21",
    "sources": [
     "https://openai.com/index/our-approach-to-advertising-and-expanding-access/",
     "https://ppc.land/advertisers-in-26-more-countries-gain-chatgpt-ads-bringing-the-total-to-89/",
-    "https://www.seroundtable.com/openai-chatgpt-ads-visual-ads-42493.html"
+    "https://www.seroundtable.com/openai-chatgpt-ads-visual-ads-42493.html",
+    "https://americanbazaaronline.com/2026/11/21/us-advertisers-pour-70-7-million-into-chatgpt-ads-in-just-six-months-492825"
    ],
    "official_source": true,
-   "notes": "Country count and rollout dates come from trade press. Not shown to under-18s or next to health, mental health or political topics."
+   "notes": "Country count and rollout dates come from trade press. Not shown to under-18s or next to health, mental health or political topics. Third-party estimate (AdClarity, Nov 2026): about $70.7M of US ChatGPT ad spend in October 2026, up 127% on April."
   },
   {
    "product": "Ads in AI Overviews",
@@ -57,12 +58,13 @@
    "buying": "Automatic through Search, Shopping and Performance Max. AI Max and broad match can match on conversation context. No opt-out.",
    "pricing": "Normal campaign bidding.",
    "announced": "2025-05-21",
-   "updated": "2026-10-28",
+   "updated": "2026-11-22",
    "sources": [
-    "https://blog.google/products/ads-commerce/ads-in-ai-mode-global/"
+    "https://blog.google/products/ads-commerce/ads-in-ai-mode-global/",
+    "https://ppc.land/google-ai-mode-ads-appear-as-deep-as-the-fourth-follow-up-question/"
    ],
    "official_source": true,
-   "notes": ""
+   "notes": "Ads on follow-up questions (multiturn) launched in the US on 28 Oct 2026; testers report them appearing as deep as the fourth follow-up (Nov 2026). Google has not confirmed a full rollout."
   },
   {
    "product": "AI Mode Direct Offers and new formats",
@@ -97,6 +99,23 @@
    ],
    "official_source": true,
    "notes": "Ads first appeared in Bing Chat in 2023."
+  },
+  {
+   "product": "Ads in Bing AI Overviews",
+   "company": "Microsoft",
+   "surface": "Bing",
+   "status": "live",
+   "markets": "All markets except China (from Nov 2026)",
+   "formats": "Ads shown next to Bing's AI-generated answers (AI Overviews).",
+   "buying": "Automatic through existing Microsoft Advertising campaigns, including Performance Max and AI Max. No separate setup.",
+   "pricing": "Normal auction bidding.",
+   "announced": "2026-11-19",
+   "updated": "2026-11-19",
+   "sources": [
+    "https://about.ads.microsoft.com/en/blog/post/november-2026/put-ai-to-work-engaging-customers-in-more-places-whats-new-in-microsoft-advertising-this-november"
+   ],
+   "official_source": true,
+   "notes": "Builds on ads in Copilot. Announced in Microsoft Advertising's November product update."
   },
   {
    "product": "Sponsored prompts in Alexa for Shopping (formerly Rufus)",

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-16",
+ "updated": "2026-11-23",
  "source": {
   "name": "ai.robots.txt",
   "url": "https://github.com/ai-robots-txt/ai.robots.txt",
@@ -574,6 +574,14 @@
    "function": "AI Assistants",
    "respects_robots": "Unclear at this time",
    "about": "Gemini-Deep-Research is the agent responsible for collecting and scanning resources used in Google Gemini's Deep Research feature, which acts as a personal research assis… More info can be found at…"
+  },
+  {
+   "name": "GeneralRetrievalBot",
+   "operator": "AxionOrbital Space Inc.",
+   "type": "search",
+   "function": "AI Search Crawlers",
+   "respects_robots": "Yes",
+   "about": "GeneralRetrievalBot collects public web pages for General Retrieval, a search service for AI agents."
   },
   {
    "name": "Google-Firebase",
